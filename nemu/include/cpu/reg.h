@@ -22,18 +22,19 @@ typedef	union {
 			uint16_t _16Add;
 		};
 		struct {
-	//		uint8_t _8Add1;
 			uint8_t _8[2];
 			uint8_t _8Add2;
 		};
 	} gpr[8];
 
 	/* Do NOT change the order of the GPRs' definitions. */
-	struct	{
+	struct {
 		uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
 	};
-
-	swaddr_t eip;
+	struct {	
+		swaddr_t eip;
+		uint8_t _8Add3;
+	};
 
 } CPU_state;
 
