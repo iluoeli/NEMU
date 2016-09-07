@@ -32,6 +32,7 @@ typedef	union {
 		uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
 	};
 	struct {	
+		uint8_t __8Add2;
 		swaddr_t eip;
 		uint8_t _8Add3;
 	};
