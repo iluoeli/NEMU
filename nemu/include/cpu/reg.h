@@ -18,8 +18,8 @@ typedef struct {
 	union {
 		uint32_t _32;
 		struct {
-			uint16_t _16Add;
-		uint16_t _16;
+			uint16_t _16;
+			uint16_t _16Add0;
 		};
 		struct {
 			uint16_t _16Add1;
