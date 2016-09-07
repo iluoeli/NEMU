@@ -15,6 +15,7 @@ enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
  */
 
 typedef	struct {
+	//General Registers define here
 	union {
 		union {
 			uint32_t _32;
@@ -33,7 +34,7 @@ typedef	struct {
 			uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
 		};
 	};
-
+	//EIP
 	swaddr_t eip;
 } CPU_state;
 
