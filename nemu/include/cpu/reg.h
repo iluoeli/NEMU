@@ -19,10 +19,10 @@ typedef struct {
 		uint32_t _32;
 		struct {
 			uint16_t _16;
-			uint16_t _16Add0;
+			uint16_t _16Add;
 		};
 		struct {
-			uint16_t _16Add1;
+			uint8_t _8Add1;
 			uint8_t _8[2];
 		};
 	} gpr[8];
