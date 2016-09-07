@@ -34,7 +34,7 @@ typedef	union {
 	struct {	
 		uint8_t __8Add2;
 		swaddr_t eip;
-		uint8_t _8Add3;
+	//	uint8_t _8Add3;
 	};
 
 } CPU_state;
