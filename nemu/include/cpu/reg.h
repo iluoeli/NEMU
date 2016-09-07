@@ -24,6 +24,7 @@ typedef struct {
 		struct {
 			uint8_t _8Add1;
 			uint8_t _8[2];
+			uint8_t _8Add2;
 		};
 	} gpr[8];
 
