@@ -57,21 +57,52 @@ static int cmd_si(char *args)
 				printf("Error: no match arguments %s \n",arg);
 				return 0;
 			}
+		}
 //		Log("n = %d\n", n);
 		cpu_exec(n);
-		}
 	}
 	return 0;
 }
 
-int cmd_info(char *arg)
+int cmd_info(char *args)
 {
-	int i;
-	for (i=0; i < 8; ++i) {
-		printf("%s\t\t0x%x\n", reg_name[i], cpu.gpr[i]._32);
+	char *arg = strtok(NULL, " ");
+	if(NULL == arg) {
+		printf("Error: there must be a subcmd\n");
 	}
-	printf("%s\t\t0x%x\n", reg_name[i],cpu.eip);
-	return 0;	
+	else if(0 == strcmp("r", arg)) {
+		int i;
+		for (i=0; i < 8; ++i) {
+			printf("%s\t\t0x%x\n", reg_name[i], cpu.gpr[i]._32);
+		}
+		printf("%s\t\t0x%x\n", reg_name[i],cpu.eip);
+	}
+	else if(0 == strcmp("w", arg)) {
+	//TODO: add	cmd info w	
+	}
+	else{
+		printf("Error: no match cmd as %s \n", arg);
+	}
+	return 0;
+}
+
+int cmd_x(char *arg)
+{
+	char *arg1 = strtok(NULL, " ");
+	char *arg2 = strtok(NULL, " ");
+	if(NULL == arg1 || NULL == arg2) {
+		printf("Error: there must be a subcmd\n");
+	}
+	else {
+		int n, add;
+		if( (n = atoi(arg1)) && (add = atoi(arg2)) ) {
+			int i;
+			for (i=0; i < n; ++i) {
+				printf("%x\n", swaddr_read(add+i*4, 4));	
+			}			
+		}
+	}
+	return 0;
 }
 
 static struct {
@@ -91,7 +122,7 @@ static struct {
 	Usage: w EXPR
 	A watchpoint stops execution of your program whenever the value of an expression changes", cmd_w },*/
 /*	{ "d", "delete watchpoints", cmd_d },*/
-/*	{ "x", "Usage: x N EXPR", cmd_x},*/
+	{ "x", "Usage: x N EXPR", cmd_x},
 
 	/* TODO: Add more commands */
 
