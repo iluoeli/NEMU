@@ -68,9 +68,9 @@ int cmd_info(char *arg)
 {
 	int i;
 	for (i=0; i < 8; ++i) {
-		printf("%s\t\t%x\n", reg_name[i], cpu.gpr[i]._32);
+		printf("%s\t\t0x%x\n", reg_name[i], cpu.gpr[i]._32);
 	}
-	printf("%s\t\t%x\n", reg_name[i],cpu.eip);
+	printf("%s\t\t0x%x\n", reg_name[i],cpu.eip);
 	return 0;	
 }
 
