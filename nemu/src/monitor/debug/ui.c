@@ -62,6 +62,11 @@ static int cmd_si(char *args)
 	return 0;
 }
 
+int cmd_info(char *arg)
+{
+	return 0;	
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -71,9 +76,9 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Step one instruction exactly.Use si[N] to step N times.",cmd_si },
-/*	{ "info", "Generic command for showing things about the program being debuffed.
-	info r -- Print the information of registers
-	info w -- Print the value of watchpoints", cmd_info },*/
+	{ "info", "Generic command for showing things about the program being debuffed."
+	"info r -- Print the information of registers"
+	"info w -- Print the value of watchpoints", cmd_info },
 /*	{ "p", "Print value of expression EXP", cmd_p },*/
 /*	{ "w", "Set a watchpoint for an expression.
 	Usage: w EXPR
