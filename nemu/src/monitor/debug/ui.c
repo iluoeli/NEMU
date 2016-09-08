@@ -20,12 +20,14 @@ char* rl_gets() {
 
 	line_read = readline("(nemu) ");
 
-	if (line_read && *line_read) {
+ 	if (line_read && *line_read) {
 		add_history(line_read);
 	}
 
 	return line_read;
 }
+
+//TODO: Add more functions here
 
 static int cmd_c(char *args) {
 	cpu_exec(-1);
@@ -38,6 +40,27 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args)
+{
+	char *arg=strtok(NULL, " ");
+	if(NULL == arg)
+		cpu_exec(1);
+	else {
+		int n=0;
+		int i;
+		for (i=0; arg[i] != '\0'; ++i) {
+			if(arg[i] <= '9' && arg[i] >= '0')
+				n = arg[i]-'0' + n*10;
+			else {	
+				printf("Error: no match arguments %s \n",arg);
+				return 0;
+			}
+		cpu_exec(n);
+		}
+	}
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -46,6 +69,16 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
+	{ "si", "Step one instruction exactly.Use si[N] to step N times.",cmd_si },
+/*	{ "info", "Generic command for showing things about the program being debuffed.
+	info r -- Print the information of registers
+	info w -- Print the value of watchpoints", cmd_info },*/
+/*	{ "p", "Print value of expression EXP", cmd_p },*/
+/*	{ "w", "Set a watchpoint for an expression.
+	Usage: w EXPR
+	A watchpoint stops execution of your program whenever the value of an expression changes", cmd_w },*/
+/*	{ "d", "delete watchpoints", cmd_d },*/
+/*	{ "x", "Usage: x N EXPR", cmd_x},*/
 
 	/* TODO: Add more commands */
 
@@ -62,17 +95,17 @@ static int cmd_help(char *args) {
 		/* no argument given */
 		for(i = 0; i < NR_CMD; i ++) {
 			printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-		}
-	}
+ 		}
+ 	}
 	else {
 		for(i = 0; i < NR_CMD; i ++) {
 			if(strcmp(arg, cmd_table[i].name) == 0) {
 				printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
 				return 0;
-			}
-		}
+ 			}
+ 		}
 		printf("Unknown command '%s'\n", arg);
-	}
+ 	}
 	return 0;
 }
 
@@ -87,9 +120,9 @@ void ui_mainloop() {
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
-		 */
+ 		 */
 		char *args = cmd + strlen(cmd) + 1;
-		if(args >= str_end) {
+ 		if(args >= str_end) {
 			args = NULL;
 		}
 
@@ -103,9 +136,10 @@ void ui_mainloop() {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
 				if(cmd_table[i].handler(args) < 0) { return; }
 				break;
-			}
-		}
+ 			}
+  		}
 
 		if(i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
-	}
+ 	}
+	
 }
