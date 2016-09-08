@@ -55,6 +55,7 @@ static int cmd_si(char *args)
 				printf("Error: no match arguments %s \n",arg);
 				return 0;
 			}
+		Log("n = %d\n", n);
 		cpu_exec(n);
 		}
 	}
