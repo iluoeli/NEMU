@@ -7,6 +7,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+char *reg_name[9] = { "eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "eip"} ;
+
 void cpu_exec(uint32_t);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -64,6 +66,11 @@ static int cmd_si(char *args)
 
 int cmd_info(char *arg)
 {
+	int i;
+	for (i=0; i < 8; ++i) {
+		printf("%s\t\t%x\n", reg_name[i], cpu.gpr[i]._32);
+	}
+	printf("%s\t\t%x\n", reg_name[i],cpu.eip);
 	return 0;	
 }
 
@@ -101,15 +108,15 @@ static int cmd_help(char *args) {
 		/* no argument given */
 		for(i = 0; i < NR_CMD; i ++) {
 			printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
- 		}
+  		}
  	}
-	else {
+ 	else {
 		for(i = 0; i < NR_CMD; i ++) {
 			if(strcmp(arg, cmd_table[i].name) == 0) {
 				printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
 				return 0;
- 			}
- 		}
+  			}
+  		}
 		printf("Unknown command '%s'\n", arg);
  	}
 	return 0;
