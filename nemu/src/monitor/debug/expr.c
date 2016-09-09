@@ -116,6 +116,7 @@ static bool make_token(char *e) {
 						strncpy(tokens[i].str, substr_start, substr_len);
 						break;
 					default: panic("please implement me");
+							--nr_token;
 	 			}
 				break;
 			}
