@@ -115,7 +115,6 @@ static bool make_token(char *e) {
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						break;
 					default: panic("please implement me");
-							--nr_token;
 	 			}
 				++nr_token;
 				break;
@@ -150,10 +149,11 @@ bool check_parentheses(int p, int q)
 		Assert(0, "Error; bra not match\n");
 		return false;
 	}
+	Log("bra match\n");
 
 	if(tokens[p].type != '(' || tokens[q].type != ')')
 		return false;
-	for (i=p; i <= q; ++i) {
+	for (i=p+1; i < q; ++i) {
 		if(tokens[i].type == '(' || tokens[i].type == ')')
 			return false;	
 	}
@@ -162,7 +162,7 @@ bool check_parentheses(int p, int q)
 
 int dot_ope(int p, int q) 
 {
-	int op = p;
+	int op = p+1;
 	int i = p;
 
 	for (; i <= q; ++i) {
