@@ -174,11 +174,11 @@ int dot_ope(int p, int q)
 				op = i;
 				break;	
 			case '*':
-				if(tokens[i].type != '+' && tokens[i].type != '-')
+				if(tokens[op].type != '+' && tokens[op].type != '-')
 					op = i;
 				break;
 			case '/':
-				if(tokens[i].type != '+' && tokens[i].type != '-')
+				if(tokens[op].type != '+' && tokens[op].type != '-')
 					op = i;
 				break;	
 			case '(':
