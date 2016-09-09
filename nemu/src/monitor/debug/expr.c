@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ, NEQ, AND, OR, NOT, DEREF,  NUM, HEX, REG,
+	NOTYPE = 256, EQ, NEQ, AND, OR, NOT, DEREF, NEG, NUM, HEX, REG
 
 	/* TODO: Add more token types */
 
@@ -95,6 +95,18 @@ static bool make_token(char *e) {
 					case EQ:
 						tokens[nr_token].type = EQ;
 						break;
+					case NEQ:
+						tokens[nr_token].type = NEQ;
+						break;
+					case AND:
+						tokens[nr_token].type = AND;
+						break;
+					case OR:
+						tokens[nr_token].type = OR;
+						break;
+					case '!':
+						tokens[nr_token].type = '!';
+						break;
 					case '+':
 						tokens[nr_token].type = '+';
 						break;
@@ -118,6 +130,12 @@ static bool make_token(char *e) {
 						// WARNING: substr_len no more than 32;
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						break;
+					case HEX:
+						tokens[nr_token].type = HEX;
+						// WARNING: substr_len no more than 32;
+						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						break;
+
 					default: panic("please implement me");
 	 			}
 				++nr_token;
@@ -237,7 +255,13 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
-
+	int i;
+	for (i=0; i < nr_token; ++i) {
+		if(tokens[i].type == '*' && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != ')')))	
+			tokens[i].type = DEREF;
+		if(tokens[i].type == '-' && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != ')')))	
+			tokens[i].type = NEG;
+	}
 //	panic("please implement me");
 	int n = eval(0, nr_token-1);
 	*success = true;
