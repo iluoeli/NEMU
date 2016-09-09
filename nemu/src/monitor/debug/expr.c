@@ -191,6 +191,7 @@ int dot_ope(int p, int q)
 
 int eval(int p, int q)
 {
+	Log("p = %d, q = %d\n", p, q);
 	if(p > q) {
 		Assert(0, "Error: error expression , p = %d, q = %d \n",p , q);		
 		return -1;
