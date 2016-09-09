@@ -236,6 +236,7 @@ uint32_t expr(char *e, bool *success) {
 
 //	panic("please implement me");
 	int n = eval(0, nr_token-1);
+	Log("Last value: %d\n", n);
 	return n;
 }
 
