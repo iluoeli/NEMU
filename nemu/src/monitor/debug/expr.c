@@ -131,6 +131,80 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+
+//check bra is valid
+bool check_parentheses(int p, int q)
+{
+	int buff=0;
+	int i=p;
+	for (; i <= q; ++i) {
+		if(tokens[i].type == '(')
+			++ buff;
+		else if(tokens[i].type == ')') {
+			if(buff < 1) {	Assert(0, "Error: bra not match\n");	return false;}
+			else
+				-- buff;
+		}
+	}
+	if(buff != 0) {
+		Assert(0, "Error; bra not match\n");
+		return false;
+	}
+
+	if(tokens[p].type != '(' || tokens[q].type != ')')
+		return false;
+	for (i=p; i <= q; ++i) {
+		if(tokens[i].type == '(' || tokens[i].type == ')')
+			return false;	
+	}
+	return true;
+}
+
+int dot_ope(int p, int q) 
+{
+	int op = p;
+//	int op_type = '/';	
+	int i = p;
+
+	for (; i <= q; ++i) {
+		if(tokens[i].type == '+') {
+	
+		}
+	}
+	return op;
+}
+
+int eval(int p, int q)
+{
+	if(p > q) {
+		/*Bad expression*/
+		printf("Error: error expression\n");
+		Assert(0, "Error: error expression");		
+		return -1;
+	}
+	else if(p == q) {
+		return 0;//atoi(tokens[p].str);
+	}
+	else if(check_parentheses(p, q) == true) {
+		return eval(p+1, q-1);	
+	}
+	else {
+		int op = dot_ope(p, q);	
+		int val1 = eval(p, op-1);
+		int val2 = eval(op+1, q);
+
+		switch(tokens[op].type) {
+			case '+': return val1 + val2;
+			case '-': return val1 - val2;
+			case '*': return val1 * val2;
+			case '/': return val1 / val2;
+			default: break;//Assert(0);
+		}
+	}
+	return 0;
+}
+
+
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
@@ -138,6 +212,9 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
+	eval(0,nr_token-1);
+
+
 	panic("please implement me");
 	return 0;
 }
