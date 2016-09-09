@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ, ADD, SUB, MUL, DIV, LBR, RBR, INT
+	NOTYPE = 256, EQ, ADD, SUB, MUL, DIV, LBR, RBR, NUM
 
 	/* TODO: Add more token types */
 
@@ -73,8 +73,8 @@ static bool make_token(char *e) {
 
 	while(e[position] != '\0') {
 		/* Try all rules one by one. */
-		for(i = 0; i < NR_REGEX; i ++) {
-			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+	 	for(i = 0; i < NR_REGEX; i ++) {
+	 		if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
@@ -110,13 +110,13 @@ static bool make_token(char *e) {
 					case ')':
 						tokens[i].type = ')';
 						break;
-					case INT:
-						tokens[i].type = INT;
+					case NUM:
+						tokens[i].type = NUM;
 						// WARNING: substr_len no more than 32;
 						strncpy(tokens[i].str, substr_start, substr_len);
 						break;
 					default: panic("please implement me");
-				}
+	 			}
 				break;
 			}
 		}
