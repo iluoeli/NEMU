@@ -194,13 +194,15 @@ int dot_ope(int p, int q)
 int eval(int p, int q)
 {
 	if(p > q) {
-		/*Bad expression*/
-		printf("Error: error expression\n");
 		Assert(0, "Error: error expression");		
 		return -1;
 	}
 	else if(p == q) {
-		return 0;//atoi(tokens[p].str);
+		int n = 0;
+		int i;
+		for (i=0; tokens[p].str[i] != '\0'; ++i)
+			n = n*10 + tokens[p].str[i]-'0';
+		return n;
 	}
 	else if(check_parentheses(p, q) == true) {
 		return eval(p+1, q-1);	
@@ -215,7 +217,7 @@ int eval(int p, int q)
 			case '-': return val1 - val2;
 			case '*': return val1 * val2;
 			case '/': return val1 / val2;
-			default: break;//Assert(0);
+			default: Assert(0,"Error: when eval tokens[op]\n");
 		}
 	}
 	return 0;
