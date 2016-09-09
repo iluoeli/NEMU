@@ -115,6 +115,7 @@ static bool make_token(char *e) {
 						Log("substr %s \n", substr_start);
 						// WARNING: substr_len no more than 32;
 						strncpy(tokens[i].str, substr_start, substr_len);
+						Log("After cpy %s \n", tokens[i].str);
 						break;
 					default: panic("please implement me");
 							--nr_token;
