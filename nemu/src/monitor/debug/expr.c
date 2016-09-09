@@ -252,8 +252,8 @@ int eval(int p, int q)
 	}
 	else if(check_parentheses(p, q) == true) {
 		return eval(p+1, q-1);	
- 	}
- 	else {
+  	}
+  	else {
 		int op = dot_ope(p, q);	
 		Log("op = %d\n", op);
 		int val1 = eval(p, op-1);
@@ -264,8 +264,12 @@ int eval(int p, int q)
 			case SUB: return val1 - val2;
 			case MUL: return val1 * val2;
 			case DIV: return val1 / val2;
+			case EQ:	return (val1 == val2);
+			case NEQ:	return (val1 != val2);
+			case AND:	return val1 && val2;
+			case OR:	return val1 || val2;
 			default: Assert(0,"Error: when eval tokens[op]\n");
-		}
+ 		}
 	}
 	return 0;
 }
