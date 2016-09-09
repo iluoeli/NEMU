@@ -92,13 +92,16 @@ int cmd_x(char *arg)
 	char *arg2 = strtok(NULL, " ");
 	if(NULL == arg1 || NULL == arg2) {
 		printf("Error: there must be a subcmd\n");
-	}
+ 	}
 	else {
-		int n, add;
-		if( (n = atoi(arg1)) && (add = atoi(arg2)) ) {
+		int n;
+		uint32_t addr;
+		bool *success = false;
+		addr = expr(arg2, success);
+ 		if( (n = atoi(arg1)) && success) {
 			int i;
-			for (i=0; i < n; ++i) {
-				printf("%x\n", swaddr_read(add+i*4, 4));	
+ 			for (i=0; i < n; ++i) {
+				printf("%x\n", swaddr_read(addr+i*4, 4));	
 			}			
 		}
 	}
@@ -135,15 +138,15 @@ static int cmd_help(char *args) {
 	char *arg = strtok(NULL, " ");
 	int i;
 
-	if(arg == NULL) {
+ 	if(arg == NULL) {
 		/* no argument given */
-		for(i = 0; i < NR_CMD; i ++) {
+ 		for(i = 0; i < NR_CMD; i ++) {
 			printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
   		}
  	}
- 	else {
-		for(i = 0; i < NR_CMD; i ++) {
-			if(strcmp(arg, cmd_table[i].name) == 0) {
+  	else {
+ 		for(i = 0; i < NR_CMD; i ++) {
+ 			if(strcmp(arg, cmd_table[i].name) == 0) {
 				printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
 				return 0;
   			}
@@ -154,7 +157,7 @@ static int cmd_help(char *args) {
 }
 
 void ui_mainloop() {
-	while(1) {
+ 	while(1) {
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);
 
@@ -164,9 +167,9 @@ void ui_mainloop() {
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
- 		 */
+  		 */
 		char *args = cmd + strlen(cmd) + 1;
- 		if(args >= str_end) {
+  		if(args >= str_end) {
 			args = NULL;
 		}
 
@@ -180,8 +183,8 @@ void ui_mainloop() {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
 				if(cmd_table[i].handler(args) < 0) { return; }
 				break;
- 			}
-  		}
+  			}
+   		}
 
 		if(i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
  	}

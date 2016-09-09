@@ -231,10 +231,8 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
-	eval(0,nr_token-1);
-
 
 	panic("please implement me");
-	return 0;
+	return eval(0,nr_token-1);
 }
 
