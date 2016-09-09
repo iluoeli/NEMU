@@ -113,7 +113,7 @@ static bool make_token(char *e) {
 					case NUM:
 						tokens[i].type = NUM;
 						// WARNING: substr_len no more than 32;
-						strncpy(tokens[i].str, substr_start, substr_len);
+						strncpy(substr_start, tokens[i].str, substr_len);
 						break;
 					default: panic("please implement me");
 							--nr_token;
