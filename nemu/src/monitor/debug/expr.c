@@ -189,19 +189,19 @@ int dot_ope(int p, int q)
  	for (; i <= q; ++i) {
  		switch(tokens[i].type) {
 			case OR:
-				op = OR;
+				op = i;
 				break;
 			case AND:
 				if(op > AND)	
-					op = AND;
+					op = i;
 				break;
 			case NEQ:
 				if(op > NEQ)
-					op = NEQ;
+					op = i;
 				break;
 			case EQ:
 				if(op > EQ)
-				 	op = EQ;
+				 	op = i;
 				break;
 			case ADD:
 				if(op > ADD)
@@ -212,19 +212,19 @@ int dot_ope(int p, int q)
 					op = i;
 				break;	
 			case MUL:
-					op = (op > MUL) ? MUL : op;
+					op = (op > MUL) ? i : op;
 				break;
 			case DIV:
-					op = (op > DIV) ? DIV : op;
+					op = (op > DIV) ? i : op;
 				break;	
 			case DEREF: 
-					op = (op > DEREF) ? DEREF : op;
+					op = (op > DEREF) ? i : op;
 				break;	
 			case NEG: 
-					op = (op > NEG) ? NEG : op;
+					op = (op > NEG) ? i : op;
 				break;	
 			case NOT: 
-					op = (op > NOT) ? NOT : op;
+					op = (op > NOT) ? i : op;
 				break;	
 			case LBR:
 				for (; tokens[i].type != RBR; ++i);	
