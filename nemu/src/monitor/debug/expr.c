@@ -202,6 +202,7 @@ int eval(int p, int q)
 		int i;
 		for (i=0; tokens[p].str[i] != '\0'; ++i)
 			n = n*10 + tokens[p].str[i]-'0';
+		Log("value = %d\n", n);
 		return n;
 	}
 	else if(check_parentheses(p, q) == true) {
