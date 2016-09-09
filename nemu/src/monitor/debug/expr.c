@@ -184,8 +184,6 @@ int dot_ope(int p, int q)
 			case '(':
 				for (; tokens[i].type != ')'; ++i);	
 				break;
-			default:
-				break;
 		}
 	}
 	return op;
