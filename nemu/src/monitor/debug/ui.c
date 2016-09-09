@@ -86,7 +86,7 @@ int cmd_info(char *args)
 	return 0;
 }
 
-int cmd_x(char *arg)
+int cmd_x(char *args)
 {
 	char *arg1 = strtok(NULL, " ");
 	char *arg2 = strtok(NULL, " ");
@@ -108,6 +108,24 @@ int cmd_x(char *arg)
 	return 0;
 }
 
+int cmd_p(char *args)
+{
+	char *arg = strtok(NULL, " ");
+	if(NULL == arg) {
+		printf("Error: there must be a subcmd\n");
+		return 0;
+	}
+	bool success = false;
+	uint32_t value = expr(args, &success);
+	if(!success) {
+		printf("Error: bad expression\n");		
+	}
+	else {
+		printf("%d\n", value);	
+	}
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -120,8 +138,8 @@ static struct {
 	{ "info", "Generic command for showing things about the program being debuffed."
 	"info r -- Print the information of registers"
 	"info w -- Print the value of watchpoints", cmd_info },
-/*	{ "p", "Print value of expression EXP", cmd_p },*/
-/*	{ "w", "Set a watchpoint for an expression.
+	{ "p", "Print value of expression EXP", cmd_p },
+	/*	 { "w", "Set a watchpoint for an expression.
 	Usage: w EXPR
 	A watchpoint stops execution of your program whenever the value of an expression changes", cmd_w },*/
 /*	{ "d", "delete watchpoints", cmd_d },*/
