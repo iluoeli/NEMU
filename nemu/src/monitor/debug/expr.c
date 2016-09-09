@@ -163,12 +163,29 @@ bool check_parentheses(int p, int q)
 int dot_ope(int p, int q) 
 {
 	int op = p;
-//	int op_type = '/';	
 	int i = p;
 
 	for (; i <= q; ++i) {
-		if(tokens[i].type == '+') {
-	
+		switch(tokens[i].type) {
+			case '+':
+				op = i;
+				break;
+			case '-':
+				op = i;
+				break;	
+			case '*':
+				if(tokens[i].type != '+' && tokens[i].type != '-')
+					op = i;
+				break;
+			case '/':
+				if(tokens[i].type != '+' && tokens[i].type != '-')
+					op = i;
+				break;	
+			case '(':
+				for (; tokens[i].type != ')'; ++i);	
+				break;
+			default:
+				break;
 		}
 	}
 	return op;
