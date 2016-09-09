@@ -113,7 +113,7 @@ static bool make_token(char *e) {
 					case NUM:
 						tokens[i].type = NUM;
 						// WARNING: substr_len no more than 32;
-						strncpy(substr_start, tokens[i].str, substr_len);
+						strncpy(tokens[i].str, substr_start, substr_len);
 						break;
 					default: panic("please implement me");
 							--nr_token;
@@ -199,6 +199,7 @@ int eval(int p, int q)
 	else if(p == q) {
 		int n = 0;
 		int i;
+		Log("str %s \n", tokens[p].str);
 		for (i=0; tokens[p].str[i] != '\0'; ++i)
 			n = n*10 + tokens[p].str[i]-'0';
 		Log("value = %d\n", n);
