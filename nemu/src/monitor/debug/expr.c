@@ -7,8 +7,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ, NEQ, AND, OR, NOT, DEREF, NEG, NUM, HEX, REG
-
+	 NOTYPE=256, OR, AND, NEQ, EQ, SUB, ADD, DIV, MUL, DEREF, NEG, NOT, LBR, RBR, NUM, HEX, REG
 	/* TODO: Add more token types */
 
 };
@@ -23,19 +22,19 @@ static struct rule {
 	 */
 
 	{" +",	NOTYPE},				// spaces
-	{"\\+", '+'},					// plus
-	{"\\-", '-'},
-	{"\\*", '*'},
-	{"\\/", '/'},
-	{"\\(", '('},
-	{"\\)", ')'},
+	{"\\+", ADD},					// plus
+	{"\\-", SUB},
+	{"\\*", MUL},
+	{"\\/", DIV},
+	{"\\(", LBR},
+	{"\\)", RBR},
 	{"==", EQ},						// equal
 	{"0x[0-9a-z]+", HEX},
 	{"[0-9]+", NUM},
 	{"&&", AND},
 	{"\\|\\|", OR},
 	{"!=", NEQ},
-	{"\\!", '!'},
+	{"\\!", NOT},
 	{"$[a-z]{2,3}", REG},
 };
 
@@ -78,7 +77,7 @@ static bool make_token(char *e) {
 	while(e[position] != '\0') {
 		/* Try all rules one by one. */
 	 	for(i = 0; i < NR_REGEX; i ++) {
-	 		if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+ 	 		if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
@@ -104,26 +103,26 @@ static bool make_token(char *e) {
 					case OR:
 						tokens[nr_token].type = OR;
 						break;
-					case '!':
-						tokens[nr_token].type = '!';
+					case NOT:
+						tokens[nr_token].type = NOT;
 						break;
-					case '+':
-						tokens[nr_token].type = '+';
+					case ADD:
+						tokens[nr_token].type = ADD;
 						break;
-					case '-':
-						tokens[nr_token].type = '-';
+					case SUB:
+						tokens[nr_token].type = SUB;
 						break;
-					case '*':
-						tokens[nr_token].type = '*';
+					case MUL:
+						tokens[nr_token].type = MUL;
 						break;
-					case '/':
-						tokens[nr_token].type = '/';
+					case DIV:
+						tokens[nr_token].type = DIV;
 						break;
-					case '(':
-						tokens[nr_token].type = '(';
+					case LBR:
+						tokens[nr_token].type = LBR;
 						break;
-					case ')':
-						tokens[nr_token].type = ')';
+					case RBR:
+						tokens[nr_token].type = RBR;
 						break;
 					case NUM:
 						tokens[nr_token].type = NUM;
@@ -137,17 +136,17 @@ static bool make_token(char *e) {
 						break;
 
 					default: panic("please implement me");
-	 			}
+ 	 			}
 				++nr_token;
 				break;
 			}
-		}
+ 		}
 
-		if(i == NR_REGEX) {
+ 		if(i == NR_REGEX) {
 			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
 			return false;
 		}
-	}
+ 	}
 
 	return true; 
 }
@@ -158,10 +157,10 @@ bool check_parentheses(int p, int q)
 {
 	int buff=0;
 	int i=p;
-	for (; i <= q; ++i) {
-		if(tokens[i].type == '(')
-			++ buff;
-		else if(tokens[i].type == ')') {
+ 	for (; i <= q; ++i) {
+		if(tokens[i].type == LBR)
+ 			++ buff;
+ 		else if(tokens[i].type == RBR) {
 			if(buff < 1) {	Assert(0, "Error: bra not match\n");	return false;}
 			else
 				-- buff;
@@ -170,13 +169,13 @@ bool check_parentheses(int p, int q)
 	if(buff != 0) {
 		Assert(0, "Error; bra not match\n");
 		return false;
-	}
+ 	}
 	Log("bra match\n");
 
-	if(tokens[p].type != '(' || tokens[q].type != ')')
+	if(tokens[p].type != LBR || tokens[q].type != RBR)
 		return false;
-	for (i=p+1; i < q; ++i) {
-		if(tokens[i].type == '(' || tokens[i].type == ')')
+	for (i=p+1; i < q; ++i) { 
+		if(tokens[i].type == LBR || tokens[i].type == RBR)
 			return false;	
 	}
 	return true;
@@ -184,27 +183,51 @@ bool check_parentheses(int p, int q)
 
 int dot_ope(int p, int q) 
 {
-	int op = p+1;
+	int op = HEX;
 	int i = p;
 
-	for (; i <= q; ++i) {
-		switch(tokens[i].type) {
-			case '+':
-				op = i;
+ 	for (; i <= q; ++i) {
+ 		switch(tokens[i].type) {
+			case OR:
+				op = OR;
 				break;
-			case '-':
-				op = i;
-				break;	
-			case '*':
-				if(tokens[op].type != '+' && tokens[op].type != '-')
+			case AND:
+				if(op > AND)	
+					op = AND;
+				break;
+			case NEQ:
+				if(op > NEQ)
+					op = NEQ;
+				break;
+			case EQ:
+				if(op > EQ)
+				 	op = EQ;
+				break;
+			case ADD:
+				if(op > ADD)
 					op = i;
 				break;
-			case '/':
-				if(tokens[op].type != '+' && tokens[op].type != '-')
+			case SUB:
+				if(op > SUB)
 					op = i;
 				break;	
-			case '(':
-				for (; tokens[i].type != ')'; ++i);	
+			case MUL:
+					op = (op > MUL) ? MUL : op;
+				break;
+			case DIV:
+					op = (op > DIV) ? DIV : op;
+				break;	
+			case DEREF: 
+					op = (op > DEREF) ? DEREF : op;
+				break;	
+			case NEG: 
+					op = (op > NEG) ? NEG : op;
+				break;	
+			case NOT: 
+					op = (op > NOT) ? NOT : op;
+				break;	
+			case LBR:
+				for (; tokens[i].type != RBR; ++i);	
 				break;
 		}
 	}
@@ -217,8 +240,8 @@ int eval(int p, int q)
 	if(p > q) {
 		Assert(0, "Error: error expression , p = %d, q = %d \n",p , q);		
 		return -1;
-	}
-	else if(p == q) {
+ 	}
+ 	else if(p == q) {
 		int n = 0;
 		int i;
 		Log("str %s \n", tokens[p].str);
@@ -229,18 +252,18 @@ int eval(int p, int q)
 	}
 	else if(check_parentheses(p, q) == true) {
 		return eval(p+1, q-1);	
-	}
-	else {
+ 	}
+ 	else {
 		int op = dot_ope(p, q);	
 		Log("op = %d\n", op);
 		int val1 = eval(p, op-1);
 		int val2 = eval(op+1, q);
 
-		switch(tokens[op].type) {
-			case '+': return val1 + val2;
-			case '-': return val1 - val2;
-			case '*': return val1 * val2;
-			case '/': return val1 / val2;
+ 		switch(tokens[op].type) {
+			case ADD: return val1 + val2;
+			case SUB: return val1 - val2;
+			case MUL: return val1 * val2;
+			case DIV: return val1 / val2;
 			default: Assert(0,"Error: when eval tokens[op]\n");
 		}
 	}
@@ -252,16 +275,16 @@ uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
 		return 0;
-	}
+ 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
 	int i;
 	for (i=0; i < nr_token; ++i) {
-		if(tokens[i].type == '*' && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != ')')))	
+		if(tokens[i].type == MUL && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != RBR)))	
 			tokens[i].type = DEREF;
-		if(tokens[i].type == '-' && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != ')')))	
+		else if(tokens[i].type == SUB && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != RBR)))	
 			tokens[i].type = NEG;
-	}
+ 	}
 //	panic("please implement me");
 	int n = eval(0, nr_token-1);
 	*success = true;
