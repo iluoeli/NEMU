@@ -96,8 +96,8 @@ int cmd_x(char *arg)
 	else {
 		int n;
 		uint32_t addr;
-		bool *success = false;
-		addr = expr(arg2, success);
+		bool success = false;
+		addr = expr(arg2, &success);
  		if( (n = atoi(arg1)) && success) {
 			int i;
  			for (i=0; i < n; ++i) {
