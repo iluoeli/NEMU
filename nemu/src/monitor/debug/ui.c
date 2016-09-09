@@ -112,7 +112,7 @@ int cmd_p(char *args)
 {
 	char *arg = strtok(NULL, " ");
 	if(NULL == arg) {
-		printf("Error: there must be a subcmd\n");
+		printf("Error: there must follow a subcmd\n");
 		return 0;
 	}
 	bool success = false;
