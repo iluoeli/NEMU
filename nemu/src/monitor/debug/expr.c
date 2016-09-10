@@ -241,19 +241,32 @@ int eval(int p, int q)
 		Assert(0, "Error: error expression , p = %d, q = %d \n",p , q);		
 		return -1;
  	}
- 	else if(p == q) {
+	//p == q: number ; p = q-1: a neg+number or DEREF+number
+  	else if(p == q) {
 		int n = 0;
 		int i;
 		Log("str %s \n", tokens[p].str);
-		for (i=0; tokens[p].str[i] != '\0'; ++i)
-			n = n*10 + tokens[p].str[i]-'0';
-		Log("value = %d\n", n);
+		//NUM
+		if(tokens[p].type == NUM) {
+			for (i=0; tokens[p].str[i] != '\0'; ++i)
+				n = n*10 + tokens[p].str[i]-'0';
+			Log("value = %d\n", n);
+		}
+		//HEX
+		else if(tokens[p].type == HEX) {
+			for (i=2; tokens[p].str[i] != '\0'; ++i) {
+				if(tokens[p].str[i] <= '9' && tokens[p].str[i] >= '0')	
+					n = n*10 + tokens[p].str[i]-'0';	
+				else
+					n = n*10 + tokens[p].str[i]-'a';
+			}
+		}
 		return n;
 	}
-	else if(check_parentheses(p, q) == true) {
+ 	else if(check_parentheses(p, q) == true) {
 		return eval(p+1, q-1);	
   	}
-  	else {
+   	else {
 		int op = dot_ope(p, q);	
 		Log("op = %d\n", op);
 		int val1 = eval(p, op-1);
@@ -269,7 +282,7 @@ int eval(int p, int q)
 			case AND:	return val1 && val2;
 			case OR:	return val1 || val2;
 			default: Assert(0,"Error: when eval tokens[op]\n");
- 		}
+  		}
 	}
 	return 0;
 }
