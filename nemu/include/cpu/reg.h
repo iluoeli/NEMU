@@ -17,20 +17,14 @@ enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
 typedef	struct {
 	//General Registers define here
 	union {
-		union {
+ 		union {
 			uint32_t _32;
-			struct {
-				uint16_t _16;
-				uint16_t _16Add;
-			};
-			struct {
-				uint8_t _8[2];
-				uint8_t _8Add2;
-			};
-		} gpr[8];
+			uint16_t _16;
+			uint8_t _8[2];
+			} gpr[8];
 
 	/* Do NOT change the order of the GPRs' definitions. */
-		struct {
+ 		struct {
 			uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
 		};
 	};
