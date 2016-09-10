@@ -257,7 +257,7 @@ int eval(int p, int q)
 			for (i=2; tokens[p].str[i] != '\0'; ++i) {
 				if(tokens[p].str[i] <= '9' && tokens[p].str[i] >= '0')	
 					n = n*10 + tokens[p].str[i]-'0';	
-				else
+				else if(tokens[p].str[i] <= 'f' && tokens[p].str[i] >= 'a')
 					n = n*10 + tokens[p].str[i] - 'a' + 10;
 			}
 		}
