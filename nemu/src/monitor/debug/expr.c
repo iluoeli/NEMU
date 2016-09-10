@@ -259,6 +259,8 @@ int eval(int p, int q)
 					n = n*10 + tokens[p].str[i]-'0';	
 				else if(tokens[p].str[i] <= 'f' && tokens[p].str[i] >= 'a')
 					n = n*10 + tokens[p].str[i] - 'a' + 10;
+				else
+					Assert(0, "Error: when evalulate HEX\n");
 			}
 		}
 		return n;
