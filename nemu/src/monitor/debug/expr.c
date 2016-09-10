@@ -253,10 +253,10 @@ int eval(int p, int q)
 			for (i=0; tokens[p].str[i] != '\0'; ++i)
 				n = n*10 + tokens[p].str[i]-'0';
 			Log("value = %d\n", n);
-		}
+	 	}
 		//HEX
 		else if(tokens[p].type == HEX) {
-			for (i=2; tokens[p].str[i] != '\0'; ++i) {
+	 		for (i=2; tokens[p].str[i] != '\0'; ++i) {
 				if(tokens[p].str[i] <= '9' && tokens[p].str[i] >= '0')	
 					n = n*16 + tokens[p].str[i]-'0';	
 				else if(tokens[p].str[i] <= 'f' && tokens[p].str[i] >= 'a')
@@ -266,6 +266,14 @@ int eval(int p, int q)
 			}
 		}
 		return n;
+	}
+	else if(p == q-1) {
+		if(tokens[p].type == NEG) {
+			return -eval(p+1, q);
+		}
+		else if(tokens[p].type == DEREF) {
+			return swaddr_read(eval(p+1, q), 32);	
+		}
 	}
  	else if(check_parentheses(p, q) == true) {
 		return eval(p+1, q-1);	
