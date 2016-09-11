@@ -18,13 +18,13 @@ char* rl_gets() {
 	if (line_read) {
 		free(line_read);
 		line_read = NULL;
-	}
+ 	}
 
 	line_read = readline("(nemu) ");
 
  	if (line_read && *line_read) {
 		add_history(line_read);
-	}
+ 	}
 
 	return line_read;
 }
@@ -64,7 +64,7 @@ static int cmd_si(char *args)
 	return 0;
 }
 
-int cmd_info(char *args)
+static int cmd_info(char *args)
 {
 	char *arg = strtok(NULL, " ");
 	if(NULL == arg) {
@@ -86,7 +86,7 @@ int cmd_info(char *args)
 	return 0;
 }
 
-int cmd_x(char *args)
+static int cmd_x(char *args)
 {
 	char *arg1 = strtok(NULL, " ");
 	char *arg2 = strtok(NULL, " ");
@@ -108,7 +108,7 @@ int cmd_x(char *args)
 	return 0;
 }
 
-int cmd_p(char *args)
+static int cmd_p(char *args)
 {
 	char *arg = strtok(NULL, " ");
 	if(NULL == arg) {
@@ -126,6 +126,17 @@ int cmd_p(char *args)
 	return 0;
 }
 
+static int cmd_w(char *args)
+{
+	char *arg = strtok(NULL, " ");
+	if(NULL == arg) {
+		printf("Error: there must follow a subcmd\n");
+		return 0;
+	}
+	
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -139,9 +150,9 @@ static struct {
 	"info r -- Print the information of registers"
 	"info w -- Print the value of watchpoints", cmd_info },
 	{ "p", "Print value of expression EXP", cmd_p },
-	/*	 { "w", "Set a watchpoint for an expression.
-	Usage: w EXPR
-	A watchpoint stops execution of your program whenever the value of an expression changes", cmd_w },*/
+		 { "w", "Set a watchpoint for an expression."
+	"Usage: w EXPR"
+	"A watchpoint stops execution of your program whenever the value of an expression changes", cmd_w },
 /*	{ "d", "delete watchpoints", cmd_d },*/
 	{ "x", "Usage: x N EXPR", cmd_x},
 
