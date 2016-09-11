@@ -70,17 +70,21 @@ static int cmd_info(char *args)
 	if(NULL == arg) {
 		printf("Error: there must be a subcmd\n");
 	}
-	else if(0 == strcmp("r", arg)) {
+ 	else if(0 == strcmp("r", arg)) {
 		int i;
-		for (i=0; i < 8; ++i) {
-			printf("%s\t\t0x%x\n", reg_name[i], cpu.gpr[i]._32);
+ 		for (i=0; i < 8; ++i) {
+			printf("%s\t\t0x%x", reg_name[i], cpu.gpr[i]._32);
+			if(i != R_ESP && i != R_EBP)
+				printf("\t%d\n", cpu.gpr[i]._32);
+			else
+				printf("\n");
 		}
 		printf("%s\t\t0x%x\n", reg_name[i],cpu.eip);
 	}
 	else if(0 == strcmp("w", arg)) {
 	//TODO: add	cmd info w	
 	}
-	else{
+ 	else{
 		printf("Error: no match cmd as %s \n", arg);
 	}
 	return 0;
@@ -100,10 +104,8 @@ static int cmd_x(char *args)
 		addr = expr(arg2, &success);
    		if( (n = atoi(arg1)) && success) {
 			int i;
-			uint32_t value;
   			for (i=0; i < n; ++i) {
-				value = swaddr_read(addr+i*4, 4);
-				printf("%x\t%d\n", value, value);	
+				printf("0x%x\n", swaddr_read(addr+i*4, 4));
  			}			
 		}
 	}
