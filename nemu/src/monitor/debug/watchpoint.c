@@ -11,7 +11,7 @@ void init_wp_pool() {
 	for(i = 0; i < NR_WP; i ++) {
 		wp_pool[i].NO = i;
 		wp_pool[i].next = &wp_pool[i + 1];
-	}
+ 	}
 	wp_pool[NR_WP - 1].next = NULL;
 
 	head = NULL;
@@ -20,4 +20,52 @@ void init_wp_pool() {
 
 /* TODO: Implement the functionality of watchpoint */
 
+
+//return a free wp
+WP* new_wp()
+{
+	if(free_ != NULL) {		
+		WP *new = free_;
+		free_ = free_->next;
+		return new;
+	}
+	else {
+		// no more free wp
+		Assert(0, "Error: no more free wp");	
+		//return NULL;
+	}
+}
+
+//return wp to free list
+void free_wp(WP *wp)
+{
+	//be care of the  order of wp_pool;
+	if(wp == NULL)
+		return;
+	
+	if(wp->NO == 1) {
+		head = head->next;
+	}
+	else {
+		WP *previous = head;	
+		while (previous->next && previous->next->NO != wp->NO)
+			previous = previous->next;
+		if(previous->next && previous->NO == wp->NO) {
+			previous->next = wp->next;	
+		}
+	}
+	
+	wp->next = NULL;	
+	if(wp->NO < free_->NO) {
+		wp->next = free_;
+		free_ = wp;	
+	}
+	else {
+		WP *previous = free_;
+		while (previous && previous->NO < wp->NO)
+			previous = previous->next;
+		wp->next = previous->next;
+		previous->next = wp;
+	}
+}
 
