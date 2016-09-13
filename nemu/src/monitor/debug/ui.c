@@ -142,7 +142,7 @@ static int cmd_w(char *args)
 	WP *new = new_wp();
 	new->expr = arg;
 	// how to value a val??
-	new->oldValue = expr(args, &success);
+	new->oldValue = expr(new->expr, &success);
 	if(success == true) {
 		printf("new  watchpoint %d success\n", new->NO);	
 	}
