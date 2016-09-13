@@ -78,3 +78,15 @@ void free_wp(WP *wp)
 	}
 }
 
+void detect_wp(bool *change)
+{
+	WP *current = head;
+	bool success = false;
+	for (; current; current = current->next) {
+		if(current->oldValue == expr(current->expr, &success)) {
+			printf("detected watchpoint %d, expression %s changed\n", current->NO, current->expr);
+			*change = true;	
+		}	
+	}		
+}
+
