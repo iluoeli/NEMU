@@ -22,7 +22,7 @@ char* rl_gets() {
 
 	line_read = readline("(nemu) ");
 
- 	if (line_read && *line_read) {
+  	if (line_read && *line_read) {
 		add_history(line_read);
  	}
 
@@ -78,9 +78,9 @@ static int cmd_info(char *args)
 				printf("\t%d\n", cpu.gpr[i]._32);
 			else
 				printf("\n");
-		}
+	 	}
 		printf("%s\t\t0x%x\n", reg_name[i],cpu.eip);
-	}
+	} 
 	else if(0 == strcmp("w", arg)) {
 	//TODO: add	cmd info w	
 	}
@@ -136,6 +136,18 @@ static int cmd_w(char *args)
 	if(NULL == arg) {
 		printf("Error: there must follow a subcmd\n");
 		return 0;
+	}
+
+	bool success = false;
+	WP *new = new_wp();
+	new->expr = args;
+	// how to value a val??
+	new->oldValue = expr(args, &success);
+	if(success == true) {
+		printf("new  watchpoint %d success\n", new->NO);	
+	}
+	else {
+		printf("new watchpoint failed\n");	
 	}
 	
 	return 0;

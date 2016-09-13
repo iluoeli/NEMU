@@ -5,6 +5,8 @@
 
 static WP wp_pool[NR_WP];
 static WP *head, *free_;
+WP* new_wp();
+void free_wp(WP *wp);
 
 void init_wp_pool() {
 	int i;
@@ -29,9 +31,14 @@ WP* new_wp()
 	if(free_ != NULL) {		
 		WP *new = free_;
 		free_ = free_->next;
+		WP *last = head;
+		while (last && last->next && last->next->NO < new->NO)
+			last = last->next;
+			new->next = last->next;
+		last->next = new;
 		return new;
 	}
-	else {
+ 	else {
 		// no more free wp
 		Assert(0, "Error: no more free wp");	
 		//return NULL;

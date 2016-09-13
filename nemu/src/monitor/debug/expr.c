@@ -136,13 +136,17 @@ static bool make_token(char *e) {
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						tokens[nr_token].str[substr_len] = '\0';
 						break;
-
+					case REG:
+						tokens[nr_token].type = REG;
+						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						tokens[nr_token].str[substr_len] = '\0';
+						
 					default: panic("please implement me");
- 	 	 		}
+  	 	 		}
 				++nr_token;
 				break;
-			}
- 		}
+ 			}
+  		}
 
  		if(i == NR_REGEX) {
 			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
@@ -249,14 +253,14 @@ int eval(int p, int q)
 		int i;
 		Log("str %s \n", tokens[p].str);
 		//NUM
-		if(tokens[p].type == NUM) {
+ 		if(tokens[p].type == NUM) {
 			for (i=0; tokens[p].str[i] != '\0'; ++i)
 				n = n*10 + tokens[p].str[i]-'0';
 			Log("value = %d\n", n);
 	 	}
 		//HEX
-		else if(tokens[p].type == HEX) {
-	 		for (i=2; tokens[p].str[i] != '\0'; ++i) {
+ 		else if(tokens[p].type == HEX) {
+ 	 		for (i=2; tokens[p].str[i] != '\0'; ++i) {
 				if(tokens[p].str[i] <= '9' && tokens[p].str[i] >= '0')	
 					n = n*16 + tokens[p].str[i]-'0';	
 				else if(tokens[p].str[i] <= 'f' && tokens[p].str[i] >= 'a')
@@ -265,6 +269,29 @@ int eval(int p, int q)
 					Assert(0, "Error: when evalulate HEX\n");
 			}
 		}
+
+		//REG
+		else if(tokens[p].type == REG) {
+			if(strcmp(tokens[p].str, "$eax") == 0) 
+				return cpu.gpr[0]._32;
+			else if(strcmp(tokens[p].str, "$ecx") == 0) 
+				return cpu.gpr[1]._32;
+			else if(strcmp(tokens[p].str, "$edx") == 0) 
+				return cpu.gpr[2]._32;
+			else if(strcmp(tokens[p].str, "$ebx") == 0) 
+				return cpu.gpr[3]._32;
+			else if(strcmp(tokens[p].str, "$esp") == 0) 
+				return cpu.gpr[4]._32;
+			else if(strcmp(tokens[p].str, "$ebp") == 0) 
+				return cpu.gpr[5]._32;
+			else if(strcmp(tokens[p].str, "$esi") == 0) 
+				return cpu.gpr[6]._32;
+			else if(strcmp(tokens[p].str, "$edi") == 0) 
+				return cpu.gpr[7]._32;
+			else if(strcmp(tokens[p].str, "$eip") == 0) 
+				return cpu.eip;
+		}
+		
 		return n;
 	}
 	else if(p == q-1) {
