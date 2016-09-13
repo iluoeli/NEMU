@@ -140,7 +140,7 @@ static int cmd_w(char *args)
 
 	bool success = false;
 	WP *new = new_wp();
-	new->expr = args;
+	new->expr = arg;
 	// how to value a val??
 	new->oldValue = expr(args, &success);
 	if(success == true) {
