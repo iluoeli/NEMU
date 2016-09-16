@@ -35,7 +35,7 @@ static struct rule {
 	{"\\|{2}", OR},
 	{"!=", NEQ},
 	{"\\!", NOT},
-	{"$[a-z]{2,3}", REG},
+	{"\\$[a-z]{2,3}", REG},
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
