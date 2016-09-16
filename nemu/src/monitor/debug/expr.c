@@ -142,6 +142,7 @@ static bool make_token(char *e) {
 						tokens[nr_token].str[substr_len] = '\0';
 						break;
 					case NOTYPE:
+						--nr_token;
 						break;
 					default: panic("please implement me");
   	 	 		}
