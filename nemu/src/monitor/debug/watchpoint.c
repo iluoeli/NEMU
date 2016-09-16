@@ -29,9 +29,9 @@ WP* new_wp()
 {
  	if(free_ != NULL) {		
 		WP *new = free_;
-		new->next = NULL;
 		free_ = free_->next;
 		WP *last = head;
+		new->next = NULL;
 		if(head == NULL)
 			head = new;
 		else {
