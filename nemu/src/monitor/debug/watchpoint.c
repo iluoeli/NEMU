@@ -34,10 +34,10 @@ WP* new_wp()
 		WP *last = head;
 		while (last && last->next && last->next->NO < new->NO)
 			last = last->next;
-			new->next = last->next;
+		new->next = last->next;
 		last->next = new;
 		return new;
-	}
+	} 
  	else {
 		// no more free wp
 		Assert(0, "Error: no more free wp");	
