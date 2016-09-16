@@ -93,15 +93,15 @@ static int cmd_info(char *args)
 static int cmd_x(char *args)
 {
 	char *arg1 = strtok(NULL, " ");
-	char *arg2 = strtok(NULL, " ");
-	if(NULL == arg1 || NULL == arg2) {
-		printf("Error: there must be a subcmd\n");
+/*	char *arg2 = strtok(NULL, " ");*/
+	if(NULL == arg1 || NULL == args) {
+		printf("Error: there must be 2 subcmds\n");
  	}
   	else {
 		int n;
 		uint32_t addr;
 		bool success = false;
-		addr = expr(arg2, &success);
+		addr = expr(args, &success);
    		if( (n = atoi(arg1)) && success) {
 			int i;
   			for (i=0; i < n; ++i) {
@@ -114,11 +114,12 @@ static int cmd_x(char *args)
 
 static int cmd_p(char *args)
 {
-	char *arg = strtok(NULL, " ");
-	if(NULL == arg) {
+/*	char *arg = strtok(NULL, " ");*/
+	if(NULL == args) {
 		printf("Error: there must follow a subcmd\n");
 		return 0;
 	}
+
 	bool success = false;
 	uint32_t value = expr(args, &success);
 	if(!success) {
