@@ -28,17 +28,21 @@ void init_wp_pool() {
 //return a free wp
 WP* new_wp()
 {
-	if(free_ != NULL) {		
+ 	if(free_ != NULL) {		
 		WP *new = free_;
 		free_ = free_->next;
 		WP *last = head;
-		while (last && last->next && last->next->NO < new->NO)
-			last = last->next;
-		new->next = last->next;
-		last->next = new;
+		if(head == NULL)
+			head = new;
+		else {
+			while (last && last->next && last->next->NO < new->NO)
+				last = last->next;
+			new->next = last->next;
+			last->next = new;
+		} 
 		return new;
-	} 
- 	else {
+	}
+  	else {
 		// no more free wp
 		Assert(0, "Error: no more free wp");	
 		//return NULL;
@@ -55,7 +59,7 @@ void free_wp(WP *wp)
 	if(wp->NO == 1) {
 		head = head->next;
 	}
-	else {
+ 	else {
 		WP *previous = head;	
 		while (previous->next && previous->next->NO != wp->NO)
 			previous = previous->next;
@@ -82,8 +86,8 @@ void detect_wp(bool *change)
 {
 	WP *current = head;
 	bool success = false;
-	for (; current; current = current->next) {
-		if(current->oldValue == expr(current->expr, &success)) {
+ 	for (; current; current = current->next) {
+ 		if(current->oldValue == expr(current->expr, &success)) {
 			printf("detected watchpoint %d, expression %s changed\n", current->NO, current->expr);
 			*change = true;	
 		}	
