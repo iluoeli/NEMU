@@ -119,7 +119,7 @@ static int cmd_p(char *args)
 		printf("Error: there must follow a subcmd\n");
 		return 0;
 	}
-	Log("args = %s\n", args);
+//	Log("args = %s\n", args);
 	bool success = false;
 	uint32_t value = expr(args, &success);
 	if(!success) {

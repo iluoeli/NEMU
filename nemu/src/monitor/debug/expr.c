@@ -55,8 +55,8 @@ void init_regex() {
 		if(ret != 0) { 
 			regerror(ret, &re[i], error_msg, 128);
 			Assert(ret == 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
-		}
-	}
+ 		}
+ 	}
 }
 
 typedef struct token {
@@ -141,6 +141,8 @@ static bool make_token(char *e) {
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						tokens[nr_token].str[substr_len] = '\0';
 						break;
+					case NOTYPE:
+						break;
 					default: panic("please implement me");
   	 	 		}
 				++nr_token;
@@ -166,7 +168,7 @@ bool check_parentheses(int p, int q)
  	for (; i <= q; ++i) {
 		if(tokens[i].type == LBR)
  			++ buff;
- 		else if(tokens[i].type == RBR) {
+ 		else if(tokens[i ].type == RBR) {
 			if(buff < 1) {	Assert(0, "Error: bra not match\n");	return false;}
 			else
 				-- buff;
@@ -183,7 +185,7 @@ bool check_parentheses(int p, int q)
 	for (i=p+1; i < q; ++i) { 
 		if(tokens[i].type == LBR || tokens[i].type == RBR)
 			return false;	
-	}
+ 	}
 	return true;
 }
 
@@ -192,8 +194,8 @@ int dot_ope(int p, int q)
 	int op = HEX;
 	int i = p;
 
- 	for (; i <= q; ++i) {
- 		switch(tokens[i].type) {
+  	for (; i <= q; ++i) {
+  		switch(tokens[i].type) {
 			case OR:
 				op = i;
 				break;
@@ -257,10 +259,10 @@ int eval(int p, int q)
 			for (i=0; tokens[p].str[i] != '\0'; ++i)
 				n = n*10 + tokens[p].str[i]-'0';
 			Log("value = %d\n", n);
-	 	}
+ 	 	}
 		//HEX
- 		else if(tokens[p].type == HEX) {
- 	 		for (i=2; tokens[p].str[i] != '\0'; ++i) {
+  		else if(tokens[p].type == HEX) {
+  	 		for (i=2; tokens[p].str[i] != '\0'; ++i) {
 				if(tokens[p].str[i] <= '9' && tokens[p].str[i] >= '0')	
 					n = n*16 + tokens[p].str[i]-'0';	
 				else if(tokens[p].str[i] <= 'f' && tokens[p].str[i] >= 'a')
@@ -290,10 +292,10 @@ int eval(int p, int q)
 				return cpu.gpr[7]._32;
 			else if(strcmp(tokens[p].str, "$eip") == 0) 
 				return cpu.eip;
-		}
+ 		}
 		
 		return n;
-	}
+ 	}
 	else if(p == q-1) {
 		if(tokens[p].type == NEG) {
 			return -eval(p+1, q);
