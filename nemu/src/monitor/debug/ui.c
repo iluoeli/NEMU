@@ -142,6 +142,7 @@ static int cmd_w(char *args)
 	WP *new = new_wp();
 	strcpy(new->expr, arg);
 	new->expr[strlen(arg)] = '\0';
+	Log("new->expr = %s\n", new->expr);
 	// how to value a val??
 	new->oldValue = expr(new->expr, &success);
 	if(success == true) {
