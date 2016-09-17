@@ -83,7 +83,7 @@ static int cmd_info(char *args)
  	} 
  	else if(0 == strcmp("w", arg)) {
 	//TODO: add	cmd info w	
-		WP *current = h_WP();
+		WP *current = h_wp();
 		printf("NO\tEXPR\n");
 		while (current) {
 			printf("%d\t%s\n", current->NO, current->expr);
@@ -162,6 +162,31 @@ static int cmd_w(char *args)
 	return 0;
 }
 
+static int cmd_d(char *args)
+{
+	char *arg = strtok(NULL, " ");		
+	if (NULL == arg) {
+	//delete all the wp
+		printf("Are you sure to delete all the watchpoint(y/n)\n");
+		char c = getchar();
+		if('y' == c || 'Y' == c) {
+			WP *current = h_wp();
+			while (current) {
+				free_wp(current);
+				current = current->next;	
+			}
+		}
+		else {	}
+	}
+	else {
+		bool success = false;
+		int NO = expr(arg, &success);
+		if(success)
+			free_wp(nr_wp(NO));
+	}
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -178,7 +203,7 @@ static struct {
 		 { "w", "Set a watchpoint for an expression."
 	"Usage: w EXPR"
 	"A watchpoint stops execution of your program whenever the value of an expression changes", cmd_w },
-/*	{ "d", "delete watchpoints", cmd_d },*/
+	{ "d", "delete watchpoints", cmd_d },
 	{ "x", "Usage: x N EXPR", cmd_x},
 
 	/* TODO: Add more commands */

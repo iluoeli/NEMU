@@ -94,7 +94,15 @@ void detect_wp(bool *change)
 	}		
 }
 
-WP *h_WP()
+WP *h_wp()
 {
 	return head;	
+}
+
+WP *nr_wp(int n)
+{
+	if(n < 32)
+		return &wp_pool[n];	
+	else
+		return NULL;
 }
