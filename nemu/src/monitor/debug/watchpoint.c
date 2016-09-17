@@ -56,30 +56,30 @@ void free_wp(WP *wp)
 	if(wp == NULL)
 		return;
 	
-	if(wp->NO == 1) {
+	if(wp == head) {
 		head = head->next;
 	}
  	else {
-		WP *previous = head;	
+		WP *previous = head;
 		while (previous->next && previous->next->NO != wp->NO)
 			previous = previous->next;
-		if(previous->next && previous->NO == wp->NO) {
+	 	if(previous->next && previous->next->NO == wp->NO) {
 			previous->next = wp->next;	
 		}
 	}
 	
 	wp->next = NULL;	
-	if(wp->NO < free_->NO) {
+	if(wp->NO < free_->NO || free_ == NULL) {
 		wp->next = free_;
 		free_ = wp;	
-	}
+	} 
 	else {
 		WP *previous = free_;
-		while (previous && previous->NO < wp->NO)
+		while (previous->next && previous->next->NO < wp->NO)
 			previous = previous->next;
 		wp->next = previous->next;
 		previous->next = wp;
-	}
+ 	}
 }
 
 void detect_wp(bool *change)
