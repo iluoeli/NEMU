@@ -196,13 +196,13 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Step one instruction exactly.Use si[N] to step N times.",cmd_si },
-	{ "info", "Generic command for showing things about the program being debuffed."
-	"info r -- Print the information of registers"
-	"info w -- Print the value of watchpoints", cmd_info },
+	{ "info", "Generic command for showing things about the program being debuffed.\n"
+		"\tinfo r -- Print the information of registers\n"
+		"\tinfo w -- Print the value of watchpoints", cmd_info },
 	{ "p", "Print value of expression EXP", cmd_p },
-		 { "w", "Set a watchpoint for an expression."
-	"Usage: w EXPR"
-	"A watchpoint stops execution of your program whenever the value of an expression changes", cmd_w },
+ 	{ "w", "Set a watchpoint for an expression.\n"
+	"\tUsage: w EXPR\n"
+	"\tA watchpoint stops execution of your program whenever the value of an expression changes", cmd_w },
 	{ "d", "delete watchpoints", cmd_d },
 	{ "x", "Usage: x N EXPR", cmd_x},
 
