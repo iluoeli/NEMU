@@ -73,13 +73,13 @@ static int cmd_info(char *args)
  	else if(0 == strcmp("r", arg)) {
 		int i;
  		for (i=0; i < 8; ++i) {
-			printf("%s\t\t0x%x", reg_name[i], cpu.gpr[i]._32);
+			printf("%s\t0x%x", reg_name[i], cpu.gpr[i]._32);
 			if(i != R_ESP && i != R_EBP)
 				printf("\t%d\n", cpu.gpr[i]._32);
 			else
 				printf("\n");
  	 	}
-		printf("%s\t\t0x%x\n", reg_name[i],cpu.eip);
+		printf("%s\t0x%x\n", reg_name[i],cpu.eip);
  	} 
  	else if(0 == strcmp("w", arg)) {
 	//TODO: add	cmd info w	
@@ -99,22 +99,22 @@ static int cmd_info(char *args)
 static int cmd_x(char *args)
 {
 	char *arg1 = strtok(NULL, " ");
-/*	char *arg2 = strtok(NULL, " ");*/
-	if(NULL == arg1 || NULL == args) {
+	char *arg2 = strtok(NULL, ".");
+	if(NULL == arg1 || NULL == arg2) {
 		printf("Error: there must be 2 subcmds\n");
  	}
   	else {
 		int n;
 		uint32_t addr;
 		bool success = false;
-		addr = expr(args, &success);
+		addr = expr(arg2, &success);
    		if( (n = atoi(arg1)) && success) {
 			int i;
   			for (i=0; i < n; ++i) {
 				printf("0x%x\n", swaddr_read(addr+i*4, 4));
- 			}			
-		}
-	}
+  			}			
+ 		}
+ 	}
 	return 0;
 }
 
