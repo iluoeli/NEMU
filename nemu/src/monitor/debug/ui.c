@@ -139,16 +139,16 @@ static int cmd_p(char *args)
 
 static int cmd_w(char *args)
 {
-	char *arg = strtok(NULL, " ");
-	if(NULL == arg) {
+//	char *arg = strtok(NULL, " ");
+	if(NULL == args) {
 		printf("Error: there must follow a subcmd\n");
 		return 0;
 	}
 
 	bool success = false;
 	WP *new = new_wp();
-	strcpy(new->expr, arg);
-	new->expr[strlen(arg)] = '\0';
+	strcpy(new->expr, args);
+	new->expr[strlen(args)] = '\0';
 	Log("new->expr = %s\n", new->expr);
 	// how to value a val??
 	new->oldValue = expr(new->expr, &success);
