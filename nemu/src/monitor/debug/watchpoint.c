@@ -66,6 +66,10 @@ void free_wp(WP *wp)
 	 	if(previous->next && previous->next->NO == wp->NO) {
 			previous->next = wp->next;	
 		}
+		else {
+		// invalid wp	
+			return;
+		}
 	}
 	
 	wp->next = NULL;	
