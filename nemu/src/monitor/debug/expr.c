@@ -85,12 +85,12 @@ static bool make_token(char *e) {
 				position += substr_len;
 
 
-				/* TODO: Now a new token is recognized with rules[i]. Add codes
+ 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array `tokens'. For certain types
 				 * of tokens, some extra actions should be performed.
  		 		 */
 
- 				switch(rules[i].token_type) {
+  				switch(rules[i].token_type) {
 					case EQ:
 						tokens[nr_token].type = EQ;
 						break;
@@ -148,10 +148,10 @@ static bool make_token(char *e) {
   	 	 		}
 				++nr_token;
 				break;
-  			}
-  		}
+  		 	}
+  		} 
 
- 		if(i == NR_REGEX) {
+  		if(i == NR_REGEX) {
 			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
 			return false;
 		}
@@ -238,7 +238,7 @@ int dot_ope(int p, int q)
 			case LBR:
 				for (; tokens[i].type != RBR; ++i);	
 				break;
-		}
+	 	}
 	}
 	return op;
 }
@@ -293,7 +293,7 @@ int eval(int p, int q)
 				return cpu.gpr[7]._32;
 			else if(strcmp(tokens[p].str, "$eip") == 0) 
 				return cpu.eip;
- 		}
+ 	 	}
 		
 		return n;
  	}
@@ -302,7 +302,7 @@ int eval(int p, int q)
 			return -eval(p+1, q);
  		}
  		else if(tokens[p].type == DEREF) {
-			return swaddr_read(eval(p+1, q), 32);
+			return swaddr_read(eval(p+1, q), 4);
 		}
 		else
 			Assert(0, "Error: bad expression\n");
