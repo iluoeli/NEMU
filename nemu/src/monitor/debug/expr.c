@@ -331,6 +331,9 @@ int eval(int p, int q)
  		else if(tokens[p].type == DEREF) {
 			return swaddr_read(eval(p+1, q), 4);
 		}
+		else if(tokens[p].type == NOT) {
+			return (eval(p+1, q) == 0) ? 1:0;
+		} 
 		else
 			Assert(0, "Error: bad expression\n");
  	}
