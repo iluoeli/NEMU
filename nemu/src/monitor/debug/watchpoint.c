@@ -94,3 +94,7 @@ void detect_wp(bool *change)
 	}		
 }
 
+WP *h_WP()
+{
+	return head;	
+}

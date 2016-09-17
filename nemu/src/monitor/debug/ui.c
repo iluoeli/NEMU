@@ -22,7 +22,7 @@ char* rl_gets() {
 
 	line_read = readline("(nemu) ");
 
-  	if (line_read && *line_read) {
+   	if (line_read && *line_read) {
 		add_history(line_read);
  	}
 
@@ -56,11 +56,11 @@ static int cmd_si(char *args)
 			else {	
 				printf("Error: no match arguments %s \n",arg);
 				return 0;
-			}
-		}
+ 			}
+ 		}
 //		Log("n = %d\n", n);
 		cpu_exec(n);
-	}
+ 	}
 	return 0;
 }
 
@@ -69,7 +69,7 @@ static int cmd_info(char *args)
 	char *arg = strtok(NULL, " ");
 	if(NULL == arg) {
 		printf("Error: there must be a subcmd\n");
-	}
+ 	}
  	else if(0 == strcmp("r", arg)) {
 		int i;
  		for (i=0; i < 8; ++i) {
@@ -78,13 +78,19 @@ static int cmd_info(char *args)
 				printf("\t%d\n", cpu.gpr[i]._32);
 			else
 				printf("\n");
-	 	}
+ 	 	}
 		printf("%s\t\t0x%x\n", reg_name[i],cpu.eip);
-	} 
-	else if(0 == strcmp("w", arg)) {
+ 	} 
+ 	else if(0 == strcmp("w", arg)) {
 	//TODO: add	cmd info w	
+		WP *current = h_WP();
+		printf("NO\tEXPR\n");
+		while (current) {
+			printf("%d\t%s\n", current->NO, current->expr);
+			current = current->next;	
+		}
 	}
- 	else{
+  	else{
 		printf("Error: no match cmd as %s \n", arg);
 	}
 	return 0;
