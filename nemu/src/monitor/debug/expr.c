@@ -342,7 +342,10 @@ uint32_t expr(char *e, bool *success) {
 	int i;
 	for (i=0; i < nr_token; ++i) {
 		if(tokens[i].type == MUL && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != RBR)))	
-			tokens[i].type = DEREF;
+			{
+				tokens[i].type = DEREF;
+				Log("match DEREF at position %d\n", i);
+			}
 		else if(tokens[i].type == SUB && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != RBR)))	
 			tokens[i].type = NEG;
  	}
