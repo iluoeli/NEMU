@@ -201,39 +201,34 @@ int dot_ope(int p, int q)
 				op = i;
 				break;
 			case AND:
-				if(op > AND)	
-					op = i;
+				op = (tokens[op].type > AND) ? i : op;
 				break;
 			case NEQ:
-				if(op > NEQ)
-					op = i;
+				op = (tokens[op].type > NEQ) ? i : op;
 				break;
 			case EQ:
-				if(op > EQ)
-				 	op = i;
+				op = (tokens[op].type > EQ) ? i : op;
 				break;
 			case ADD:
-				if(op > ADD)
-					op = i;
+				op = (tokens[op].type > ADD) ? i : op;
 				break;
 			case SUB:
-				if(op > SUB)
-					op = i;
+				op = (tokens[op].type > SUB) ? i : op;
 				break;	
 			case MUL:
-					op = (op > MUL) ? i : op;
+				op = (tokens[op].type > MUL) ? i : op;
 				break;
 			case DIV:
-					op = (op > DIV) ? i : op;
+				op = (tokens[op].type > DIV) ? i : op;
 				break;	
 			case DEREF: 
-					op = (op > DEREF) ? i : op;
+				op = (tokens[op].type > DEREF) ? i : op;
 				break;	
 			case NEG: 
-					op = (op > NEG) ? i : op;
+				op = (tokens[op].type > NEG) ? i : op;
 				break;	
 			case NOT: 
-					op = (op > NOT) ? i : op;
+				op = (tokens[op].type > NOT) ? i : op;
 				break;	
 			case LBR:
 				for (; tokens[i].type != RBR; ++i);	
@@ -294,8 +289,8 @@ int eval(int p, int q)
 			else if(strcmp(tokens[p].str, "$eip") == 0) 
 				return cpu.eip;
  	 	}
-		
 		return n;
+		
  	}
 	else if(p == q-1) {
 		if(tokens[p].type == NEG) {
@@ -342,10 +337,7 @@ uint32_t expr(char *e, bool *success) {
 	int i;
 	for (i=0; i < nr_token; ++i) {
 		if(tokens[i].type == MUL && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != RBR)))	
-			{
 				tokens[i].type = DEREF;
-				Log("match DEREF at position %d\n", i);
-			}
 		else if(tokens[i].type == SUB && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != RBR)))	
 			tokens[i].type = NEG;
  	}
