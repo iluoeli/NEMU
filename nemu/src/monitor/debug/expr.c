@@ -343,18 +343,19 @@ int eval(int p, int q)
    	else {
 		int op = dot_ope(p, q);	
 		Log("op = %d\n", op);
-		int val1 = eval(p, op-1);
-		int val2 = eval(op+1, q);
+	//	int val1 = eval(p, op-1);
+	//	int val2 = eval(op+1, q);
 
  		switch(tokens[op].type) {
-			case ADD: return val1 + val2;
-			case SUB: return val1 - val2;
-			case MUL: return val1 * val2;
-			case DIV: return val1 / val2;
-			case EQ:	return (val1 == val2);
-			case NEQ:	return (val1 != val2);
-			case AND:	return val1 && val2;
-			case OR:	return val1 || val2;
+			case ADD: return eval(p, op-1) + eval(op+1, q);
+			case SUB: return eval(p, op-1) - eval(op+1, q);
+			case MUL: return eval(p, op-1) * eval(op+1, q);
+			case DIV: return eval(p, op-1) / eval(op+1, q);
+			case EQ:	return (eval(p,op-1) == eval(op+1, q));
+			case NEQ:	return (eval(p, op-1) != eval(op+1, q));
+			case AND:	return eval(p, op-1) && eval(op+1, q);
+			case OR:	return eval(p, op-1) || eval(op+1, q);
+			case NOT:	return !eval(p+1, q);
 			default: Assert(0,"Error: when eval tokens[op]\n");
   		}
 	}
