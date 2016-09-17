@@ -192,7 +192,7 @@ bool check_parentheses(int p, int q)
 
 int dot_ope(int p, int q) 
 {
-	int op = HEX;
+	int op = 32767;
 	int i = p;
 
   	for (; i <= q; ++i) {
