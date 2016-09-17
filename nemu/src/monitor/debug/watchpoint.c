@@ -53,7 +53,7 @@ WP* new_wp()
 void free_wp(WP *wp)
 {
 	//be care of the  order of wp_pool;
-	if(wp == NULL)
+	if(wp == NULL || head == NULL)
 		return;
 	
 	if(wp == head) {
@@ -105,7 +105,7 @@ WP *h_wp()
 
 WP *nr_wp(int n)
 {
-	if(n < 32)
+	if(n < 32 && n >= 0)
 		return &wp_pool[n];	
 	else
 		return NULL;
