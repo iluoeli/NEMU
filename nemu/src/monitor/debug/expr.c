@@ -356,6 +356,8 @@ int eval(int p, int q)
 			case AND:	return eval(p, op-1) && eval(op+1, q);
 			case OR:	return eval(p, op-1) || eval(op+1, q);
 			case NOT:	return !eval(p+1, q);
+			case DEREF:	return swaddr_read(eval(p+1, q), 4);
+			case NEG:	return -eval(p+1, q);
 			default: Assert(0,"Error: when eval tokens[op]\n");
   		}
 	}
