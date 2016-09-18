@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <regex.h>
 
+int valid = true;	//to detect eval() valid
+
 enum {
 	 NOTYPE=256, OR, AND, NEQ, EQ, SUB, ADD, DIV, MUL, NOT, DEREF, NEG, LBR, RBR, NUM, HEX, REG
 	/* TODO: Add more token types */
@@ -251,6 +253,7 @@ uint32_t eval(int p, int q)
 	if(p > q) {
 	//	Assert(0, "Error: error expression , p = %d, q = %d \n",p , q);		
 		printf("Error: bad expression\n");
+		valid = false;
 		return 0;
  	}
 	//p == q: number ; p = q-1: a neg+number or DEREF+number
@@ -260,9 +263,10 @@ uint32_t eval(int p, int q)
 		Log("str %s \n", tokens[p].str);
 		//NUM
  		if(tokens[p].type == NUM) {
-			for (i=0; tokens[p].str[i] != '\0'; ++i)
+			for (i=0; tokens[p].str[i] != '\0'; ++i) 
 				n = n*10 + tokens[p].str[i]-'0';
-			Log("value = %d\n", n);
+			//Log("value = %d\n", n);
+			return n;
   	 	}
 		//HEX
   		else if(tokens[p].type == HEX) {
@@ -271,12 +275,10 @@ uint32_t eval(int p, int q)
 					n = n*16 + tokens[p].str[i]-'0';	
 				else if(tokens[p].str[i] <= 'f' && tokens[p].str[i] >= 'a')
 					n = n*16 + tokens[p].str[i] - 'a' + 10;
-				else {
-					//Assert(0, "Error: when evalulate HEX\n");
-					printf("no match char as %c\n", tokens[p].str[i]);
-					return 0;
-				}
- 			}
+				else 
+					n = n*16 + tokens[p].str[i] - 'A' + 10;
+			}
+			return n;
  		}
 
 		//REG
@@ -331,11 +333,16 @@ uint32_t eval(int p, int q)
 				return cpu.gpr[2]._8[1];
 			else if(strcmp(tokens[p].str, "$bh") == 0) 
 				return cpu.gpr[3]._8[1];
+			else {
+				printf("invalid regester name %s\n", tokens[p].str);
+				valid = false;
+				return 0;
+			}
  	 	}
-		return n;
 		
  	}
-	else if(p == q-1) {
+	// may be can be delete for it's useless.
+/*	else if(p == q-1) {
 		if(tokens[p].type == NEG) {
 			return -eval(p+1, q);
  		}
@@ -351,11 +358,12 @@ uint32_t eval(int p, int q)
 			return 0;
 		}
  	}
-
+*/
 	else if(check_parentheses(p, q) == true) {
 		return eval(p+1, q-1);	
 	}
 	else if(check_parentheses(p, q) == -1) {
+		valid =false;
 		return 0;
 	}
    	else {
@@ -377,10 +385,12 @@ uint32_t eval(int p, int q)
 			case DEREF:	return swaddr_read(eval(p+1, q), 4);
 			case NEG:	return -eval(p+1, q);
 			default:// Assert(0,"Error: when eval tokens[op]\n");
-				printf("Error: bad expression\n");
+				printf("Error: invalid expression at position %d ~ %d\n", p, q);
+				valid = false;
 				return 0;
   		}
 	}
+	return 0;
 }
 
 
@@ -399,9 +409,14 @@ uint32_t expr(char *e, bool *success) {
 			tokens[i].type = NEG;
  	}
 //	panic("please implement me");
-	int n = eval(0, nr_token-1);
-	*success = true;
-	Log("Last value: %d\n", n);
-	return n;
+	valid = true;
+	uint32_t n = eval(0, nr_token-1);
+	if(valid == true) {
+		*success = true;
+		Log("Last value: %d\n", n);
+	}
+	else
+		*success = false;
+		return n;
 }
 
