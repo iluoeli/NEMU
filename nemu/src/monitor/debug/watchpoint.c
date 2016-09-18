@@ -34,15 +34,19 @@ WP* new_wp()
 		new->next = NULL;
 		if(head == NULL)
 			head = new;
+		else if(head->NO < new->NO) {
+			new->next = head;
+			head = new;
+		}
 		else {
 			while (last && last->next && last->next->NO < new->NO)
 				last = last->next;
 			new->next = last->next;
 			last->next = new;
-		} 
+ 		} 
 		return new;
 	}
-  	else {
+   	else {
 		// no more free wp
 		Assert(0, "Error: no more free wp");	
 		//return NULL;
@@ -105,7 +109,7 @@ WP *h_wp()
 
 WP *nr_wp(int n)
 {
-	if(n < 32 && n >= 0)
+	if(n < NR_WP && n >= 0)
 		return &wp_pool[n];	
 	else
 		return NULL;
