@@ -429,6 +429,6 @@ uint32_t expr(char *e, bool *success) {
 	}
 	else
 		*success = false;
-		return n;
+	return n;
 }
 
