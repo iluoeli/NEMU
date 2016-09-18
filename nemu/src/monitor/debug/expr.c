@@ -85,6 +85,7 @@ static bool make_token(char *e) {
 				position += substr_len;
 
 
+
  				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array `tokens'. For certain types
 				 * of tokens, some extra actions should be performed.
@@ -144,10 +145,12 @@ static bool make_token(char *e) {
 					case NOTYPE:
 						--nr_token;
 						break;
-					default: panic("please implement me");
+					default:// panic("please implement me");
+						printf("Error: not match type\n");
   	 	 		}
 				++nr_token;
 				break;
+
   		 	}
   		} 
 
@@ -162,22 +165,26 @@ static bool make_token(char *e) {
 
 
 //check bra is valid
-bool check_parentheses(int p, int q)
+int check_parentheses(int p, int q)
 {
 	int buff=0;
 	int i=p;
  	for (; i <= q; ++i) {
 		if(tokens[i].type == LBR)
  			++ buff;
- 		else if(tokens[i ].type == RBR) {
-			if(buff < 1) {	Assert(0, "Error: bra not match\n");	return false;}
+		else  if(tokens[i ].type == RBR) {
+			if(buff < 1) {	/*Assert(0, "Error: bra not match\n")*/;
+				printf("Error: right bra not match");
+				return -1;
+			 	}
 			else
 				-- buff;
 		}
 	}
 	if(buff != 0) {
-		Assert(0, "Error; bra not match\n");
-		return false;
+	//	Assert(0, "Error; bra not match\n");
+		printf("Error: left bra not match\n");
+		return -1;
  	}
 	Log("bra match\n");
 
@@ -186,7 +193,7 @@ bool check_parentheses(int p, int q)
 	for (i=p+1; i < q; ++i) { 
 		if(tokens[i].type == LBR || tokens[i].type == RBR)
 			return false;	
- 	}
+  	}
 	return true;
 }
 
@@ -242,8 +249,9 @@ int eval(int p, int q)
 {
 	Log("p = %d, q = %d\n", p, q);
 	if(p > q) {
-		Assert(0, "Error: error expression , p = %d, q = %d \n",p , q);		
-		return -1;
+	//	Assert(0, "Error: error expression , p = %d, q = %d \n",p , q);		
+		printf("Error: bad expression\n");
+		return 0;
  	}
 	//p == q: number ; p = q-1: a neg+number or DEREF+number
   	else if(p == q) {
@@ -263,8 +271,11 @@ int eval(int p, int q)
 					n = n*16 + tokens[p].str[i]-'0';	
 				else if(tokens[p].str[i] <= 'f' && tokens[p].str[i] >= 'a')
 					n = n*16 + tokens[p].str[i] - 'a' + 10;
-				else
-					Assert(0, "Error: when evalulate HEX\n");
+				else {
+					//Assert(0, "Error: when evalulate HEX\n");
+					printf("no match char as %c\n", tokens[p].str[i]);
+					return 0;
+				}
  			}
  		}
 
@@ -334,12 +345,19 @@ int eval(int p, int q)
 		else if(tokens[p].type == NOT) {
 			return (eval(p+1, q) == 0) ? 1:0;
 		} 
-		else
-			Assert(0, "Error: bad expression\n");
+		else {
+			//Assert(0, "Error: bad expression\n");
+			printf("Error: bad expression\n");
+			return 0;
+		}
  	}
- 	else if(check_parentheses(p, q) == true) {
+
+	else if(check_parentheses(p, q) == true) {
 		return eval(p+1, q-1);	
-  	}
+	}
+	else if(check_parentheses(p, q) == -1) {
+		return 0;
+	}
    	else {
 		int op = dot_ope(p, q);	
 		Log("op = %d\n", op);
@@ -358,10 +376,11 @@ int eval(int p, int q)
 			case NOT:	return !eval(p+1, q);
 			case DEREF:	return swaddr_read(eval(p+1, q), 4);
 			case NEG:	return -eval(p+1, q);
-			default: Assert(0,"Error: when eval tokens[op]\n");
+			default:// Assert(0,"Error: when eval tokens[op]\n");
+				printf("Error: bad expression\n");
+				return 0;
   		}
 	}
-	return 0;
 }
 
 
