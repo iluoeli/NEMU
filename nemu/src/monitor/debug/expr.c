@@ -29,7 +29,7 @@ static struct rule {
 	{"\\(", LBR},
 	{"\\)", RBR},
 	{"==", EQ},						// equal
-	{"0x[0-9a-z]+", HEX},
+	{"0x[0-9a-fA-F]+", HEX},
 	{"[0-9]+", NUM},
 	{"&&", AND},
 	{"\\|{2}", OR},
