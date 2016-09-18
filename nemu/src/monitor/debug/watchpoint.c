@@ -34,7 +34,7 @@ WP* new_wp()
 		new->next = NULL;
 		if(head == NULL)
 			head = new;
-		else if(head->NO < new->NO) {
+		else if(head->NO > new->NO) {
 			new->next = head;
 			head = new;
 		}
