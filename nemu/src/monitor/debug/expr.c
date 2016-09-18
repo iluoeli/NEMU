@@ -245,7 +245,7 @@ int dot_ope(int p, int q)
 	return op;
 }
 
-int eval(int p, int q)
+uint32_t eval(int p, int q)
 {
 	Log("p = %d, q = %d\n", p, q);
 	if(p > q) {
