@@ -142,8 +142,14 @@ static bool make_token(char *e) {
 					case HEX:
 						tokens[nr_token].type = HEX;
 						// WARNING: substr_len no more than 32;
-						strncpy(tokens[nr_token].str, substr_start, substr_len);
-						tokens[nr_token].str[substr_len] = '\0';
+						if(substr_len < 32) {
+							strncpy(tokens[nr_token].str, substr_start, substr_len);
+							tokens[nr_token].str[substr_len] = '\0';
+						}
+						else {
+							strncpy(tokens[nr_token].str, substr_start-32+substr_len, 31);		
+							tokens[nr_token].str[31] = '\0';
+						}
 						break;
 					case REG:
 						tokens[nr_token].type = REG;
