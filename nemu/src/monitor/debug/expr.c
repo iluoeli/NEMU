@@ -31,7 +31,7 @@ static struct rule {
 	{"\\(", LBR},
 	{"\\)", RBR},
 	{"==", EQ},						// equal
-	{"0x[0-9a-fA-F]+", HEX},
+	{"0x|X[0-9a-fA-F]+", HEX},
 	{"[0-9]+", NUM},
 	{"&&", AND},
 	{"\\|{2}", OR},
@@ -252,7 +252,7 @@ uint32_t eval(int p, int q)
 	Log("p = %d, q = %d\n", p, q);
 	if(p > q) {
 	//	Assert(0, "Error: error expression , p = %d, q = %d \n",p , q);		
-		printf("Error: bad expression\n");
+		//printf("Error: bad expression\n");
 		valid = false;
 		return 0;
  	}

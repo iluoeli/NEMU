@@ -44,22 +44,14 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args)
 {
-	char *arg=strtok(NULL, " ");
+	char *arg=strtok(NULL, ".");
 	if(NULL == arg)
 		cpu_exec(1);
 	else {
-		int n=0;
-		int i;
-		for (i=0; arg[i] != '\0'; ++i) {
-			if(arg[i] <= '9' && arg[i] >= '0')
-				n = arg[i]-'0' + n*10;
-			else {	
-				printf("Error: no match arguments %s \n",arg);
-				return 0;
- 			}
- 		}
-//		Log("n = %d\n", n);
-		cpu_exec(n);
+		bool success = false;
+		int n = expr(arg, &success);
+		if(true == success)
+			cpu_exec(n);
  	}
 	return 0;
 }
@@ -112,7 +104,7 @@ static int cmd_x(char *args)
 			int i;
   			for (i=0; i < n; ++i) {
 				printf("0x%x\n", swaddr_read(addr+i*4, 4));
-  			}			
+   			}			
  		}
  	}
 	return 0;
@@ -120,18 +112,15 @@ static int cmd_x(char *args)
 
 static int cmd_p(char *args)
 {
-/*	char *arg = strtok(NULL, " ");*/
-	if(NULL == args) {
+	char *arg = strtok(NULL, ";");
+	if(NULL == arg) {
 		printf("Error: there must follow a subcmd\n");
 		return 0;
 	}
 //	Log("args = %s\n", args);
 	bool success = false;
-	uint32_t value = expr(args, &success);
-	if(!success) {
-		printf("Error: bad expression\n");		
-	}
-	else {
+	uint32_t value = expr(arg, &success);
+	if(success == true) {
 		printf("%d\n", value);	
 	}
 	return 0;
@@ -139,25 +128,25 @@ static int cmd_p(char *args)
 
 static int cmd_w(char *args)
 {
-//	char *arg = strtok(NULL, " ");
-	if(NULL == args) {
-		printf("Error: there must follow a subcmd\n");
+	char *arg = strtok(NULL, " ");
+	if(NULL == arg) {
+		printf("Error: too few arguments\n");
 		return 0;
 	}
 
 	bool success = false;
 	WP *new = new_wp();
 	if(new == NULL) {
-		printf("Error: no more watchpoint\n");
+		printf("Error: no more watchpoints\n");
 		return 0;
 	}
-	strcpy(new->expr, args);
-	new->expr[strlen(args)] = '\0';
+	strcpy(new->expr, arg);
+	new->expr[strlen(arg)] = '\0';
 	Log("new->expr = %s\n", new->expr);
 	// how to value a val??
 	new->oldValue = expr(new->expr, &success);
 	if(success == true) {
-		printf("new  watchpoint %d success\n", new->NO);	
+		printf("new  watchpoint %d success: %s\n", new->NO, new->expr);	
  	}
 	else {
 		printf("new watchpoint failed\n");	
