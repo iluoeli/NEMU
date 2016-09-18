@@ -48,8 +48,8 @@ WP* new_wp()
 	}
    	else {
 		// no more free wp
-		Assert(0, "Error: no more free wp");	
-		//return NULL;
+		//Assert(0, "Error: no more free wp");	
+		return NULL;
 	}
 }
 

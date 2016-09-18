@@ -147,6 +147,10 @@ static int cmd_w(char *args)
 
 	bool success = false;
 	WP *new = new_wp();
+	if(new == NULL) {
+		printf("Error: no more watchpoint\n");
+		return 0;
+	}
 	strcpy(new->expr, args);
 	new->expr[strlen(args)] = '\0';
 	Log("new->expr = %s\n", new->expr);
