@@ -31,7 +31,7 @@ static struct rule {
 	{"\\(", LBR},
 	{"\\)", RBR},
 	{"==", EQ},						// equal
-	{"0(x | X)[0-9a-fA-F]+", HEX},
+	{"0x|X[0-9a-fA-F]+", HEX},
 	{"[0-9]+", NUM},
 	{"&&", AND},
 	{"\\|{2}", OR},
