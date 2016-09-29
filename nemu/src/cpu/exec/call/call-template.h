@@ -2,7 +2,7 @@
 
 #define instr call
 
-//#if DATA_BYTE == 4
+#if DATA_BYTE == 4
 static void do_execute()
 {
 	REG(R_ESP) += DATA_BYTE;
@@ -11,7 +11,7 @@ static void do_execute()
 }
 
 make_instr_helper(i)
-//#endif
+#endif
 
 
 
