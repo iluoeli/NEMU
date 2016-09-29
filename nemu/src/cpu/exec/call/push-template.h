@@ -1,17 +1,14 @@
 #include "cpu/exec/template-start.h"
 
-#define instr call
+#define instr push
 
-#if DATA_BYTE == 4
 static void do_execute()
 {
 	REG(R_ESP) -= DATA_BYTE;
-	MEM_W(REG(R_ESP), cpu.eip);
-	cpu.eip = op_src->imm + cpu.eip;	
+	REG(R_ESP) = op_src->reg;	
 }
 
-make_instr_helper(i)
-#endif
+make_instr_helper(r)
 
 
 
