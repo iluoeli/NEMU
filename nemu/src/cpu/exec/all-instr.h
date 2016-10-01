@@ -31,5 +31,6 @@
 #include "transfer/push.h"
 #include "transfer/je.h"
 #include "transfer/pop.h"
+#include "transfer/ret.h"
 
 #include "logic/test.h"
