@@ -15,6 +15,7 @@ static void do_execute()
 	for(;i < 8; i++)
 		count += ((tmp & (0x1 << i)) == 0)? 0:1;
 	cpu.EFLAGES.PF = (count%2 == 0)? 0:1;
+	print_asm_template2();
 }
 
 make_instr_helper(r2rm)
