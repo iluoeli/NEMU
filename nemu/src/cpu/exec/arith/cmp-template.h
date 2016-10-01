@@ -20,7 +20,7 @@ static void do_execute()
 
 make_helper(concat(cmp_ib2rm_, SUFFIX))
 {
-	concat(decode_rm_, SUFFIX)(eip);
+	//concat(decode_rm_, SUFFIX)(eip);
 	op_dest->imm = 1;
 //	decode_i_b(eip+DATA_BYTE);
 //	op_dest->type = OP_TYPE_MEM;
