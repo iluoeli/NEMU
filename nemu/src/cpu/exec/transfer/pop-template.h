@@ -6,6 +6,7 @@ static void do_execute()
 {
 	cpu.eip = REG(R_ESP);
 	REG(R_ESP) -= DATA_BYTE;
+	print_asm_template2();
 }
 
 make_instr_helper(r)

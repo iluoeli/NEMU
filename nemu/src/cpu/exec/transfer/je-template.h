@@ -1,11 +1,12 @@
 #include "cpu/exec/template-start.h"
 
-#define instr jz
+#define instr je
 
 static void do_execute()
 {
 	if(cpu.EFLAGES.ZF == 0)
 		cpu.eip += op_src->val & 0xff;	
+		print_asm_template2();
 }
 
 make_instr_helper(i)
