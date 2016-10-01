@@ -28,4 +28,6 @@
 
 #include "transfer/call.h"
 #include "transfer/push.h"
+#include "transfer/jz.h"
+
 #include "logic/test.h"
