@@ -6,7 +6,7 @@
 static void do_execute()
 {
 	REG(R_ESP) -= DATA_BYTE;
-	MEM_W(REG(R_ESP), cpu.eip);
+	MEM_W(REG(R_ESP), cpu.eip+5);
 	cpu.eip += op_src->imm;	
 	print_asm_template2();
 }
