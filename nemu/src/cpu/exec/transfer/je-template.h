@@ -6,7 +6,7 @@ static void do_execute()
 {
 	if(cpu.EFLAGES.ZF == 1)
 		cpu.eip += op_src->imm;	
-	print_asm_template2();
+	print_asm_template1();
 }
 
 make_instr_helper(i)
