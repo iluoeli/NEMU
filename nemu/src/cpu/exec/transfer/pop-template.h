@@ -18,6 +18,7 @@ make_helper(pop_b)
 	op_src->type = OP_TYPE_REG;
 	op_src->reg = R_EBP;	
 	op_src->val = op_src->reg;
+	do_execute();
 	return 1;		
 }
 #endif
