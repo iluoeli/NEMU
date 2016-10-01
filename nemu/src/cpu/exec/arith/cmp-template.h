@@ -17,6 +17,6 @@ static void do_execute()
 	print_asm_template2();
 }
 
-make_instr_helper(i2rm)
+make_instr_helper(i2r)
 
 #include "cpu/exec/template-end.h"
