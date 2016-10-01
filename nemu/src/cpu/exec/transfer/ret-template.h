@@ -7,6 +7,7 @@ static void do_execute()
 {
 	cpu.eip = MEM_R(REG(R_ESP));
 	REG(R_ESP) += DATA_BYTE;	
+	print_asm_template2();
 }
 
 make_helper(concat(pop_, SUFFIX))
