@@ -4,7 +4,7 @@
 
 static void do_execute()
 {
-	uint32_t tmp = op_src->imm - op_dest->imm;
+	uint32_t tmp = op_src->val - op_dest->val;
 
 	cpu.EFLAGES.OF = !(((op_src->imm>>(8*DATA_BYTE-1) & 0x1) ^ (op_dest->imm>>(8*DATA_BYTE-1) & 0x1)) & ((op_src->imm>>(8*DATA_BYTE-1) & 0x1) ^ (tmp>>(8*DATA_BYTE-1) & 0x1)) & 0x1);		
 	cpu.EFLAGES.SF = (tmp>>(DATA_BYTE-1) & 1);
