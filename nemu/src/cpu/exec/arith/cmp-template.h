@@ -2,7 +2,6 @@
 
 #define instr cmp
 
-#if DATA_BYTE == 2 || DATA_BYTE == 4
 static void do_execute()
 {
 	uint32_t tmp = op_src->imm - op_dest->imm;
@@ -17,7 +16,7 @@ static void do_execute()
 
 	print_asm_template2();
 }
-
+/*
 make_helper(concat(cmp_ib2rm_, SUFFIX))
 {
 	//concat(decode_rm_, SUFFIX)(eip);
@@ -28,10 +27,9 @@ make_helper(concat(cmp_ib2rm_, SUFFIX))
 	do_execute();
 	return 1+DATA_BYTE;
 }
+*/
 
-#endif
-
-//make_instr_helper(i2rm)
+make_instr_helper(i2rm)
 
 
 
