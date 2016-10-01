@@ -10,11 +10,12 @@ static void do_execute()
 	//will DATA_BYTE eflect??
 	cpu.EFLAGES.SF = ((tmp & 0x8000) == 0)? 0:1;	
 	cpu.EFLAGES.ZF = (tmp == 0x0000)? 1:0;	
-	uint8_t count = 0;
-	int8_t i = 0;
-	for(;i < 8; i++)
-		count += ((tmp & (0x1 << i)) == 0)? 0:1;
-	cpu.EFLAGES.PF = (count%2 == 0)? 0:1;
+	//PF
+	uint32_t ret = tmp;
+	ret = ((uint32_t)tmp>>4) ^ tmp;
+	ret = (ret>>2) ^ ret;
+	ret = (ret>>1) ^ ret;
+	cpu.EFLAGES.PF = ret & 1;
 	print_asm_template2();
 }
 
