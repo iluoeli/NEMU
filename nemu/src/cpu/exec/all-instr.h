@@ -30,5 +30,6 @@
 #include "transfer/call.h"
 #include "transfer/push.h"
 #include "transfer/je.h"
+#include "transfer/pop.h"
 
 #include "logic/test.h"
