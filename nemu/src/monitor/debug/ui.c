@@ -62,9 +62,9 @@ static int cmd_info(char *args)
 	if(NULL == arg) {
 		printf("Error: there must be a subcmd\n");
  	}
- 	else if(0 == strcmp("r", arg)) {
+  	else if(0 == strcmp("r", arg)) {
 		int i;
- 		for (i=0; i < 8; ++i) {
+  		for (i=0; i < 8; ++i) {
 			printf("%s\t0x%x", reg_name[i], cpu.gpr[i]._32);
 			if(i != R_ESP && i != R_EBP)
 				printf("\t%d\n", cpu.gpr[i]._32);
@@ -72,8 +72,11 @@ static int cmd_info(char *args)
 				printf("\n");
  	 	}
 		printf("%s\t0x%x\n", reg_name[i],cpu.eip);
+		printf("CF\t0x%x\n", cpu.EFLAGES.CF);
+		printf("SF\t0x%x\n", cpu.EFLAGES.SF);
+		printf("ZF\t0x%x\n", cpu.EFLAGES.ZF);
  	} 
- 	else if(0 == strcmp("w", arg)) {
+  	else if(0 == strcmp("w", arg)) {
 	//TODO: add	cmd info w	
 		WP *current = h_wp();
 		printf("NO\tEXPR\n");
