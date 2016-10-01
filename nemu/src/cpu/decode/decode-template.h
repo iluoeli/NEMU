@@ -132,6 +132,7 @@ make_helper(concat(decode_rm_, SUFFIX)) {
 	return decode_rm_internal(eip, op_src, op_src2);		/* op_src2 not use here */
 }
 
+
 make_helper(concat(decode_r_, SUFFIX)) {
 	return decode_r_internal(eip, op_src);
 }
@@ -184,5 +185,10 @@ void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 	else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src); }
 	else { assert(0); }
 }
+/*
+make_helper(concat(decode_ib2rm_, SUFFIX)) {
+	int 
+}
+*/
 
 #include "cpu/exec/template-end.h"

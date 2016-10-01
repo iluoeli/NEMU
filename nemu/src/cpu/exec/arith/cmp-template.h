@@ -2,11 +2,12 @@
 
 #define instr cmp
 
+#if DATA_BYTE == 2 || DATA_BYTE == 4
 static void do_execute()
 {
-	uint32_t tmp = op_src->simm - op_src->simm;
+	uint32_t tmp = op_src->simm - op_dest->simm;
 
-	cpu.EFLAGES.OF = !(((op_src->imm>>(8*DATA_BYTE-1) & 0x1) ^ (op_src2->imm>>(8*DATA_BYTE-1) & 0x1)) & ((op_src->imm>>(8*DATA_BYTE-1) & 0x1) ^ (tmp>>(8*DATA_BYTE-1) & 0x1)) & 0x1);		
+	cpu.EFLAGES.OF = !(((op_src->imm>>(8*DATA_BYTE-1) & 0x1) ^ (op_dest->imm>>(8*DATA_BYTE-1) & 0x1)) & ((op_src->imm>>(8*DATA_BYTE-1) & 0x1) ^ (tmp>>(8*DATA_BYTE-1) & 0x1)) & 0x1);		
 	cpu.EFLAGES.SF = (tmp>>(DATA_BYTE-1) & 1);
 	cpu.EFLAGES.ZF = (tmp == 0);
 	uint32_t ret = (tmp>>4) ^ tmp;
@@ -17,6 +18,22 @@ static void do_execute()
 	print_asm_template2();
 }
 
-make_instr_helper(i2rm)
+make_helper(concat(cmp_ib2rm_, SUFFIX))
+{
+	concat(decode_rm_, SUFFIX)(eip);
+	*op_dest = *op_src;
+	decode_i_b(eip+DATA_BYTE);
+//	decode_i_b(eip+DATA_BYTE);
+//	op_dest->type = OP_TYPE_MEM;
+//	op_dest->imm = read(eip, );		
+	do_execute();
+	return 1+DATA_BYTE;
+}
+
+#endif
+
+//make_instr_helper(i2rm)
+
+
 
 #include "cpu/exec/template-end.h"
