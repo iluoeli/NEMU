@@ -14,7 +14,8 @@ enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
  * For more details about the register encoding scheme, see i386 manual.
  */
 
-typedef struct {
+typedef union {
+	struct {
 		uint32_t CF:1;
 		uint32_t :1;
 		uint32_t PF:1;
@@ -31,7 +32,9 @@ typedef struct {
 		uint32_t NT:1;
 		uint32_t :1;
 		uint32_t RF:1;
-		uint32_t VM:1;		
+		uint32_t VM:1;
+	};
+	uint32_t eflages;
 }Eflages;
 typedef	struct {
 	//General Registers define here
