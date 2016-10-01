@@ -13,7 +13,7 @@ static void do_execute()
 make_helper(concat(pop_, SUFFIX))
 {
 	do_execute();	
-	return 1;	
+	return 0;	
 }
 #endif
 
