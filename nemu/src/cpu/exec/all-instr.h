@@ -26,6 +26,6 @@
 
 #include "special/special.h"
 
-#include "call/call.h"
-#include "call/push.h"
+#include "transfer/call.h"
+#include "transfer/push.h"
 #include "logic/test.h"
