@@ -4,7 +4,7 @@
 
 static void do_execute()
 {
-	int32_t tmp = op_src->val && op_src2->val;
+	int32_t tmp = op_src->val && op_dest->val;
 	cpu.EFLAGES.CF = 0;
 	cpu.EFLAGES.OF = 0;
 	//will DATA_BYTE eflect??
