@@ -11,6 +11,15 @@ static void do_execute()
 
 make_instr_helper(r)
 
-
+/*
+make_helper(push_a)
+{
+	op_src->type = OP_TYPE_REG;
+	op_src->reg = R_EAX;
+	op_src->val = op_src->reg;
+	do_execute();	
+	return 1;
+}
+*/
 
 #include "cpu/exec/template-end.h"
