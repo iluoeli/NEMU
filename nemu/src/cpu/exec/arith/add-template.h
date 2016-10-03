@@ -18,6 +18,9 @@ static void do_execute()
 }
 
 make_instr_helper(r2rm)
+#if DATA_BYTE == 2 || DATA_BYTE == 4
+make_instr_helper(rm_imm)
+#endif
 
 #undef RET_DATA_TYPE
 
