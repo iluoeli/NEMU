@@ -31,7 +31,7 @@ make_helper(concat(cmp_ib2rm_, SUFFIX))
 */
 
 make_instr_helper(i2rm)
-
+make_instr_helper(r2rm)
 
 
 #include "cpu/exec/template-end.h"
