@@ -12,7 +12,7 @@
 
 static void do_execute()
 {
-	RET_DATA_TYPE result = (RET_DATA_TYPE)op_dest->imm - (RET_DATA_TYPE)op_src->imm;
+	RET_DATA_TYPE result = (RET_DATA_TYPE)op_dest->val - (RET_DATA_TYPE)op_src->val;
 	OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
