@@ -6,8 +6,8 @@ static void do_execute()
 {
 	uint32_t tmp = op_src->val - op_dest->val;
 
-	cpu.EFLAGES.OF = !(((op_src->imm>>(8*DATA_BYTE-1) & 0x1) ^ (op_dest->imm>>(8*DATA_BYTE-1) & 0x1)) & ((op_src->imm>>(8*DATA_BYTE-1) & 0x1) ^ (tmp>>(8*DATA_BYTE-1) & 0x1)) & 0x1);		
-	cpu.EFLAGES.SF = (tmp>>(DATA_BYTE-1) & 1);
+	cpu.EFLAGES.OF = !( ( MSB(op_src->val) ^ MSB(op_dest->val) ) & (MSB(op_src->val) ^ MSB(tmp) ));		
+	cpu.EFLAGES.SF = MSB(tmp);
 	cpu.EFLAGES.ZF = (tmp == 0);
 	uint32_t ret = (tmp>>4) ^ tmp;
 	ret = (ret>>2) ^ ret;
