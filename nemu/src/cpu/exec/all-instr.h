@@ -35,6 +35,7 @@
 
 #include "transfer/call.h"
 #include "transfer/je.h"
+#include "transfer/jcc/jbe.h"
 #include "transfer/ret.h"
 #include "transfer/jmp.h"
 
