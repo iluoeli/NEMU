@@ -32,9 +32,10 @@ make_helper(concat(decode_si_, SUFFIX)) {
 	 *
 	op_src->simm = ???
 	 */
+	 op_src->simm = instr_fetch(eip, DATA_BYTE);
 	panic("please implement me");
 
-	op_src->val = op_src->simm;
+	op_src->val = (int32_t)op_src->simm;
 
 #ifdef DEBUG
 	snprintf(op_src->str, OP_STR_SIZE, "$0x%x", op_src->val);
@@ -187,7 +188,10 @@ void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 }
 /*
 make_helper(concat(decode_ib2rm_, SUFFIX)) {
-	int 
+	int len = contact(decode_rm_, SUFFIX)(eip);
+	*op_dest = *op_src;
+	len += decode_i_b(eip+len);
+	return len;
 }
 */
 
