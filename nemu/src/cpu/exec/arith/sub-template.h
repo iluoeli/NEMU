@@ -14,6 +14,7 @@ static void do_execute()
 {
 	RET_DATA_TYPE result = (RET_DATA_TYPE)op_dest->imm - (RET_DATA_TYPE)op_src->imm;
 	OPERAND_W(op_dest, result);
+	print_asm_template2();
 }
 
 make_instr_helper(rm_imm)
