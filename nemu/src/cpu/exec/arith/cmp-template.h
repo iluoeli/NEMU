@@ -4,7 +4,7 @@
 
 static void do_execute()
 {
-	uint32_t tmp = op_src->val - op_dest->val;
+	uint32_t tmp = op_dest->val - op_src->val;
 
 	cpu.EFLAGES.OF = !( ( MSB(op_src->val) ^ MSB(op_dest->val) ) & (MSB(op_src->val) ^ MSB(tmp) ));		
 	cpu.EFLAGES.SF = MSB(tmp);
@@ -13,7 +13,7 @@ static void do_execute()
 	ret = (ret>>2) ^ ret;
 	ret = (ret>>1) ^ ret;
 	cpu.EFLAGES.PF = ret & 1;
-	cpu.EFLAGES.CF = (op_src->val < op_dest->val);
+	cpu.EFLAGES.CF = (op_dest->val < op_src->val);
 
 	print_asm_template2();
 }
