@@ -2,6 +2,8 @@
 
 #include "data-mov/mov.h"
 #include "data-mov/xchg.h"
+#include "data-mov/push.h"
+#include "data-mov/pop.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"
@@ -28,9 +30,7 @@
 #include "special/special.h"
 
 #include "transfer/call.h"
-#include "transfer/push.h"
 #include "transfer/je.h"
-#include "transfer/pop.h"
 #include "transfer/ret.h"
 
 #include "logic/test.h"
