@@ -5,7 +5,7 @@
 static void do_execute()
 {
 	if(cpu.EFLAGES.ZF || cpu.EFLAGES.CF)
-		cpu.eip += op_src->imm;	
+		cpu.eip += op_src->val;	
 	print_asm_template1();
 }
 
