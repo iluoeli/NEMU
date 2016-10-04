@@ -30,7 +30,7 @@ make_group(group1_v,
 /* 0x83 */
 make_group(group1_sx_v,
 	add_rm_imm_v, inv, inv, inv, 
-	inv, sub_rm_imm_v, inv, cmp_i2rm_b)
+	and_si2rm_v, sub_rm_imm_v, inv, cmp_i2rm_b)
 
 /* 0xc0 */
 make_group(group2_i_b,
