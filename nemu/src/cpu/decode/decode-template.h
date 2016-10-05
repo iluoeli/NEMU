@@ -186,13 +186,11 @@ void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 	else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src); }
 	else { assert(0); }
 }
-/*
-make_helper(concat(decode_ib2rm_, SUFFIX)) {
-	int len = contact(decode_rm_, SUFFIX)(eip);
-	*op_dest = *op_src;
-	len += decode_i_b(eip+len);
-	return len;
+
+make_helper(concat(decode_rmb2r__, SUFFIX)) {
+	decode_r_internal(eip, op_dest);
+	return decode_rm_b(eip);
 }
-*/
+
 
 #include "cpu/exec/template-end.h"
