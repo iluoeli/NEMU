@@ -31,17 +31,26 @@ int main() {
 	nemu_assert(getbit(buf, 4) == 0);
 	set_bp();
 	nemu_assert(getbit(buf, 5) == 1);
+	set_bp();
 	nemu_assert(getbit(buf, 6) == 0);
+	set_bp();
 	nemu_assert(getbit(buf, 7) == 1);
 
 //	set_bp();
 	setbit(buf, 8, 1);
+	set_bp();
 	setbit(buf, 9, 0);
+	set_bp();
 	setbit(buf, 10, 1);
+	set_bp();
 	setbit(buf, 11, 0);
+	set_bp();
 	setbit(buf, 12, 1);
+	set_bp();
 	setbit(buf, 13, 0);
+	set_bp();
 	setbit(buf, 14, 1);
+	set_bp();
 	setbit(buf, 15, 0);
 	nemu_assert(buf[1] == 0x55);
 
