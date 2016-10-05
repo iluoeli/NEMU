@@ -3,7 +3,7 @@
 #define instr jne
 make_helper(concat(jne_i_, SUFFIX))
 {
-	int len = concat(decode_i_, SUFFIX)(eip);
+	int len = concat(decode_i_, SUFFIX)(eip+1);
 	if(cpu.EFLAGES.ZF == 0)
 		cpu.eip += (DATA_TYPE_S)op_src->imm - (1+len);	
 	print_asm_template1();
@@ -14,7 +14,7 @@ make_helper(concat(jne_i_, SUFFIX))
 #define instr je
 make_helper(concat(je_i_, SUFFIX))
 {
-	int len = concat(decode_i_, SUFFIX)(eip);
+	int len = concat(decode_i_, SUFFIX)(eip+1);
 	if(cpu.EFLAGES.ZF == 1)
 		cpu.eip += (DATA_TYPE_S)op_src->imm - (1+len);	
 	print_asm_template1();
@@ -25,7 +25,7 @@ make_helper(concat(je_i_, SUFFIX))
 #define instr ja
 make_helper(concat(ja_i_, SUFFIX))
 {
-	int len = concat(decode_i_, SUFFIX)(eip);
+	int len = concat(decode_i_, SUFFIX)(eip+1);
 	if(cpu.EFLAGES.ZF == 0 || cpu.EFLAGES.CF == 0)
 		cpu.eip += (DATA_TYPE_S)op_src->imm - (1+len);	
 	print_asm_template1();
@@ -36,7 +36,7 @@ make_helper(concat(ja_i_, SUFFIX))
 #define instr jae
 make_helper(concat(jae_i_, SUFFIX))
 {
-	int len = concat(decode_i_, SUFFIX)(eip);
+	int len = concat(decode_i_, SUFFIX)(eip+1);
 	if(cpu.EFLAGES.CF == 0)
 		cpu.eip += (DATA_TYPE_S)op_src->imm - (1+len);	
 	print_asm_template1();
