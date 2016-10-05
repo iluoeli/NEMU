@@ -37,8 +37,6 @@
 #include "special/special.h"
 
 #include "transfer/call.h"
-#include "transfer/je.h"
-#include "transfer/jcc/jbe.h"
 #include "transfer/jcc.h"
 #include "transfer/ret.h"
 #include "transfer/jmp.h"
