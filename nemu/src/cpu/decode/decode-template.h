@@ -191,6 +191,10 @@ make_helper(concat(decode_rmb2r_, SUFFIX)) {
 	concat(decode_r_, SUFFIX)(eip);
 	return decode_rm_b(eip);
 }
+make_helper(concat(decode_rmw2r_, SUFFIX)) {
+	decode_r_l(eip);
+	return decode_rm_l(eip);
+}
 
 
 #include "cpu/exec/template-end.h"
