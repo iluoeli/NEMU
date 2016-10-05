@@ -6,7 +6,8 @@ make_helper(setne_rm_b)
 	int len = decode_rm_b(eip);
 	DATA_TYPE result = (cpu.EFLAGES.ZF == 0);
 	OPERAND_W(op_src, result);
-	return len+1;	
+	print_asm_template1();
+	return len;	
 }
 	
 
