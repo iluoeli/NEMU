@@ -188,7 +188,7 @@ void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 }
 
 make_helper(concat(decode_rmb2r_, SUFFIX)) {
-	decode_r_internal(eip, op_dest);
+	concat(decode_r_, SUFFIX)(eip);
 	return decode_rm_b(eip);
 }
 
