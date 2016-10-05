@@ -32,10 +32,10 @@ make_helper(concat(decode_si_, SUFFIX)) {
 	 *
 	op_src->simm = ???
 	 */
-	 op_src->simm = instr_fetch(eip, DATA_BYTE);
+	 op_src->simm = (DATA_TYPE_S)instr_fetch(eip, DATA_BYTE);
 //	panic("please implement me");
 
-	op_src->val = (DATA_TYPE_S)op_src->simm;
+	op_src->val = op_src->simm;
 
 #ifdef DEBUG
 	snprintf(op_src->str, OP_STR_SIZE, "$0x%x", op_src->val);
@@ -191,10 +191,12 @@ make_helper(concat(decode_rmb2r_, SUFFIX)) {
 	concat(decode_r_, SUFFIX)(eip);
 	return decode_rm_b(eip);
 }
+#if DATA_BYTE == 4
 make_helper(concat(decode_rmw2r_, SUFFIX)) {
 	decode_r_l(eip);
 	return decode_rm_l(eip);
 }
+#endif
 
 
 #include "cpu/exec/template-end.h"
