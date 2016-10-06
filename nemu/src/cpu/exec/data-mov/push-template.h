@@ -5,14 +5,22 @@
 static void do_execute()
 {
 #if DATA_BYTE == 1
-	reg_l(R_ESP) -= 2;
+	reg_l(R_ESP) -= 4;
 #undef DATA_BYTE
-#define DATA_BYTE 2
+#define DATA_BYTE 4
 	MEM_W(reg_l(R_ESP), op_src->val);
 #undef DATA_BYTE
 #define DATA_BYTE 1
 
-#elif DATA_BYTE == 4 || DATA_BYTE == 2
+#elif DATA_BYTE == 2
+	reg_l(R_ESP) -= 4;
+#undef DATA_BYTE
+#define DATA_BYTE 4
+	MEM_W(reg_l(R_ESP), op_src->val);
+#undef DATA_BYTE
+#define DATA_BYTE 2
+
+#elif DATA_BYTE == 4
 	reg_l(R_ESP) -= DATA_BYTE;
 	MEM_W(reg_l(R_ESP), op_src->val);
 #endif
