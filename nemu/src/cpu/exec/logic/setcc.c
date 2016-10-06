@@ -1,14 +1,18 @@
 #include "cpu/exec/helper.h"
 
 #define DATA_BYTE 1
-#include "setcc-template.h"
-#undef DATA_BYTE
-/*
-#define DATA_BYTE 2
-#include "setcc-template.h"
-#undef DATA_BYTE
 
-#define DATA_BYTE 4
+#define instr setne
+#define instr_condition (cpu.EFLAGES.CF == 0)
 #include "setcc-template.h"
-#undef DATA_BYTE
-*/
+#undef instr
+#undef instr_condition
+
+#define instr seta
+#define instr_condition (cpu.EFLAGES.CF == 0 && cpu.EFLAGES.ZF == 0)
+#include "setcc-template.h"
+#undef instr
+#undef instr_condition
+
+
+
