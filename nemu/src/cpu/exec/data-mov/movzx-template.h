@@ -1,6 +1,6 @@
 #include "cpu/exec/template-start.h"
 
-#define instr movzx
+#define instr movz
 
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 static void do_execute()
