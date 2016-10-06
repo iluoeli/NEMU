@@ -63,7 +63,7 @@
 #undef instr_condition
 
 #define instr setle
-#define instr_condition (cpu.EFLAGES.ZF == 1 && cpu.EFLAGES.SF != cpu.EFLAGES.OF)
+#define instr_condition (cpu.EFLAGES.ZF == 1 || cpu.EFLAGES.SF != cpu.EFLAGES.OF)
 #include "setcc-template.h"
 #undef instr
 #undef instr_condition
