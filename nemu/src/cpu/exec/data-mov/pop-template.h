@@ -4,13 +4,14 @@
 
 static void do_execute()
 {
-	OPERAND_W(op_src, MEM_R(REG(R_ESP)));
+	OPERAND_W(op_src, MEM_R(reg_l(R_ESP)));
+	REG(R_ESP) += DATA_BYTE;
 //	REG(op_src->reg) = MEM_R(REG(R_ESP));
-#if DATA_BYTE == 1 || DATA_BYTE == 4
-	REG(R_ESP) += 4;
-#elif DATA_BYTE == 2
-	REG(R_ESP) += 2;
-#endif
+//#if DATA_BYTE == 1 || DATA_BYTE == 4
+//	REG(R_ESP) += 4;
+//#elif DATA_BYTE == 2
+//	REG(R_ESP) += 2;
+//#endif
 	print_asm_template2();
 }
 
