@@ -8,7 +8,7 @@ static void do_execute()
 //	reg_l(R_ESP) -= 4;
 //	MEM_W(reg_l(R_ESP), op_src->val);
 //#elif DATA_BYTE == 2
-	reg_w(R_ESP) -= DATA_BYTE;
+	reg_l(R_ESP) -= DATA_BYTE;
 	MEM_W(reg_l(R_ESP), op_src->val);
 //#endif
 /*	REG(R_ESP) -= DATA_BYTE;
