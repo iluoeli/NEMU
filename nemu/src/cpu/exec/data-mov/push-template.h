@@ -12,7 +12,7 @@ static void do_execute()
 #undef DATA_BYTE
 #define DATA_BYTE 1
 
-#elif DATA_BYTE == 4 || DDATA_BYTE == 2
+#elif DATA_BYTE == 4 || DATA_BYTE == 2
 	reg_l(R_ESP) -= DATA_BYTE;
 	MEM_W(reg_l(R_ESP), op_src->val);
 #endif
