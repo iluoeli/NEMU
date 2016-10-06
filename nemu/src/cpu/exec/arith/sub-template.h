@@ -12,12 +12,19 @@
 
 static void do_execute()
 {
-	RET_DATA_TYPE result = (RET_DATA_TYPE)op_dest->val - (RET_DATA_TYPE)op_src->val;
+	DATA_TYPE result = op_dest->val - (DATA_TYPE_S)op_src->val;
 	OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
 
-make_instr_helper(rm_imm)
+make_instr_helper(r2rm)
+make_instr_helper(rm2r)
+make_instr_helper(i2a)
+make_instr_helper(i2rm)
+
+#if DATA_BYTE == 2 || DATA_BYTE == 4
+make_instr_helper(si2rm)
+#endif
 
 #undef RET_DATA_TYPE
 
