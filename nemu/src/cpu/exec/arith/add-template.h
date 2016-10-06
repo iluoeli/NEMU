@@ -13,10 +13,7 @@
 static void do_execute()
 {	
 	DATA_TYPE result;
-	if(op_src->type == OP_TYPE_IMM)
-		result = (RET_DATA_TYPE)op_dest->imm + (RET_DATA_TYPE)op_src->imm;
-	else 
-		result = op_dest->val + op_src->val;
+	result = (RET_DATA_TYPE)op_dest->imm + (RET_DATA_TYPE)op_src->imm;
 	OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
