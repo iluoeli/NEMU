@@ -24,8 +24,11 @@ int main() {
 
 	buf[0] = 0xaa; 
 	nemu_assert(getbit(buf, 0) == 0);
+	set_bp();
 	nemu_assert(getbit(buf, 1) == 1);
+	set_bp();
 	nemu_assert(getbit(buf, 2) == 0);
+	set_bp();
 	nemu_assert(getbit(buf, 3) == 1);
 	set_bp();
 	nemu_assert(getbit(buf, 4) == 0);
