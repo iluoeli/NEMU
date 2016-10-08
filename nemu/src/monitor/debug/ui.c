@@ -62,7 +62,7 @@ static int cmd_info(char *args)
 	if(NULL == arg) {
 		printf("Error: there must be a subcmd\n");
  	}
-   	else if(0 == strcmp("r", arg)) {
+    	else if(0 == strcmp("r", arg)) {
 		int i;
    		for (i=0; i < 8; ++i) {
 			printf("%s\t0x%x", reg_name[i], cpu.gpr[i]._32);
@@ -73,6 +73,7 @@ static int cmd_info(char *args)
  	 	}
 		printf("%s\t0x%x\n", reg_name[i],cpu.eip);
 		printf("CF\t0x%x\n", cpu.EFLAGES.CF);
+		printf("OF\t0x%x\n", cpu.EFLAGES.OF);
 		printf("SF\t0x%x\n", cpu.EFLAGES.SF);
 		printf("ZF\t0x%x\n", cpu.EFLAGES.ZF);
 		printf("PF\t0x%x\n", cpu.EFLAGES.PF);
