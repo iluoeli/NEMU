@@ -4,7 +4,7 @@
 
 static void do_execute()
 {
-	DATA_TYPE tmp = op_dest->val - op_src->val;
+	DATA_TYPE tmp = op_src->val - op_dest->val;
 
 	cpu.EFLAGES.OF =  ( MSB(op_src->val) == MSB(op_dest->val) && (MSB(op_src->val) != MSB(tmp) ));		
 	cpu.EFLAGES.SF = MSB(tmp);
