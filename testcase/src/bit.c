@@ -49,7 +49,7 @@ int main() {
 	nemu_assert(buf[1] == 0x5);
 	set_bp();
 	setbit(buf, 11, 0);
-	nemu_assert(buf[1] == 0x1);
+	nemu_assert(buf[1] == 0x5);
 	set_bp();
 	setbit(buf, 12, 1);
 	nemu_assert(buf[1] == 0x15);
