@@ -190,14 +190,14 @@ void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 make_helper(concat(decode_rmb2r_, SUFFIX)) {
 //	concat(decode_r_, SUFFIX)(eip);
 //	decode_r_internal(eip, op_dest);
-	decode_rm2r_b(eip);
+	decode_rm2r_w(eip);
 	return decode_rm_b(eip);
 }
 #if DATA_BYTE == 4
 make_helper(concat(decode_rmw2r_, SUFFIX)) {
 //	decode_r_l(eip);
 //	decode_r_internal(eip, op_dest);
-	decode_rm2r_w(eip);
+	decode_rm2r_l(eip);
 	return decode_rm_l(eip);
 }
 #endif
