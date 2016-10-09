@@ -12,8 +12,17 @@
 
 static void do_execute()
 {
-	DATA_TYPE result = op_dest->val + op_src->val;
+	uint64_t result = op_dest->val + op_src->val;
 	OPERAND_W(op_dest, result);
+	cpu.EFLAGES.OF =  ( MSB(op_src->val) == MSB(op_dest->val) && (MSB(op_dest->val) != MSB(result) ));
+	 cpu.EFLAGES.SF = MSB(result);
+	 cpu.EFLAGES.ZF = (result == 0);
+	 uint8_t ret = (result>>4) ^ result;
+     ret = (ret>>2) ^ ret;
+     ret = (ret>>1) ^ ret;
+     cpu.EFLAGES.PF = ret & 1;
+     cpu.EFLAGES.CF = (result >> (DATA_BYTE*8 - 1)) & 1;
+		    
 	print_asm_template2();
 }
 
