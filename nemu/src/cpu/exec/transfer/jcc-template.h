@@ -26,7 +26,7 @@ make_helper(concat(je_i_, SUFFIX))
 make_helper(concat(ja_i_, SUFFIX))
 {
 	int len = concat(decode_i_, SUFFIX)(eip+1);
-	if(cpu.EFLAGES.ZF == 0 || cpu.EFLAGES.CF == 0)
+	if(cpu.EFLAGES.ZF == 0 && cpu.EFLAGES.CF == 0)
 		cpu.eip += (DATA_TYPE_S)op_src->imm;	
 	print_asm_template1();
 	return 1+len;
