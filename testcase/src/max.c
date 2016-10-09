@@ -17,10 +17,10 @@ int main() {
 	int loop = 0;
 	for(i = 0; i < NR_DATA; i ++) {
 		for(j = 0; j < NR_DATA; j ++) {
-			seb_bp();
+			set_bp();
 			nemu_assert(max(test_data[i], test_data[j]) == ans[ans_idx ++]);
 			loop ++;
-		}
+ 		}
 	}
 
 	nemu_assert(loop == NR_DATA * NR_DATA);
