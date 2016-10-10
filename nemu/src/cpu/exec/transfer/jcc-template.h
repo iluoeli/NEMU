@@ -37,7 +37,7 @@ make_helper(concat(ja_i_, SUFFIX))
 make_helper(concat(jae_i_, SUFFIX))
 {
 	int len = concat(decode_i_, SUFFIX)(eip+1);
-	if(cpu.EFLAGES.CF == 0)
+	if(cpu.EFLAGES.CF == 0 || cpu.EFLAGES.ZF == 1)
 		cpu.eip += (DATA_TYPE_S)op_src->imm;	
 	print_asm_template1();
 	return 1+len;
@@ -48,7 +48,7 @@ make_helper(concat(jae_i_, SUFFIX))
 make_helper(concat(jb_i_, SUFFIX))
 {
 	int len = concat(decode_i_, SUFFIX)(eip+1);
-	if(cpu.EFLAGES.CF == 1)
+	if(cpu.EFLAGES.CF == 1 && cpu.EFLAGES.ZF == 0)
 		cpu.eip += (DATA_TYPE_S)op_src->imm;	
 	print_asm_template1();
 	return 1+len;
@@ -70,7 +70,7 @@ make_helper(concat(jbe_i_, SUFFIX))
 make_helper(concat(jg_i_, SUFFIX))
 {
 	int len = concat(decode_i_, SUFFIX)(eip+1);
-	if(cpu.EFLAGES.ZF == 0 || cpu.EFLAGES.SF == cpu.EFLAGES.OF)
+	if(cpu.EFLAGES.ZF == 0 && cpu.EFLAGES.SF == cpu.EFLAGES.OF)
 		cpu.eip += (DATA_TYPE_S)op_src->imm;	
 	print_asm_template1();
 	return 1+len;
@@ -81,7 +81,7 @@ make_helper(concat(jg_i_, SUFFIX))
 make_helper(concat(jge_i_, SUFFIX))
 {
 	int len = concat(decode_i_, SUFFIX)(eip+1);
-	if(cpu.EFLAGES.SF == cpu.EFLAGES.OF)
+	if(cpu.EFLAGES.SF == cpu.EFLAGES.OF || cpu.EFLAGES.ZF == 1)
 		cpu.eip += (DATA_TYPE_S)op_src->imm;	
 	print_asm_template1();
 	return 1+len;
@@ -92,7 +92,7 @@ make_helper(concat(jge_i_, SUFFIX))
 make_helper(concat(jl_i_, SUFFIX))
 {
 	int len = concat(decode_i_, SUFFIX)(eip+1);
-	if(cpu.EFLAGES.SF != cpu.EFLAGES.OF)
+	if(cpu.EFLAGES.SF != cpu.EFLAGES.OF && cpu.EFLAGES.ZF == 0)
 		cpu.eip += (DATA_TYPE_S)op_src->imm;	
 	print_asm_template1();
 	return 1+len;
