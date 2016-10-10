@@ -1,4 +1,5 @@
 #include "cpu/exec/helper.h"
+#include "cpu/decode/modrm.h"
 
 make_helper(cwtl)
 {
@@ -17,3 +18,7 @@ make_helper(cltd)
 	return 1;
 }
 
+make_helper(cwtl_cltd_v)
+{
+	return (ops_decoded.is_operand_size_16 ? cwtl:cltd)(eip);	
+}

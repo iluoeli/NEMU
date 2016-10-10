@@ -3,6 +3,7 @@
 
 make_helper(cwtl);
 make_helper(cltd);
+make_helper(cwtl_cltd_v);
 		  
 		
 #endif
