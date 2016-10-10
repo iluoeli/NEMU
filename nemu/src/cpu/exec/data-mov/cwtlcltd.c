@@ -2,8 +2,7 @@
 
 make_helper(cwtl)
 {
-	int32_t tmp = reg_w(R_EAX);
-	reg_l(R_EAX) = tmp;
+	reg_w(R_DX) = ((int16_t)reg_w(R_AX) < 0) ? 0xffff : 0x0;
 	print_asm("cwtl");	
 	return 1;
 }
@@ -11,8 +10,7 @@ make_helper(cwtl)
 
 make_helper(cltd)
 {
-	int64_t tmp = reg_l(R_EAX);
-	reg_l(R_EDX) = (tmp >> 32) & 0xffffffff;
+	reg_l(R_EDX) = ((int32_t)reg_l(R_EAX) < 0) ? 0xffffffff : 0x0;
 	print_asm("cltd");	
 	return 1;
 }
