@@ -18,6 +18,7 @@ make_instr_helper(r)
 make_instr_helper(i)
 #endif
 */
+/*
 #if DATA_BYTE == 4
 make_helper(pop_b)
 {
@@ -28,5 +29,5 @@ make_helper(pop_b)
 	return 1;		
 }
 #endif
-
+*/
 #include "cpu/exec/template-end.h"
