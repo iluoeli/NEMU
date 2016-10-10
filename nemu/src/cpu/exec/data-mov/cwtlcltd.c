@@ -16,3 +16,4 @@ make_helper(cltd)
 	print_asm("cltd");	
 	return 1;
 }
+
