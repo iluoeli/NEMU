@@ -36,6 +36,7 @@
 #include "logic/setcc.h"
 
 #include "string/rep.h"
+#include "string/lods.h"
 
 #include "misc/misc.h"
 
