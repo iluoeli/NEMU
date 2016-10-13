@@ -3,7 +3,7 @@
 
 make_helper(movs_b);
 make_helper(movs_w);
-make_helper(movs_d);
+make_helper(movs_l);
 make_helper(movs_v);
 
 
