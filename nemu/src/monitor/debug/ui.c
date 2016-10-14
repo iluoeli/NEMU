@@ -77,6 +77,7 @@ static int cmd_info(char *args)
 		printf("SF\t0x%x\n", cpu.EFLAGES.SF);
 		printf("ZF\t0x%x\n", cpu.EFLAGES.ZF);
 		printf("PF\t0x%x\n", cpu.EFLAGES.PF);
+		printf("DF\t0x%x\n", cpu.EFLAGES.DF);
  	} 
   	else if(0 == strcmp("w", arg)) {
 	//TODO: add	cmd info w	
