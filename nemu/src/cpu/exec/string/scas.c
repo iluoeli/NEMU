@@ -42,7 +42,7 @@ make_helper(scas_w)
 	ret = (ret>>2) ^ ret;
 	ret = (ret>>1) ^ ret;
 	cpu.EFLAGES.PF = ret & 1;
-	cpu.EFLAGES.CF = (result>>16 & 1) ^ 1;
+	cpu.EFLAGES.CF = (ax < dest);
 
 	if(cpu.EFLAGES.DF == 0)
 		reg_l(R_EDI) += 2;
@@ -68,7 +68,7 @@ make_helper(scas_l)
 	ret = (ret>>2) ^ ret;
 	ret = (ret>>1) ^ ret;
 	cpu.EFLAGES.PF = ret & 1;
-	cpu.EFLAGES.CF = (result>>32 & 1) ^ 1;
+	cpu.EFLAGES.CF = (eax < dest);
 
 	if(cpu.EFLAGES.DF == 0)
 		reg_l(R_EDI) += 4;

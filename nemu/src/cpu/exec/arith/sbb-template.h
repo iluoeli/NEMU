@@ -14,6 +14,14 @@ static void do_execute()
 {
 	DATA_TYPE result = op_dest->val - (op_src->val + cpu.EFLAGES.CF);
 	OPERAND_W(op_dest, result);
+	cpu.EFLAGES.OF =  ( !MSB(op_src->val) == MSB(op_dest->val) && (MSB(op_dest->val+cpu.EFLAGES.CF) != MSB(result) ));
+	cpu.EFLAGES.SF = MSB(result);
+	cpu.EFLAGES.ZF = (result == 0);
+	uint32_t ret = (result>>4) ^ result;
+	ret = (ret>>2) ^ ret;
+	ret = (ret>>1) ^ ret;
+	cpu.EFLAGES.PF = ret & 1;
+	cpu.EFLAGES.CF = (op_dest->val < (op_src->val+cpu.EFLAGES.CF));
 	print_asm_template2();
 }
 
