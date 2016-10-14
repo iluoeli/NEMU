@@ -8,7 +8,7 @@ make_helper(scas_b)
 	uint16_t result;
 	dest = swaddr_read(reg_l(R_EDI), 1);
 	result = al - dest;
-	cpu.EFLAGES.OF =  ( (dest>>7 & 1) == (al>>7 & 1) && ((al>>7 & 1) != (result>>7 & 1)));
+	cpu.EFLAGES.OF =  ( !(dest>>7 & 1) == (al>>7 & 1) && ((al>>7 & 1) != (result>>7 & 1)));
 	cpu.EFLAGES.SF = (result>>7 & 1);
 	cpu.EFLAGES.ZF = ((uint8_t)result == 0);
 	uint8_t ret = (result>>4) ^ result;
@@ -34,7 +34,7 @@ make_helper(scas_w)
 	uint32_t result;
 	dest = swaddr_read(reg_l(R_EDI), 2);
 	result = ax - dest;
-	cpu.EFLAGES.OF =  ( (dest>>15 & 1) == (ax>>15 & 1) && ((ax>>15 & 1) != (result>>15 & 1)));
+	cpu.EFLAGES.OF =  ( !(dest>>15 & 1) == (ax>>15 & 1) && ((ax>>15 & 1) != (result>>15 & 1)));
 	cpu.EFLAGES.SF = (result>>15 & 1);
 	cpu.EFLAGES.ZF = ((uint16_t)result == 0);
 	uint8_t ret = (result>>4) ^ result;
@@ -60,7 +60,7 @@ make_helper(scas_l)
 	uint64_t result;
 	dest = swaddr_read(reg_l(R_EDI), 4);
 	result = eax - dest;
-	cpu.EFLAGES.OF =  ( (dest>>31 & 1) == (eax>>31 & 1) && ((eax>>31 & 1) != (result>>31 & 1)));
+	cpu.EFLAGES.OF =  ( !(dest>>31 & 1) == (eax>>31 & 1) && ((eax>>31 & 1) != (result>>31 & 1)));
 	cpu.EFLAGES.SF = (result>>31 & 1);
 	cpu.EFLAGES.ZF = ((uint32_t)result == 0);
 	uint8_t ret = (result>>4) ^ result;
