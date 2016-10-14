@@ -7,7 +7,7 @@ make_helper(movs_b)
 		reg_l(R_EDI) ++;
 		reg_l(R_ESI) ++;
 	}
-	else{
+ 	else{
 		reg_l(R_EDI) --;
 		reg_l(R_ESI) --;
 	}
@@ -18,11 +18,11 @@ make_helper(movs_b)
 make_helper(movs_w)
 {
 	swaddr_write(reg_l(R_EDI), 2, swaddr_read(reg_l(R_ESI), 2));
-	if(cpu.EFLAGES.DF == 0){
+ 	if(cpu.EFLAGES.DF == 0){
 		reg_l(R_EDI) += 2;
 		reg_l(R_ESI) += 2;
 	}
-	else{
+ 	else{
 		reg_l(R_EDI) -= 2;
 		reg_l(R_ESI) -= 2;
 	}
@@ -33,11 +33,11 @@ make_helper(movs_w)
 make_helper(movs_l)
 {
 	swaddr_write(reg_l(R_EDI), 4, instr_fetch(reg_l(R_ESI), 4));
-	if(cpu.EFLAGES.DF == 0){
+ 	if(cpu.EFLAGES.DF == 0){
 		reg_l(R_EDI) += 4;
 		reg_l(R_ESI) += 4;
 	}
- 	else{
+  	else{
 		reg_l(R_EDI) -= 4;
 		reg_l(R_ESI) -= 4;
 	}
