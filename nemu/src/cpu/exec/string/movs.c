@@ -32,7 +32,7 @@ make_helper(movs_w)
 
 make_helper(movs_l)
 {
-	swaddr_write(reg_l(R_EDI), 4, instr_fetch(reg_l(R_ESI), 4));
+	swaddr_write(reg_l(R_EDI), 4, swaddr_read(reg_l(R_ESI), 4));
  	if(cpu.EFLAGES.DF == 0){
 		reg_l(R_EDI) += 4;
 		reg_l(R_ESI) += 4;
