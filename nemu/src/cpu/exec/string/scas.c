@@ -15,7 +15,8 @@ make_helper(scas_b)
 	ret = (ret>>2) ^ ret;
 	ret = (ret>>1) ^ ret;
 	cpu.EFLAGES.PF = ret & 1;
-	cpu.EFLAGES.CF = (result>>8 & 1) ^ 1;
+	//cpu.EFLAGES.CF = (result>>8 & 1) ^ 1;
+	cpu.EFLAGES.CF = (al < dest);
 
 	if(cpu.EFLAGES.DF == 0)
 		reg_l(R_EDI)++;
