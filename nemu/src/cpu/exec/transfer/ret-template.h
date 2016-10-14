@@ -26,7 +26,7 @@ make_helper(ret_i_b)
 {
 	decode_i_b(eip+1);
 	do_execute();
-	cpu.eip += op_src->val;	
+	reg_l(R_ESP) += op_src->val;	
 	return 0;	
 }
 #endif
