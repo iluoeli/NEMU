@@ -3,7 +3,7 @@
 #define instr dec
 
 static void do_execute () {
-	uint64_t result = op_src->val - 1;
+	uint64_t result = (uint64_t)op_src->val - 1;
 	OPERAND_W(op_src, result);
 
 	/* TODO: Update EFLAGS. */
@@ -15,7 +15,7 @@ static void do_execute () {
 	ret = (ret>>2) ^ ret;
 	ret = (ret>>1) ^ ret;
 	cpu.EFLAGES.PF = ret & 1;
-	cpu.EFLAGES.CF = (op_src->val  < 1) & 1;	 
+	cpu.EFLAGES.CF = (result >> (DATA_BYTE * 8)) & 1;	 
 
 	print_asm_template1();
 }
