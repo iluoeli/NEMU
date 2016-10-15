@@ -26,7 +26,7 @@ make_helper(rep) {
 				);
 
 			/* TODO: Jump out of the while loop if necessary. */
-			if(cpu.EFLAGES.ZF == 1 && (
+			if(cpu.EFLAGES.ZF == 0 && (
 					ops_decoded.opcode == 0xa6
 				 || ops_decoded.opcode == 0xa7 
 				 || ops_decoded.opcode == 0xae 
@@ -57,7 +57,7 @@ make_helper(repnz) {
 			  );
 
 		/* TODO: Jump out of the while loop if necessary. */
-		if(cpu.EFLAGES.ZF == 0 && (
+		if(cpu.EFLAGES.ZF == 1 && (
 					ops_decoded.opcode == 0xa6
 				 || ops_decoded.opcode == 0xa7 
 				 || ops_decoded.opcode == 0xae 
