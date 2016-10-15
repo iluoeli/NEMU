@@ -98,7 +98,7 @@ static int cmd_x(char *args)
 {
 	char *arg1 = strtok(NULL, " ");
 	char *arg2 = strtok(NULL, ".");
-	if(NULL == arg1 || NULL == arg2) {
+ 	if(NULL == arg1 || NULL == arg2) {
 		printf("Error: there must be 2 subcmds\n");
  	}
   	else {
@@ -112,7 +112,7 @@ static int cmd_x(char *args)
 				printf("0x%x\n", swaddr_read(addr+i*4, 4));
    			}			
  		}
- 	}
+  	}
 	return 0;
 }
 
@@ -134,7 +134,7 @@ static int cmd_p(char *args)
 
 static int cmd_w(char *args)
 {
-	char *arg = strtok(NULL, " ");
+	char *arg = strtok(NULL, ",");
 	if(NULL == arg) {
 		printf("Error: too few arguments\n");
 		return 0;
@@ -148,7 +148,7 @@ static int cmd_w(char *args)
 	}
 	strcpy(new->expr, arg);
 	new->expr[strlen(arg)] = '\0';
-	Log("new->expr = %s\n", new->expr);
+//	Log("new->expr = %s\n", new->expr);
 	// how to value a val??
 	new->oldValue = expr(new->expr, &success);
 	if(success == true) {
