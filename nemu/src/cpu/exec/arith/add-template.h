@@ -12,7 +12,7 @@
 
 static void do_execute()
 {
-	uint64_t result = op_dest->val + op_src->val;
+	uint64_t result = (uint64_t)op_dest->val + (uint64_t)op_src->val;
 	OPERAND_W(op_dest, result);
 	cpu.EFLAGES.OF =  ( MSB(op_src->val) == MSB(op_dest->val) && (MSB(op_dest->val) != MSB(result) ));
 	 cpu.EFLAGES.SF = MSB(result);
