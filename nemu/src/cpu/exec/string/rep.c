@@ -9,7 +9,7 @@ make_helper(rep) {
 		/* repz ret */
 		exec(eip + 1);
 		len = 0;
-	}
+ 	}
    	else {
   		while(cpu.ecx) {
 			exec(eip + 1);
@@ -26,10 +26,10 @@ make_helper(rep) {
 				);
 
 			/* TODO: Jump out of the while loop if necessary. */
-			if(cpu.EFLAGES.ZF == 1)	break;
- 		}
+			if(cpu.EFLAGES.ZF == 0)	break;
+  		}
 		len = 1;
-	}
+ 	}
 
 #ifdef DEBUG
 	char temp[80];
@@ -53,7 +53,7 @@ make_helper(repnz) {
 			  );
 
 		/* TODO: Jump out of the while loop if necessary. */
-		if(cpu.EFLAGES.ZF == 0)	break;
+		if(cpu.EFLAGES.ZF == 1)	break;
 
   	}
 
