@@ -26,7 +26,11 @@ make_helper(rep) {
 				);
 
 			/* TODO: Jump out of the while loop if necessary. */
-			if(cpu.EFLAGES.ZF == 1)	break;
+			if(cpu.EFLAGES.ZF == 1 && (
+					ops_decoded.opcode == 0xa6
+				 || ops_decoded.opcode == 0xa7 
+				 || ops_decoded.opcode == 0xae 
+				 || ops_decoded.opcode == 0xaf))	break;
   		}
 		len = 1;
  	}
@@ -53,7 +57,11 @@ make_helper(repnz) {
 			  );
 
 		/* TODO: Jump out of the while loop if necessary. */
-		if(cpu.EFLAGES.ZF == 1 || cpu.ecx == 0)	break;
+		if(cpu.EFLAGES.ZF == 0 && (
+					ops_decoded.opcode == 0xa6
+				 || ops_decoded.opcode == 0xa7 
+				 || ops_decoded.opcode == 0xae 
+				 || ops_decoded.opcode == 0xaf))	break;
 
   	}
 
