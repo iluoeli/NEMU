@@ -61,7 +61,7 @@ static int cmd_info(char *args)
 	char *arg = strtok(NULL, " ");
 	if(NULL == arg) {
 		printf("Error: there must be a subcmd\n");
- 	}
+ 	} 
     	else if(0 == strcmp("r", arg)) {
 		int i;
    		for (i=0; i < 8; ++i) {
@@ -70,7 +70,7 @@ static int cmd_info(char *args)
 				printf("\t%d\n", cpu.gpr[i]._32);
 			else
 				printf("\n");
- 	 	}
+ 	  	}
 		printf("%s\t0x%x\n", reg_name[i],cpu.eip);
 		printf("CF\t0x%x\n", cpu.EFLAGES.CF);
 		printf("OF\t0x%x\n", cpu.EFLAGES.OF);
@@ -90,7 +90,7 @@ static int cmd_info(char *args)
 	}
   	else{
 		printf("Error: no match cmd as %s \n", arg);
-	}
+	} 
 	return 0;
 }
 
@@ -220,11 +220,11 @@ static int cmd_help(char *args) {
 		/* no argument given */
  		for(i = 0; i < NR_CMD; i ++) {
 			printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-  		}
- 	}
-  	else {
- 		for(i = 0; i < NR_CMD; i ++) {
- 			if(strcmp(arg, cmd_table[i].name) == 0) {
+   		}
+  	}
+   	else {
+  		for(i = 0; i < NR_CMD; i ++) {
+  			if(strcmp(arg, cmd_table[i].name) == 0) {
 				printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
 				return 0;
   			}
@@ -245,9 +245,9 @@ void ui_mainloop() {
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
-  		 */
+   		 */
 		char *args = cmd + strlen(cmd) + 1;
-  		if(args >= str_end) {
+   		if(args >= str_end) {
 			args = NULL;
 		}
 
@@ -258,13 +258,13 @@ void ui_mainloop() {
 
 		int i;
 		for(i = 0; i < NR_CMD; i ++) {
-			if(strcmp(cmd, cmd_table[i].name) == 0) {
+ 			if(strcmp(cmd, cmd_table[i].name) == 0) {
 				if(cmd_table[i].handler(args) < 0) { return; }
 				break;
   			}
-   		}
+    		}
 
 		if(i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
- 	}
+  	}
 	
 }
