@@ -26,7 +26,7 @@ make_helper(rep) {
 				);
 
 			/* TODO: Jump out of the while loop if necessary. */
-			if(cpu.EFLAGES.ZF == 0)	break;
+			if(cpu.EFLAGES.ZF == 0 || cpu.ecx == 0)	break;
   		}
 		len = 1;
  	}
@@ -53,7 +53,7 @@ make_helper(repnz) {
 			  );
 
 		/* TODO: Jump out of the while loop if necessary. */
-		if(cpu.EFLAGES.ZF == 1)	break;
+		if(cpu.EFLAGES.ZF == 1 || cpu.ecx == 0)	break;
 
   	}
 
