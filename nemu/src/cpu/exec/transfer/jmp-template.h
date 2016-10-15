@@ -6,7 +6,7 @@
 //jmp direct 
 static void do_execute()
 {
-	cpu.eip += op_src->val;
+	cpu.eip += (DATA_TYPE_S)op_src->val;
 	if(ops_decoded.is_operand_size_16 == true)
 		cpu.eip = cpu.eip & 0x0000ffff;
 	print_asm_template1();
