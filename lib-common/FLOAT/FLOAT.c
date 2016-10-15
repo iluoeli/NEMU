@@ -1,8 +1,8 @@
 #include "FLOAT.h"
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-	nemu_assert(0);
-	return 0;
+i//	nemu_assert(0);
+	return (a/b) << 16;
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
@@ -29,7 +29,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT f2F(float a) {
-	/* You should figure out how to convert `a' into FLOAT without
+ 	/* You should figure out how to convert `a' into FLOAT without
 	 * introducing x87 floating point instructions. Else you can
 	 * not run this code in NEMU before implementing x87 floating
 	 * point instructions, which is contrary to our expectation.
@@ -39,13 +39,13 @@ FLOAT f2F(float a) {
 	 * performing arithmetic operations on it directly?
 	 */
 
-	nemu_assert(0);
-	return 0;
+//	nemu_assert(0);
+	return (a << 16);
 }
 
 FLOAT Fabs(FLOAT a) {
-	nemu_assert(0);
-	return 0;
+//	nemu_assert(0);
+	return (a & 0x7fffffff);
 }
 
 /* Functions below are already implemented */
@@ -56,7 +56,7 @@ FLOAT sqrt(FLOAT x) {
 	do {
 		dt = F_div_int((F_div_F(x, t) - t), 2);
 		t += dt;
-	} while(Fabs(dt) > f2F(1e-4));
+ 	} while(Fabs(dt) > f2F(1e-4));
 
 	return t;
 }
@@ -69,7 +69,7 @@ FLOAT pow(FLOAT x, FLOAT y) {
 		t2 = F_mul_F(t, t);
 		dt = (F_div_F(x, t2) - t) / 3;
 		t += dt;
-	} while(Fabs(dt) > f2F(1e-4));
+ 	} while(Fabs(dt) > f2F(1e-4));
 
 	return t;
 }
