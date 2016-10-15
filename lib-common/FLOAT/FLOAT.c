@@ -1,7 +1,7 @@
 #include "FLOAT.h"
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-i//	nemu_assert(0);
+//	nemu_assert(0);
 	return (a/b) << 16;
 }
 
@@ -23,9 +23,10 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * It is OK not to use the template above, but you should figure
 	 * out another way to perform the division.
 	 */
-
-	nemu_assert(0);
-	return 0;
+	FLOAT quo, rem;
+	asm volatile ("div %2" : "=a"(quo), "=d"(rem) : "r"(b), "a"(a), "d"(0x00000000));
+//	nemu_assert(0);
+	return quo << 16;
 }
 
 FLOAT f2F(float a) {
@@ -40,7 +41,17 @@ FLOAT f2F(float a) {
 	 */
 
 //	nemu_assert(0);
-	return (a << 16);
+	FLOAT tmp, result;
+	int M, R, E;
+	asm volatile ("movl 0x8(%%ebp), %%eax" : "=a"(tmp));
+	M = tmp & 0x007fffff;
+	R = 2;
+	E = tmp & 0x7f800000;
+	result = (M * (R << E ) << 16);
+	result = result & 0x7fffffff;
+	result = result || (tmp & 0x80000000);
+
+	return result;
 }
 
 FLOAT Fabs(FLOAT a) {
@@ -53,10 +64,10 @@ FLOAT Fabs(FLOAT a) {
 FLOAT sqrt(FLOAT x) {
 	FLOAT dt, t = int2F(2);
 
-	do {
+ 	do {
 		dt = F_div_int((F_div_F(x, t) - t), 2);
 		t += dt;
- 	} while(Fabs(dt) > f2F(1e-4));
+  	} while(Fabs(dt) > f2F(1e-4));
 
 	return t;
 }
