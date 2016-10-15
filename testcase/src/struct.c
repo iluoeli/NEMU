@@ -18,8 +18,7 @@ int main() {
 		d.pad2[i] = i;
 	}
 	struct dummy t = fun(d);
-
- 	for(i = 0; i < N; i ++) {
+  	for(i = 0; i < N; i ++) {
 		nemu_assert(t.pad1[i] == i + 128);
 		nemu_assert(t.pad2[i] == i);
 	}
