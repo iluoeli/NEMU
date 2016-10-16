@@ -198,7 +198,7 @@ make_helper(concat(decode_rmw2r_, SUFFIX)) {
 //	decode_r_l(eip);
 //	decode_r_internal(eip, op_dest);
 	decode_rm2r_l(eip);
-	return decode_rm_l(eip);
+	return decode_rm_w(eip);
 }
 #endif
 
