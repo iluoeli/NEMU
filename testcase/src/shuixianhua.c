@@ -10,12 +10,11 @@ int main() {
 	int n, n2, n1, n0;
 	int k = 0;
 	for(n = 100; n < 1000; n ++) {
-		if(n == 153)
 		n2 = n / 100;
 		n1 = (n / 10) % 10;
 		n0 = n % 10;
 
-		if(n == cube(n2) + cube(n1) + cube(n0)) {
+ 		if(n == cube(n2) + cube(n1) + cube(n0)) {
 			nemu_assert(n == ans[k]);
 			k ++;
 		}
