@@ -43,14 +43,19 @@ FLOAT f2F(float a) {
 	 */
 
 //	nemu_assert(0);
-	FLOAT tmp, result;
+	long long tmp;
+	long long result;
 	int M, R, E;
 	asm volatile ("movl 0x4(%%esp), %%eax" : "=a"(tmp));
 	M = tmp & 0x007fffff;
 	M = tmp | 0x00800000;
 	R = 2;
 	E = (tmp & 0x7f800000) >> 23;
-	result = (M * (R << (E-127) ) << 16);
+	E = E - 127 + 16 -23;
+	if(((E >> 31) & 1) == 0)
+		result = (FLOAT_ARG(M) * (FLOAT_ARG(R) << E ));
+	else
+		result = (FLOAT_ARG(M) * (FLOAT_ARG(R) >> E ));
 	result = result & 0x7fffffff;
 	result = result | (tmp & 0x80000000);
 
