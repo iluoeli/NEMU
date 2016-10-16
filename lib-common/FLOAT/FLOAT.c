@@ -44,9 +44,9 @@ FLOAT f2F(float a) {
 
 //	nemu_assert(0);
 	FLOAT tmp;
+	asm volatile ("movl 0x4(%%esp), %%eax" : "=a"(tmp));
 	long long result;
 	int M, R, E;
-	asm volatile ("movl 0x4(%%esp), %%eax" : "=a"(tmp));
 	M = tmp & 0x007fffff;
 	M = tmp | 0x00800000;
 	R = 2;
