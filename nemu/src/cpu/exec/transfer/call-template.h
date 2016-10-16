@@ -19,12 +19,12 @@ make_instr_helper(i)
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_helper(concat(call_rm_, SUFFIX))
 {
-	concat(decode_rm_, SUFFIX)(eip+1);	
+	int len = concat(decode_rm_, SUFFIX)(eip+1);	
 	cpu.esp -= 4;
 	swaddr_write(cpu.esp, 4, cpu.eip);
 	cpu.eip = op_src->val;
 	print_asm_template1();
-	return 0;
+	return 1+len;
 }
 #endif
 
