@@ -64,7 +64,10 @@ FLOAT f2F(float a) {
 
 FLOAT Fabs(FLOAT a) {
 //	nemu_assert(0);
-	return (a & 0x7fffffff);
+	FLOAT result;
+	if(((a >> 31) & 0x1) == 1)
+		result = -result;
+	return result;
 }
 
 /* Functions below are already implemented */
