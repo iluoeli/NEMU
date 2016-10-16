@@ -50,7 +50,7 @@ FLOAT f2F(float a) {
 	M = tmp | 0x00800000;
 	R = 2;
 	E = (tmp & 0x7f800000) >> 23;
-	result = (M * (R << E ) << 16);
+	result = (M * (R << (E-127) ) << 16);
 	result = result & 0x7fffffff;
 	result = result | (tmp & 0x80000000);
 
