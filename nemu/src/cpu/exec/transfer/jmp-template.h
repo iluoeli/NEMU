@@ -19,10 +19,10 @@ make_helper(concat(jmp_rm_, SUFFIX))
 {
 	concat(decode_rm_, SUFFIX)(eip+1);
 	if(ops_decoded.is_operand_size_16 == true){
-		cpu.eip = reg_l(op_src->reg) & 0x0000ffff;
+		cpu.eip = op_src->val & 0x0000ffff;
 	}
 	else
-		cpu.eip = reg_l(op_src->reg);
+		cpu.eip = op_src->val;
 	print_asm_template1();
 	return 0;
 }

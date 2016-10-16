@@ -9,7 +9,7 @@ static void do_execute()
 		cpu.eip = MEM_R(REG(R_ESP)) & 0x0000ffff;
 		reg_w(R_SP) += 2;
 	}
- 	else {
+  	else {
 		cpu.eip = MEM_R(REG(R_ESP));
 		reg_l(R_ESP) += 4;
 	}
