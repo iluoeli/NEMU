@@ -5,7 +5,7 @@
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 static void do_execute()
 {
-	DATA_TYPE result = (DATA_TYPE)op_src->val;
+	uint32_t result = (uint32_t)op_src->val;
 	OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
