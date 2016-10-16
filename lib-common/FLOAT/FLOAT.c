@@ -48,7 +48,7 @@ FLOAT f2F(float a) {
 	long long result;
 	int M, R, E;
 	M = tmp & 0x007fffff;
-	M = tmp | 0x00800000;
+	M = M | 0x00800000;
 	E = (tmp & 0x7f800000) >> 23;
 	E = E - 127 + 16 -23;
 	if(((E >> 31) & 1) == 0)
