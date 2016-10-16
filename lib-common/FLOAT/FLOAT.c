@@ -54,7 +54,7 @@ FLOAT f2F(float a) {
 	if(((E >> 31) & 1) == 0)
 		result = ((M) << E );
 	else
-		result = ((M) >> E );
+		result = ((M) >> (-E) );
 	result = result & 0x7fffffff;
 	result = result | (tmp & 0x80000000);
 
