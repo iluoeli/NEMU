@@ -2,7 +2,9 @@
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
 //	nemu_assert(0);
-	return (a * b) >> 16;
+	uint64_t result;
+	result = (a * b) >> 16;
+	return result;
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
@@ -45,11 +47,12 @@ FLOAT f2F(float a) {
 	int M, R, E;
 	asm volatile ("movl 0x4(%%esp), %%eax" : "=a"(tmp));
 	M = tmp & 0x007fffff;
+	M = tmp | 0x00800000;
 	R = 2;
-	E = tmp & 0x7f800000;
+	E = (tmp & 0x7f800000) >> 23;
 	result = (M * (R << E ) << 16);
 	result = result & 0x7fffffff;
-	result = result || (tmp & 0x80000000);
+	result = result | (tmp & 0x80000000);
 
 	return result;
 }
@@ -76,7 +79,7 @@ FLOAT pow(FLOAT x, FLOAT y) {
 	/* we only compute x^0.333 */
 	FLOAT t2, dt, t = int2F(2);
 
-	do {
+ 	do {
 		t2 = F_mul_F(t, t);
 		dt = (F_div_F(x, t2) - t) / 3;
 		t += dt;
