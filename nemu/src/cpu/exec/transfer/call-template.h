@@ -21,10 +21,10 @@ make_helper(concat(call_rm_, SUFFIX))
 {
 	int len = concat(decode_rm_, SUFFIX)(eip+1);	
 	cpu.esp -= 4;
-	swaddr_write(cpu.esp, 4, cpu.eip);
+	swaddr_write(cpu.esp, 4, cpu.eip+1+len);
 	cpu.eip = op_src->val;
 	print_asm_template1();
-	return 1+len;
+	return 0;
 }
 #endif
 
