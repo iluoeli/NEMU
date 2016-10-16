@@ -2,8 +2,8 @@
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
 //	nemu_assert(0);
-	uint64_t result;
-	result = (a * b) >> 16;
+	long long result;
+	result = (FLOAT_ARG(a) * FLOAT_ARG(b)) >> 16;
 	return result;
 }
 
