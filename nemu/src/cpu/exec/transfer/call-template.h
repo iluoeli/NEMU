@@ -23,6 +23,7 @@ make_helper(concat(call_rm_, SUFFIX))
 	cpu.esp -= 4;
 	swaddr_write(cpu.esp, 4, cpu.eip);
 	cpu.eip = op_src->val;
+	print_asm_template1();
 	return 0;
 }
 #endif
