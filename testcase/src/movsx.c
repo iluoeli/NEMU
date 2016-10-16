@@ -27,6 +27,7 @@ int main() {
 	nemu_assert(b == 3);
 	nemu_assert(A[5] == 3);
 	nemu_assert(C[1] == 0xffffff80);
+	set_bp();
 	nemu_assert(A[0] == 0xffffff80);
 
 	return 0;
