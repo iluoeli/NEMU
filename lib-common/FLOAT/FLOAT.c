@@ -49,13 +49,12 @@ FLOAT f2F(float a) {
 	int M, R, E;
 	M = tmp & 0x007fffff;
 	M = tmp | 0x00800000;
-	R = 2;
 	E = (tmp & 0x7f800000) >> 23;
 	E = E - 127 + 16 -23;
 	if(((E >> 31) & 1) == 0)
-		result = ((M) * ((R) << E ));
+		result = ((M) << E );
 	else
-		result = ((M) / ((R) << E ));
+		result = ((M) >> E );
 	result = result & 0x7fffffff;
 	result = result | (tmp & 0x80000000);
 
