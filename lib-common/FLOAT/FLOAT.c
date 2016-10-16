@@ -53,9 +53,9 @@ FLOAT f2F(float a) {
 	E = (tmp & 0x7f800000) >> 23;
 	E = E - 127 + 16 -23;
 	if(((E >> 31) & 1) == 0)
-		result = (FLOAT_ARG(M) * (FLOAT_ARG(R) << E ));
+		result = ((M) * ((R) << E ));
 	else
-		result = (FLOAT_ARG(M) * (FLOAT_ARG(R) >> E ));
+		result = ((M) * ((R) >> E ));
 	result = result & 0x7fffffff;
 	result = result | (tmp & 0x80000000);
 
