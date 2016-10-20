@@ -86,6 +86,9 @@ uint32_t search_elf_obj(char *objName, bool *success)
 {
 	int i=0;
 	for (; i < nr_symtab_entry; ++i){
+		printf("%s\n", objName);
+		printf("%d\n", symtab[i].st_name);
+		printf("%s\n", strtab);
 		if (symtab[i].st_info == STT_OBJECT && strcmp(objName, strtab+symtab[i].st_name) == 0)
 			*success = true;
 			return symtab[i].st_value;
