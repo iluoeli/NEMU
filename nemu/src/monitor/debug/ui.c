@@ -1,5 +1,6 @@
 #include "monitor/monitor.h"
 #include "monitor/expr.h"
+#include "monitor/elf.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
 
@@ -188,7 +189,7 @@ static int cmd_d(char *args)
 
 static int cmd_bt(char *args)
 {
-	
+		
 	return 0;	
 }
 
