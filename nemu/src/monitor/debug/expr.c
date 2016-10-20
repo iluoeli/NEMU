@@ -362,7 +362,7 @@ uint32_t eval(int p, int q)
 			uint32_t addr;
 			bool success = false;
 			addr = search_elf_obj(tokens[p].str, &success);
-			return success ? addr : 0;
+			return success ? addr : -1;
 		}
   	}
 	// may be can be delete for it's useless.
