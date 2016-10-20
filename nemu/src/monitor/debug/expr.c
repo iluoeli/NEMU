@@ -39,7 +39,7 @@ static struct rule {
 	{"!=", NEQ},
 	{"\\!", NOT},
 	{"\\$[a-z]{2,3}", REG},
-	{"([a-zA-Z]|\\_){1}[a-zA-Z0-9]+", OBJNAME}
+	{"([a-zA-Z]|\\_){1}[a-zA-Z0-9|\\_]*", OBJNAME}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
