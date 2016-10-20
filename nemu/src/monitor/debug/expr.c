@@ -5,11 +5,12 @@
  */
 #include <sys/types.h>
 #include <regex.h>
+#include "monitor/elf.h"
 
 int valid = true;	//to detect eval() valid
 
 enum {
-	 NOTYPE=256, OR, AND, NEQ, EQ, SUB, ADD, DIV, MUL, NOT, DEREF, NEG, LBR, RBR, NUM, HEX, REG
+	 NOTYPE=256, OR, AND, NEQ, EQ, SUB, ADD, DIV, MUL, NOT, DEREF, NEG, LBR, RBR, NUM, HEX, REG, OBJNAME
 	/* TODO: Add more token types */
 
 };
@@ -21,7 +22,7 @@ static struct rule {
 
 	/* TODO: Add more rules.
 	 * Pay attention to the precedence level of different rules.
-	 */
+	  */
 
 	{" +",	NOTYPE},				// spaces
 	{"\\+", ADD},					// plus
@@ -38,6 +39,7 @@ static struct rule {
 	{"!=", NEQ},
 	{"\\!", NOT},
 	{"\\$[a-z]{2,3}", REG},
+	{"([a-zA-Z]|\\_){1}[a-zA-Z0-9]+", OBJNAME}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -153,6 +155,11 @@ static bool make_token(char *e) {
 						break;
 					case REG:
 						tokens[nr_token].type = REG;
+						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						tokens[nr_token].str[substr_len] = '\0';
+						break;
+					case OBJNAME:
+						tokens[nr_token].type = OBJNAME;
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						tokens[nr_token].str[substr_len] = '\0';
 						break;
@@ -351,8 +358,13 @@ uint32_t eval(int p, int q)
 				return 0;
  			}
   	 	}
-		
- 	}
+ 		else if(tokens[p].type == OBJNAME) {
+			uint32_t addr;
+			bool success = false;
+			addr = search_elf_obj(tokens[p].str, &success);
+			return success ? addr : 0;
+		}
+  	}
 	// may be can be delete for it's useless.
 /*	else if(p == q-1) {
 		if(tokens[p].type == NEG) {

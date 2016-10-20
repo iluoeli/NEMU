@@ -1,6 +1,7 @@
 #include "common.h"
 #include <stdlib.h>
 #include <elf.h>
+#include "monitor/elf.h"
 
 char *exec_file = NULL;
 
@@ -70,7 +71,7 @@ void load_elf_tables(int argc, char *argv[]) {
 			fseek(fp, sh[i].sh_offset, SEEK_SET);
 			ret = fread(strtab, sh[i].sh_size, 1, fp);
 			assert(ret == 1);
-		}
+	 	}
 	}
 
 	free(sh);
@@ -80,4 +81,18 @@ void load_elf_tables(int argc, char *argv[]) {
 
 	fclose(fp);
 }
+
+uint32_t search_elf_obj(char *objName, bool *success)
+{
+	int i=0;
+	for (; i < nr_symtab_entry; ++i){
+		if (symtab[i].st_info == STT_OBJECT && strcmp(objName, strtab+symtab[i].st_name) == 0)
+			*success = true;
+			return symtab[i].st_value;
+
+	}	
+	*success = false;
+	return 0;
+}
+
 
