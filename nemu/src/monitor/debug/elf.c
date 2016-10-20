@@ -87,6 +87,7 @@ uint32_t search_elf_obj(char *objName, bool *success)
 	int i=0;
 		printf("execFile:: %s\n", exec_file);
 		printf("objName:: %s\n", objName);
+		printf("STT_OBJECT:: %d\n", STT_OBJECT);
 	for (; i < nr_symtab_entry; ++i){
 		printf("Name:: %d\n", symtab[i].st_name);
 		printf("strtab:: %s\n", strtab+symtab[i].st_name);
