@@ -126,8 +126,8 @@ static int cmd_p(char *args)
 //	Log("args = %s\n", args);
 	bool success = false;
 	uint32_t value = expr(arg, &success);
-	if(success == true) {
-		printf("%d\n", value);	
+ 	if(success == true) {
+		printf("0x%x\n", value);	
 	}
 	return 0;
 }
