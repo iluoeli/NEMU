@@ -90,10 +90,10 @@ uint32_t search_elf_obj(char *objName, bool *success)
 		printf("objName:: %s\n", objName);
 		printf("Name:: %d\n", symtab[i].st_name);
 		printf("strtab:: %s\n", strtab);
-		if (symtab[i].st_info == STT_OBJECT && strcmp(objName, strtab+symtab[i].st_name) == 0)
+		if (symtab[i].st_info == STT_OBJECT && strcmp(objName, strtab+symtab[i].st_name) == 0){
 			*success = true;
 			return symtab[i].st_value;
-
+		}
 	}	
 	*success = false;
 	return 0;
