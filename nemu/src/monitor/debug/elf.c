@@ -115,7 +115,7 @@ static void load_func_info()
 			func_info[nr_func][2] = i;
 			func_info[nr_func][0] = symtab[i].st_value;
 			func_info[nr_func][1] = func_info[nr_func][0] + symtab[i].st_size;		
-			printf("func_num: %d, func_name: %s\tfunc_value: %x\n", func_info[nr_func][2],symtab[i].st_name+strtab, symtab[i].st_value);
+			//printf("func_num: %d, func_name: %s\tfunc_value: %x\n", func_info[nr_func][2],symtab[i].st_name+strtab, symtab[i].st_value);
 			nr_func ++;
 		}
 	}	
@@ -137,7 +137,7 @@ static void load_stack_info()
 	uint32_t ebp=cpu.ebp;
 
 	for(i=0; ebp != 0; ++i){ 
-			printf("ebp %d:%x\n", i, ebp);
+			//printf("ebp %d:%x\n", i, ebp);
 			statab[i].ret_addr = swaddr_read(ebp+4, 4);
 			statab[i].prev_ebp = swaddr_read(ebp, 4);
 			for(j=0; j < 4; ++j)
@@ -152,14 +152,13 @@ void print_stack_info()
 	int func=-1;
 	load_stack_info();
 	load_func_info();	
-	printf("print_stack_info\n");
+//	printf("print_stack_info\n");
 	do {
 		i++;
 		printf("prev_ebp: %x\tret_addr: %x\n", statab[i].prev_ebp, statab[i].ret_addr);
 		func = is_func(statab[i].ret_addr);
 		if((func != -1)){
-			printf("func = %d\n", func);
-			printf("#%d\t0x%x  in  %s  \n", i, symtab[1].st_value, strtab+symtab[1].st_name);
+		//	printf("func = %d\n", func);
 			printf("#%d\t0x%x  in  %s  \n", i, symtab[func].st_value, strtab+symtab[func].st_name);
 		}
 	} while(statab[i].prev_ebp !=  0);
