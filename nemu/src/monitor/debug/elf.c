@@ -115,6 +115,7 @@ static void load_func_info()
 			func_info[nr_func][2] = i;
 			func_info[nr_func][0] = symtab[i].st_value;
 			func_info[nr_func][1] = func_info[nr_func][0] + symtab[i].st_size;		
+			printf("func_name: %s\tfunc_value: %x\n", symtab[i].st_name+strtab, symtab[i].st_value);
 			nr_func ++;
 		}
 	}	
@@ -156,7 +157,7 @@ void print_stack_info()
 		i++;
 			printf("prev_ebp: %x\tret_addr: %x\n", statab[i].prev_ebp, statab[i].ret_addr);
 		if((func=is_func(statab[i].ret_addr) != -1)){
-			printf("#%d\t0x%x  in  %s  \n", i, symtab[func+1].st_value, strtab+symtab[func+1].st_name);
+			printf("#%d\t0x%x  in  %s  \n", i, symtab[func].st_value, strtab+symtab[func].st_name);
 		}
 	} while(statab[i].prev_ebp !=  0);
 }
