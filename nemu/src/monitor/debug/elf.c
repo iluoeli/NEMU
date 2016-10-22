@@ -111,7 +111,7 @@ static void load_func_info()
 	int i = 0;
 	nr_func = 0;
 	for (; i < nr_symtab_entry; ++i){
-		if (symtab[i].st_info == STT_FUNC){
+		if (symtab[i].st_info == 18){
 			func_info[nr_func][2] = i;
 			func_info[nr_func][0] = symtab[i].st_value;
 			func_info[nr_func][1] = func_info[nr_func][0] + symtab[i].st_size;		
