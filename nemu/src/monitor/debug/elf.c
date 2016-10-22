@@ -133,7 +133,7 @@ int is_func(swaddr_t addr)
 static void load_stack_info()
 {
 	int i=0, j=0;
-	uint32_t ebp=cpu.eip;
+	uint32_t ebp=swaddr_read(cpu.ebp, 4);
 
 	for(i=0; ebp != 0; ++i){ 
 			printf("ebp %d:%x\n", i, ebp);
