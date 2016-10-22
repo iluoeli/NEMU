@@ -115,7 +115,7 @@ static void load_func_info()
 			func_info[nr_func][2] = i;
 			func_info[nr_func][0] = symtab[i].st_value;
 			func_info[nr_func][1] = func_info[nr_func][0] + symtab[i].st_size;		
-			printf("func_name: %s\tfunc_value: %x\n", symtab[i].st_name+strtab, symtab[i].st_value);
+			printf("func_num: %d, func_name: %s\tfunc_value: %x\n", i,symtab[i].st_name+strtab, symtab[i].st_value);
 			nr_func ++;
 		}
 	}	
