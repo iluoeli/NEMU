@@ -147,16 +147,16 @@ static void load_stack_info()
 
 void print_stack_info()
 {
-	int i=0;
+	int i=-1;
 	int func=-1;
 	load_stack_info();
 	load_func_info();	
 	printf("print_stack_info\n");
 	do {
+		i++;
 		if((func=is_func(statab[i].ret_addr) != -1)){
 			printf("prev_ebp: %x\tret_addr: %x\t", statab[i].prev_ebp, statab[i].ret_addr);
 			printf("#%d\t0x%x  in  %s  \n", i, func_info[func][0], strtab+symtab[func_info[i][2]].st_name);
 		}
-		i++;
 	}while(statab[i].prev_ebp !=  0);
 }
