@@ -159,7 +159,7 @@ void print_stack_info()
 		func = is_func(statab[i].ret_addr);
 		if((func != -1)){
 		//	printf("func = %d\n", func);
-			printf("#%d\t0x%x  in  %s  \n", i, symtab[func].st_value, strtab+symtab[func].st_name);
+			printf("#%d\t0x%x  in  %s(%x, %x, %x, %x )  \n", i, symtab[func].st_value, strtab+symtab[func].st_name, statab[i].args[0], statab[i].args[1], statab[i].args[2], statab[i].args[3]);
 		}
 	} while(statab[i].prev_ebp !=  0);
 }
