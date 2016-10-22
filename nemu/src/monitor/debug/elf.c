@@ -1,13 +1,20 @@
 #include "common.h"
+#include "nemu.h"
 #include <stdlib.h>
 #include <elf.h>
 #include "monitor/elf.h"
+
+#define SIZE 32
 
 char *exec_file = NULL;
 
 static char *strtab = NULL;
 static Elf32_Sym *symtab = NULL;
 static int nr_symtab_entry;
+
+static PartOfStackFrame statab[SIZE];
+static int func_info[SIZE][3];	//fun_info[n][0]: start addr; fun_info[n][1]: end addr: fun _info[n][2]: nr in symtab
+static int nr_func = 0;	
 
 void load_elf_tables(int argc, char *argv[]) {
 	int ret;
@@ -63,7 +70,7 @@ void load_elf_tables(int argc, char *argv[]) {
 			ret = fread(symtab, sh[i].sh_size, 1, fp);
 			assert(ret == 1);
 			nr_symtab_entry = sh[i].sh_size / sizeof(symtab[0]);
-		}
+ 		}
 		else if(sh[i].sh_type == SHT_STRTAB && 
 	 			strcmp(shstrtab + sh[i].sh_name, ".strtab") == 0) {
 			/* Load string table from exec_file */
@@ -72,7 +79,7 @@ void load_elf_tables(int argc, char *argv[]) {
 			ret = fread(strtab, sh[i].sh_size, 1, fp);
 			assert(ret == 1);
 	 	}
-	}
+ 	}
 
 	free(sh);
 	free(shstrtab);
@@ -99,4 +106,55 @@ uint32_t search_elf_obj(char *objName, bool *success)
 	return 0;
 }
 
+static void load_func_info()
+{
+	int i = 0;
+	nr_func = 0;
+	for (; i < nr_symtab_entry; ++i){
+		if (symtab[i].st_info == STT_FUNC){
+			func_info[nr_func][2] = i;
+			func_info[nr_func][0] = symtab[i].st_value;
+			func_info[nr_func][1] = func_info[nr_func][0] + symtab[i].st_size;		
+			nr_func ++;
+		}
+	}	
+}
 
+int is_func(swaddr_t addr)
+{
+	int i=0;	
+	for ( ; i < nr_func; i++){
+		if(addr >= func_info[i][0] && addr <= func_info[i][1])
+			return i;
+	}
+	return -1;
+}
+
+static void load_stack_info()
+{
+	int i=0, j=0;
+	uint32_t ebp=swaddr_read(cpu.ebp+4, 4);
+
+	for(i=0; ebp != 0; ++i){ 
+			printf("ebp %d:%x\n", i, ebp);
+			statab[i].ret_addr = swaddr_read(ebp+4, 4);
+			statab[i].prev_ebp = swaddr_read(ebp, 4);
+			for(j=0; j < 4; ++j)
+				statab[i].args[j] = swaddr_read(ebp+8+i*4, 4);
+			ebp = statab[i].prev_ebp;	
+	}
+}
+
+void print_stack_info()
+{
+	int i=0;
+	int func=-1;
+	load_stack_info();
+	load_func_info();	
+	while(statab[i].prev_ebp !=  0){
+		if((func=is_func(statab[i].ret_addr) != -1)){
+			printf("#%d\t0x%x  in  %s  \n", i, func_info[func][0], strtab+symtab[func].st_name);
+			i++;
+		}
+	}
+}
