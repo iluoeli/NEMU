@@ -156,7 +156,7 @@ void print_stack_info()
 		i++;
 			printf("prev_ebp: %x\tret_addr: %x\n", statab[i].prev_ebp, statab[i].ret_addr);
 		if((func=is_func(statab[i].ret_addr) != -1)){
-			printf("#%d\t0x%x  in  %s  \n", i, symtab[func].st_value, strtab+symtab[func].st_name);
+			printf("#%d\t0x%x  in  %s  \n", i, symtab[func+1].st_value, strtab+symtab[func+1].st_name);
 		}
 	} while(statab[i].prev_ebp !=  0);
 }
