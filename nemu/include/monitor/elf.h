@@ -11,6 +11,6 @@ typedef struct {
 
 
 uint32_t search_elf_obj(char *, bool *);
-
+void print_stack_info();
 
 #endif

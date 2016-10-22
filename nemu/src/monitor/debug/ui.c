@@ -189,7 +189,7 @@ static int cmd_d(char *args)
 
 static int cmd_bt(char *args)
 {
-		
+	print_stack_info();		
 	return 0;	
 }
 
