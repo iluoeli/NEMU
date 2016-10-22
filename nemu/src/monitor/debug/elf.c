@@ -125,7 +125,7 @@ int is_func(swaddr_t addr)
 	int i=0;	
 	for ( ; i < nr_func; i++){
 		if(addr >= func_info[i][0] && addr <= func_info[i][1])
-			return i;
+			return func_info[i][2];
 	}
 	return -1;
 }
@@ -140,7 +140,7 @@ static void load_stack_info()
 			statab[i].ret_addr = swaddr_read(ebp+4, 4);
 			statab[i].prev_ebp = swaddr_read(ebp, 4);
 			for(j=0; j < 4; ++j)
-				statab[i].args[j] = swaddr_read(ebp+8+i*4, 4);
+				statab[i].args[j] = swaddr_read(ebp+8+j*4, 4);
 			ebp = statab[i].prev_ebp;	
 	}
 }
@@ -152,11 +152,11 @@ void print_stack_info()
 	load_stack_info();
 	load_func_info();	
 	printf("print_stack_info\n");
-	while(statab[i].prev_ebp !=  0){
+	do {
 		if((func=is_func(statab[i].ret_addr) != -1)){
 			printf("prev_ebp: %x\tret_addr: %x\t", statab[i].prev_ebp, statab[i].ret_addr);
 			printf("#%d\t0x%x  in  %s  \n", i, func_info[func][0], strtab+symtab[func_info[i][2]].st_name);
 		}
 		i++;
-	}
+	}while(statab[i].prev_ebp !=  0);
 }
