@@ -102,10 +102,11 @@ void init_cond() {
 	asm volatile("subl $16, %esp");
 
 	/* Here we go! */
-	((void(*)(void))eip)();
+	//((void(*)(void))eip)();
+	cpu.eip = eip;
 
 	HIT_GOOD_TRAP;
 
-//	panic("should not reach here");
+	panic("should not reach here");
 }
 
