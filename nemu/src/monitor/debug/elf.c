@@ -112,7 +112,7 @@ static void load_func_info()
 	nr_func = 0;
 	for (; i < nr_symtab_entry; ++i){ 
 	//	printf("%d, %s\n", symtab[i].st_info, strtab+symtab[i].st_name);
-		if (symtab[i].st_info == 18 || (symtab[i].st_info == 16 && strcmp(strtab+symtab[i].st_name, "_start") == 0)){
+		if (symtab[i].st_info == 18){
 			func_info[nr_func][2] = i;
 			func_info[nr_func][0] = symtab[i].st_value;
 			func_info[nr_func][1] = func_info[nr_func][0] + symtab[i].st_size;		
@@ -153,6 +153,14 @@ void print_stack_info()
 	int func=-1;
 	load_stack_info();
 	load_func_info();	
+
+	//print current func stack
+	func = is_func(cpu.eip);
+	if(func >= 0) {
+		i++;
+		printf("#%d\t0x%x  in  %s(%x, %x, %x, %x)  \n", i, symtab[func].st_value, strtab+symtab[func].st_name, statab[i].args[0], statab[i].args[1], statab[i].args[2], statab[i].args[3]);
+}
+
 //	printf("print_stack_info\n");
 	do {
 		i++;
