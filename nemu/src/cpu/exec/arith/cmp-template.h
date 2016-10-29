@@ -6,7 +6,7 @@ static void do_execute()
 {
 	uint64_t tmp = op_dest->val - op_src->val;
 
-	cpu.EFLAGES.OF =  ( !MSB(op_src->val) == MSB(op_dest->val) && (MSB(op_dest->val) != MSB(tmp) ));		
+	cpu.EFLAGES.OF =  ( MSB(~op_src->val+1) == MSB(op_dest->val) && (MSB(op_dest->val) != MSB(tmp) ));		
 	cpu.EFLAGES.SF = MSB(tmp);
 	cpu.EFLAGES.ZF = ((DATA_TYPE)tmp == 0);
 	uint32_t ret = (tmp>>4) ^ tmp;
