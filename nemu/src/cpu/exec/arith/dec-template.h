@@ -8,7 +8,7 @@ static void do_execute () {
 
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
-	cpu.EFLAGES.OF =  ( MSB(op_src->val) == MSB(~1) && (MSB(op_src->val) != MSB(result) ));
+	cpu.EFLAGES.OF =  ( MSB(op_src->val) == MSB(~1+1) && (MSB(op_src->val) != MSB(result) ));
     cpu.EFLAGES.SF = MSB(result);
 	cpu.EFLAGES.ZF = ((DATA_TYPE)result == 0);
     uint8_t ret = (result>>4) ^ result;

@@ -14,7 +14,7 @@ static void do_execute()
 {
 	uint64_t result = op_dest->val - (DATA_TYPE_S)op_src->val;
 	OPERAND_W(op_dest, result);
-	cpu.EFLAGES.OF =  ( MSB(~op_src->val) == MSB(op_dest->val) && (MSB(op_dest->val) != MSB(result) ));
+	cpu.EFLAGES.OF =  ( MSB(~op_src->val+1) == MSB(op_dest->val) && (MSB(op_dest->val) != MSB(result) ));
 	cpu.EFLAGES.SF = MSB(result);
 	cpu.EFLAGES.ZF = ((DATA_TYPE)result == 0);
 	uint32_t ret = (result>>4) ^ result;
