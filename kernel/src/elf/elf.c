@@ -43,7 +43,7 @@ uint32_t loader() {
 	uint8_t buf_ph[elf->e_phentsize];
 	for(i=0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, load each segment into memory */
-		ramdisk_read(buf_ph, elf->e_phoff+i*elf->e_phentsize, elf->e_phentsize);
+		ramdisk_read(buf_ph, ELF_OFFSET_IN_DISK+elf->e_phoff+i*elf->e_phentsize, elf->e_phentsize);
 		ph = (void *)buf_ph;
 		if(ph->p_type == PT_LOAD) {
 
@@ -51,7 +51,7 @@ uint32_t loader() {
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
 			uint8_t buf[ph->p_memsz];
-			ramdisk_read(buf, ph->p_offset, ph->p_memsz);	
+			ramdisk_read(buf, ELF_OFFSET_IN_DISK+ph->p_offset, ph->p_memsz);	
 			ramdisk_write(buf, ph->p_vaddr, ph->p_memsz);	
 			 
 			/* TOD O: zero the memory region 
