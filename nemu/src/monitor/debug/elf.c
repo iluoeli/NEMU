@@ -149,7 +149,7 @@ static void load_stack_info()
 
 void print_stack_info()
 {
-	int i=-1;
+	int i=0;
 	int func=-1;
 	load_stack_info();
 	load_func_info();	
@@ -158,8 +158,7 @@ void print_stack_info()
 	//print current func stack
 	func = is_func(cpu.eip);
 	if(func >= 0) {
-		i++;
-		printf("#%d\t0x%x  in  %s(%x, %x, %x, %x)  \n", i, symtab[func].st_value, strtab+symtab[func].st_name, statab[i].args[0], statab[i].args[1], statab[i].args[2], statab[i].args[3]);
+		printf("#0\t0x%x  in  %s(%x, %x, %x, %x)  \n", symtab[func].st_value, strtab+symtab[func].st_name, swaddr_read(cpu.ebp+8, 4), swaddr_read(cpu.ebp+12, 4), swaddr_read(cpu.ebp+16, 4), swaddr_read(cpu.ebp+20, 4));
 	}
 //	printf("print_stack_info\n");
 	do {
