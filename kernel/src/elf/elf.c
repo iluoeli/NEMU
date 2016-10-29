@@ -60,7 +60,7 @@ uint32_t loader() {
 			int margin = ph->p_memsz-ph->p_filesz;
 			uint8_t buf_zero[margin];	
 			int j;
-			for (j=0; 8*j < margin; ++j)
+			for (j=0; j < margin; ++j)
 				buf_zero[j] = 0;
 			ramdisk_write(buf_zero, ph->p_vaddr+ph->p_filesz, margin);
 
