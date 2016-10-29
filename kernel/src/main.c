@@ -80,6 +80,7 @@ void init_cond() {
 
 	/* Load the program. */
 	uint32_t eip = loader();
+	panic("load eip successful");
 	
 #if defined(IA32_PAGE) && defined(HAS_DEVICE)
 	/* Read data in the video memory to check whether 
@@ -102,8 +103,7 @@ void init_cond() {
 	asm volatile("subl $16, %esp");
 
 	/* Here we go! */
-	//((void(*)(void))eip)();
-	cpu.eip = eip;
+	((void(*)(void))eip)();
 
 	HIT_GOOD_TRAP;
 
