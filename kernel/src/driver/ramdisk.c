@@ -1,6 +1,5 @@
 #include "common.h"
 #include <string.h>
-#include <stdio.h>
 
 #define RAMDISK_START ((void *)0)
 #define RAMDISK_SIZE 0xa0000
@@ -13,14 +12,12 @@
 /* read `len' bytes starting from `offset' of ramdisk into `buf' */
 void ramdisk_read(uint8_t *buf, uint32_t offset, uint32_t len) {
 	nemu_assert(offset + len < RAMDISK_SIZE);
-	printf("ramdisk_read successful\n");
 	memcpy(buf, RAMDISK_START + offset, len);
 }
 
 /* write `len' bytes starting from `buf' into the `offset' of ramdisk */
 void ramdisk_write(uint8_t *buf, uint32_t offset, uint32_t len) {
 	nemu_assert(offset + len < RAMDISK_SIZE);
-	printf("ramdisk_write successful\n");
 	memcpy(RAMDISK_START + offset, buf, len);
 }
 

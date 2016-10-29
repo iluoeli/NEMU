@@ -85,5 +85,6 @@ uint32_t loader() {
 	write_cr3(get_ucr3());
 #endif
 
+	panic("before return");
 	return entry;
 }
