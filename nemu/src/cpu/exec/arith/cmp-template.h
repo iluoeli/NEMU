@@ -4,16 +4,16 @@
 
 static void do_execute()
 {
-	DATA_TYPE tmp = op_dest->val - op_src->val;
+	uint64_t tmp = op_dest->val - op_src->val;
 
-	cpu.EFLAGES.OF =  ( !MSB(op_src->val) == MSB(op_dest->val) && (MSB(op_dest->val) != MSB(tmp) ));		
+	cpu.EFLAGES.OF =  ( MSB(!op_src->val) == MSB(op_dest->val) && (MSB(op_dest->val) != MSB(tmp) ));		
 	cpu.EFLAGES.SF = MSB(tmp);
-	cpu.EFLAGES.ZF = (tmp == 0);
+	cpu.EFLAGES.ZF = ((DATA_TYPE)tmp == 0);
 	uint32_t ret = (tmp>>4) ^ tmp;
 	ret = (ret>>2) ^ ret;
 	ret = (ret>>1) ^ ret;
 	cpu.EFLAGES.PF = ret & 1;
-	cpu.EFLAGES.CF = (op_dest->val < op_src->val);
+	cpu.EFLAGES.CF = !((tmp >> (8*DATA_BYTE)) & 1);
 
 	print_asm_template2();
 }
