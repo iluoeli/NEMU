@@ -21,7 +21,7 @@ static void do_execute()
 	ret = (ret>>2) ^ ret;
 	ret = (ret>>1) ^ ret;
 	cpu.EFLAGES.PF = ret & 1;
-	cpu.EFLAGES.CF = !(result >> (DATA_BYTE * 8) & 1);
+	cpu.EFLAGES.CF = (op_dest->val < (op_src->val + cpu.EFLAGES.CF));
 	print_asm_template2();
 }
 
