@@ -3,7 +3,7 @@
 #define instr inc
 
 static void do_execute () {
-	uint64_t result = op_src->val + 1;
+	uint64_t result = (uint64_t)op_src->val + 1;
 	OPERAND_W(op_src, result);
 
 	/* TODO: Update EFLAGS. */
