@@ -110,7 +110,8 @@ static void load_func_info()
 {
 	int i = 0;
 	nr_func = 0;
-	for (; i < nr_symtab_entry; ++i){
+	for (; i < nr_symtab_entry; ++i){ 
+		printf("%d, %s\n", symtab[i].st_info, strtab+symtab[i].st_name);
 		if (symtab[i].st_info == 18 || (symtab[i].st_info == STT_NOTYPE && strcmp(strtab+symtab[i].st_name, "_start") == 0)){
 			func_info[nr_func][2] = i;
 			func_info[nr_func][0] = symtab[i].st_value;
