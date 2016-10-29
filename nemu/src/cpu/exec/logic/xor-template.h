@@ -9,7 +9,6 @@ static void do_execute () {
 	/* TODO: Update EFLAGS. */
 	cpu.EFLAGES.CF = 0;
 	cpu.EFLAGES.OF = 0;
-	cpu.EFLAGES.OF =  ( MSB(op_src->val) == MSB(op_dest->val) && (MSB(op_dest->val) != MSB(result)));
 	cpu.EFLAGES.SF = MSB(result);
 	cpu.EFLAGES.ZF = (result == 0);
 	uint8_t ret = (result>>4) ^ result;
