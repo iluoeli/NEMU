@@ -9,6 +9,7 @@
 void ide_read(uint8_t *, uint32_t, uint32_t);
 #else
 void ramdisk_read(uint8_t *, uint32_t, uint32_t);
+void ramdisk_write(uint8_t *buf, uint32_t offset, uint32_t len);
 #endif
 
 #define STACK_SIZE (1 << 20)
@@ -26,6 +27,7 @@ uint32_t loader() {
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 #else
 	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);
+
 #endif
 
 	elf = (void*)buf;
@@ -37,19 +39,29 @@ uint32_t loader() {
 
 	/* Load each program segment */
 	//panic("please implement me");
-	for(; true; ) {
+	int i;
+	uint8_t buf_ph[elf->e_phentsize+1];
+	for(i=0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, load each segment into memory */
+		ramdisk_read(buf_ph, elf->e_phoff+i*elf->e_phentsize, elf->e_phentsize);
+		ph = (void *)buf_ph;
 		if(ph->p_type == PT_LOAD) {
 
 			/* TO DO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
-			 
+			ramdisk_read(ph->p_vaddr, ph->p_offset, ph->p_memsz);	
+
 			 
 			/* TOD O: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
-
+			int margin = ph->p_memsz-ph->p_filesz;
+			uint8_t buf_zero[margin];	
+			int j;
+			for (j=0; 8*j < margin; ++j)
+				buf_zero[j] = 0;
+			ramdisk_write(buf_zero, ph->p_vaddr+ph->p_filesz, ph->p_memsz-ph->p_filesz);
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
