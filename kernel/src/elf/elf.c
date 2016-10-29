@@ -38,7 +38,7 @@ uint32_t loader() {
 	nemu_assert(*p_magic == elf_magic);
 
 	/* Load each program segment */
-	panic("please implement me");
+//	panic("please implement me");
 	int i;
 	uint8_t buf_ph[elf->e_phentsize];
 	for(i=0; i < elf->e_phnum; i++) {
