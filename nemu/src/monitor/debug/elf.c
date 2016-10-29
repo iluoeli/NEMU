@@ -158,7 +158,7 @@ void print_stack_info()
 	//print current func stack
 	func = is_func(cpu.eip);
 	if(func >= 0) {
-		printf("#0\t0x%x  in  %s(%x, %x, %x, %x)  \n", symtab[func].st_value, strtab+symtab[func].st_name, swaddr_read(cpu.ebp+8, 4), swaddr_read(cpu.ebp+12, 4), swaddr_read(cpu.ebp+16, 4), swaddr_read(cpu.ebp+20, 4));
+		printf("#0\t0x%x  in  %s(0x%x, 0x%x, 0x%x, 0x%x)  \n", symtab[func].st_value, strtab+symtab[func].st_name, swaddr_read(cpu.ebp+8, 4), swaddr_read(cpu.ebp+12, 4), swaddr_read(cpu.ebp+16, 4), swaddr_read(cpu.ebp+20, 4));
 	}
 //	printf("print_stack_info\n");
 	do {
