@@ -53,8 +53,8 @@ clean: clean-cpp
 
 ##### some convinient rules #####
 
-USERPROG := obj/testcase/fact
-ENTRY := $(USERPROG)
+USERPROG := obj/testcase/hello-str
+ENTRY := $(kernel_BIN)
 
 entry: $(ENTRY)
 	objcopy -S -O binary $(ENTRY) entry
