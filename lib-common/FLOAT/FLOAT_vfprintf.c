@@ -36,8 +36,8 @@ static void modify_vfprintf() {
 	mprotect((void *)((addr_call - 100) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
 	*(uint32_t *)(void *)(addr_call+1) = addr_delta;
 	// modify instrucrions 
-	*(uint32_t *)(void *)(addr_vf + 0x2fc) = 0xff3090ff;
-	*(uint32_t *)(void *)(addr_vf + 0x2f9) = 0x83ec08ff;
+//	*(uint32_t *)(void *)(addr_vf + 0x2fc) = 0xff3090ff;
+//	*(uint32_t *)(void *)(addr_vf + 0x2f9) = 0x83ec08ff;
 
 
 # if 0
