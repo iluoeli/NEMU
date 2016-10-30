@@ -52,7 +52,7 @@ uint32_t loader() {
  			 */
 			uint8_t buf_file[ph->p_filesz];
 			ramdisk_read(buf_file, ELF_OFFSET_IN_DISK+ph->p_offset, ph->p_filesz);	
-			ramdisk_write(buf_file, ph->p_vaddr, ph->p_filesz);	
+		//	ramdisk_write(buf_file, ph->p_vaddr, ph->p_filesz);	
 			 
   			/* TOD O: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
@@ -62,7 +62,7 @@ uint32_t loader() {
 			int j;
 			for (j=0; j < margin; ++j)
 				buf_zero[j] = 0;
-			ramdisk_write(buf_zero, ph->p_vaddr+ph->p_filesz, margin);
+			//ramdisk_write(buf_zero, ph->p_vaddr+ph->p_filesz, margin);
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
