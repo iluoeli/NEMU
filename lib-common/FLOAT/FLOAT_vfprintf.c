@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "FLOAT.h"
+#include <sys/mman.h>
 
 extern char _vfprintf_internal;
 extern char _fpmaxtostr;
@@ -27,6 +28,18 @@ static void modify_vfprintf() {
 	 * hijack.
 	 */
 
+	uint32_t addr_format = (uint32_t)(format_FLOAT);
+	uint32_t addr_vf = (uint32_t)(void *)&_vfprintf_internal;
+	uint32_t addr_fp = (uint32_t)(void *)&_fpmaxtostr;
+	uint32_t addr_call = addr_vf + 0x306;
+	uint32_t addr_delta = (*(uint32_t *)(void *)(addr_call+1)) + (addr_format - addr_fp);
+	mprotect((void *)((addr_call - 100) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+	*(uint32_t *)(void *)(addr_call+1) = addr_delta;
+	// modify instrucrions 
+	*(uint32_t *)(void *)(addr_vf + 0x2fc) = 0xff3090ff;
+	*(uint32_t *)(void *)(addr_vf + 0x2f9) = 0x83ec08ff;
+
+
 # if 0
 	else if (ppfs->conv_num <= CONV_A) {  /* floating point */
 		ssize_t nf;
@@ -42,6 +55,7 @@ static void modify_vfprintf() {
 		*count += nf;
 
 		return 0;
+		p
 	} else if (ppfs->conv_num <= CONV_S) {  /* wide char or string */
 #endif
 
