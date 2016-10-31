@@ -33,6 +33,7 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	e = 14 - e;
 	result = result | ((f & 0x3fffffff) >> 8);
 	result = result | ((e + 127) << 23);
+	result = result & 0xfffffeff; 
 #ifdef TEST_LINUX
 	printf("result = %x\n", result);
 #endif
