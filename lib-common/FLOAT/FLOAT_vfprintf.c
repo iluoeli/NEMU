@@ -23,8 +23,8 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 */
 #ifdef TEST_LINUX
 	printf("f = %x\n", f);
+	f = 0x10000;
 #endif
-//	f = 0xfffecccd;
 	char buf[80];
 	int i = 0;
 	int j = 15;
@@ -32,7 +32,7 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	uint32_t ex = 1;
 	if((f >> 31) & 1 == 1) {
 		i += sprintf(buf, "%c", '-');
-		f = ~f;
+		f = ~f + 1;
 	}
 	result = (f & 0x7fff0000) >> 16;
 #ifdef TEST_LINUX
@@ -41,11 +41,13 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	i += sprintf(buf+i, "%d", result);
 	i += sprintf(buf+i, "%c", '.');
 	result = 0;
-	for(ex = 50000; j >= 0; --j) {
+	for(ex = 500000000; j >= 0; --j) {
 		result += ((f >> j) & 1) * ex;
-		ex >>= 1;
+		ex /= 2;
 	}
-	i += sprintf(buf+i, "%d", result);
+	result /= 1000;
+
+	i += sprintf(buf+i, "%06d", result);
 #ifdef TEST_LINUX
 	printf("result = %d\n", result);
 #endif
