@@ -5,6 +5,7 @@
 
 extern char _vfprintf_internal;
 extern char _fpmaxtostr;
+extern char _ppfs_setargs;
 extern int __stdio_fwrite(char *buf, int len, FILE *stream);
 
 __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
@@ -102,6 +103,13 @@ static void modify_ppfs_setargs() {
 	 * Below is the code section in _vfprintf_internal() relative to
 	 * the modification.
 	 */
+	uint32_t addr_ppfs = (uint32_t)(void *)&_ppfs_setargs;
+	*(uint32_t *)(void *)(addr_ppfs + 0x71) = 0xffffa8e9;
+	*(uint32_t *)(void *)(addr_ppfs + 0x72) = 0xffffffa8;
+	 
+	
+
+
 
 #if 0
 	enum {                          /* C type: */
