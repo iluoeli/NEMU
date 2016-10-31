@@ -17,7 +17,16 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 */
 
 	char buf[80];
-	int len = sprintf(buf, "0x%08x", f);
+	uint32_t result = (f & 0x80000000);
+	if(result)	f = ~f;
+	int8_t e = 0;
+	for (; (f & 0x40000000) == 0 && e < 32; e++)
+		f = f << 1;
+	e = 15 - e;
+	result = result | ((f & 0x3fffffff) >> 8);
+	result = result | ((e + 127) << 23);
+
+	int len = sprintf(buf, "0x%08x", result);
 	return __stdio_fwrite(buf, len, stream);
 }
 
@@ -29,15 +38,22 @@ static void modify_vfprintf() {
 	 */
 
 	uint32_t addr_format = (uint32_t)(format_FLOAT);
-	uint32_t addr_vf = (uint32_t)_vfprintf_internal;
-	uint32_t addr_fp = (uint32_t)_fpmaxtostr;
+	uint32_t addr_vf = (uint32_t)(void *)&_vfprintf_internal;
+	uint32_t addr_fp = (uint32_t)(void *)&_fpmaxtostr;
+//	printf("%x, %x, %x\n", addr_format, addr_vf, addr_fp);
 	uint32_t addr_call = addr_vf + 0x306;
 	uint32_t addr_delta = (*(uint32_t *)(void *)(addr_call+1)) + (addr_format - addr_fp);
-	mprotect((void *)((addr_call - 100) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+	mprotect((void *)((addr_call - 100 + 5) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
 	*(uint32_t *)(void *)(addr_call+1) = addr_delta;
+//	printf("*addr_call = %x\n", *(uint16_t *)(void *)(addr_call+1));
+//	printf("%x, %x\n", addr_delta);
 	// modify instrucrions 
-//	*(uint32_t *)(void *)(addr_vf + 0x2fc) = 0xff3090ff;
-//	*(uint32_t *)(void *)(addr_vf + 0x2f9) = 0x83ec08ff;
+	*(uint32_t *)(void *)(addr_vf + 0x2fc) = 0xff9030ff;	//ff 30 90 ff
+//	printf("modyfy 3\n");
+	*(uint32_t *)(void *)(addr_vf + 0x2f9) = 0xff08ec83;	// 83 ec 08 ff
+	*(uint16_t *)(void *)(addr_vf + 0x2e8) = 0x9090;
+	*(uint16_t *)(void *)(addr_vf + 0x2e4) = 0x9090;
+//	printf("modyfy 4\n");
 
 
 # if 0
