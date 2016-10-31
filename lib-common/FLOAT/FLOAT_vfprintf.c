@@ -23,8 +23,23 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 #ifdef TEST_LINUX
 	printf("f = %x\n", f);
 #endif
-	
 	char buf[80];
+	int i = 0;
+	int j = 15;
+	uint32_t result = 0;
+	uint32_t ex = 1;
+	if((f >> 31) & 1 == 1)
+		i += fprintf(stream, "%c", '-');			
+	result = (f & 7fff0000) / 0x10000;
+//	i += sprintf(buf+i, "0x%08x", result);
+//	i += sprintf(buf+i, "0x%08x", '.');
+	i += fprintf(stream, "%d", result);
+	for(ex = 250000; j >= 0; --j) {
+		result += ((f >> j) & 1) * ex;
+		ex  /= 2;
+	}
+	i += fprintf(stream, "%d", result);
+	/*bad 
 	uint32_t result = (f & 0x80000000);
 	if(result)	f = ~f;
 	int8_t e = 0;
@@ -33,11 +48,11 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	e = 14 - e;
 	result = result | ((f & 0x3fffffff) >> 8);
 	result = result | ((e + 127) << 23);
-	result = result & 0xfffffeff; 
+	result = result & 0xfffffeff;*/ 
 #ifdef TEST_LINUX
 	printf("result = %x\n", result);
 #endif
-	int len = sprintf(buf, "0x%08x", result);
+	int len = sprintf(buf, "0x%08x", f);
 	return __stdio_fwrite(buf, len, stream);
 }
 
