@@ -104,7 +104,8 @@ static void modify_ppfs_setargs() {
 	 * the modification.
 	 */
 	uint32_t addr_ppfs = (uint32_t)(void *)&_ppfs_setargs;
-	*(uint32_t *)(void *)(addr_ppfs + 0x71) = 0xffffa8e9;
+	// e9 ff ff ff a8
+	*(uint32_t *)(void *)(addr_ppfs + 0x71) = 0xffffffe9;
 	*(uint32_t *)(void *)(addr_ppfs + 0x72) = 0xffffffa8;
 	 
 	
