@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "FLOAT.h"
 
-//#define TEST_LINUX
+#define TEST_LINUX
 
 #ifdef TEST_LINUX
 #include <sys/mman.h>
@@ -24,30 +24,31 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 #ifdef TEST_LINUX
 	printf("f = %x\n", f);
 #endif
+	f = 0xfffecccd;
 	char buf[80];
 	int i = 0;
 	int j = 15;
 	uint32_t result = 0;
 	uint32_t ex = 1;
 	if((f >> 31) & 1 == 1) {
-		i += fprintf(stream, "%c", '-');			
+		i += sprintf(buf, "%c", '-');
 		f = ~f;
 	}
 	result = (f & 0x7fff0000) >> 16;
 #ifdef TEST_LINUX
 	printf("result = %d\n", result);
 #endif
-//	i += sprintf(buf+i, "0x%08x", result);
-//	i += sprintf(buf+i, "0x%08x", '.');
-	i += fprintf(stream, "%d", result);
-	for(ex = 250000; j >= 0; --j) {
+	i += sprintf(buf+i, "%d", result);
+	i += sprintf(buf+i, "%c", '.');
+	result = 0;
+	for(ex = 0x1048576; j >= 0; --j) {
 		result += ((f >> j) & 1) * ex;
-		ex  /= 2;
+		ex  >>= 4;
 	}
+	i += sprintf(buf+i, "%d", result);
 #ifdef TEST_LINUX
 	printf("result = %d\n", result);
 #endif
-	i += fprintf(stream, "%d", result);
 	/*bad 
 	uint32_t result = (f & 0x80000000);
 	if(result)	f = ~f;
@@ -58,8 +59,11 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	result = result | ((f & 0x3fffffff) >> 8);
 	result = result | ((e + 127) << 23);
 	result = result & 0xfffffeff;*/ 
-	int len = sprintf(buf, "0x%08x", f);
-	return __stdio_fwrite(buf, len, stream);
+//	int len = sprintf(buf, "0x%08x", f);
+#ifdef TEST_LINUX
+	printf("buf = %s, len = %d\n", buf, i);
+#endif
+	return __stdio_fwrite(buf, i, stream);
 }
 
 static void modify_vfprintf() {
