@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "FLOAT.h"
 
-#define TEST_LINUX
+//#define TEST_LINUX
 
 #ifdef TEST_LINUX
 #include <sys/mman.h>
@@ -41,9 +41,9 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	i += sprintf(buf+i, "%d", result);
 	i += sprintf(buf+i, "%c", '.');
 	result = 0;
-	for(ex = 0x1048576; j >= 0; --j) {
+	for(ex = 50000; j >= 0; --j) {
 		result += ((f >> j) & 1) * ex;
-		ex  >>= 4;
+		ex >>= 1;
 	}
 	i += sprintf(buf+i, "%d", result);
 #ifdef TEST_LINUX
