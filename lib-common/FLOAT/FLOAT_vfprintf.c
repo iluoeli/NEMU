@@ -24,7 +24,7 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 #ifdef TEST_LINUX
 	printf("f = %x\n", f);
 #endif
-	f = 0xfffecccd;
+//	f = 0xfffecccd;
 	char buf[80];
 	int i = 0;
 	int j = 15;
