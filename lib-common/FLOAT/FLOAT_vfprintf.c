@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "FLOAT.h"
-//#include <sys/mman.h>
+
+
+#ifdef TEST_LINUX
+#include <sys/mman.h>
+#endif
 
 extern char _vfprintf_internal;
 extern char _fpmaxtostr;
@@ -16,16 +20,18 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 *         0x00010000    "1.000000"
 	 *         0x00013333    "1.199996"
 	 */
-
+	printf("f = %x\n", f);
+	
 	char buf[80];
 	uint32_t result = (f & 0x80000000);
 	if(result)	f = ~f;
 	int8_t e = 0;
 	for (; (f & 0x40000000) == 0 && e < 32; e++)
 		f = f << 1;
-	e = 15 - e;
+	e = 14 - e;
 	result = result | ((f & 0x3fffffff) >> 8);
 	result = result | ((e + 127) << 23);
+	printf("result = %x\n", result);
 
 	int len = sprintf(buf, "0x%08x", result);
 	return __stdio_fwrite(buf, len, stream);
@@ -44,7 +50,11 @@ static void modify_vfprintf() {
 //	printf("%x, %x, %x\n", addr_format, addr_vf, addr_fp);
 	uint32_t addr_call = addr_vf + 0x306;
 	uint32_t addr_delta = (*(uint32_t *)(void *)(addr_call+1)) + (addr_format - addr_fp);
-//	mprotect((void *)((addr_call - 100 + 5) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+
+#ifdef TEST_LINUX
+	mprotect((void *)((addr_call - 100 + 5) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+#endif
+
 	*(uint32_t *)(void *)(addr_call+1) = addr_delta;
 //	printf("*addr_call = %x\n", *(uint16_t *)(void *)(addr_call+1));
 //	printf("%x, %x\n", addr_delta);
@@ -106,6 +116,9 @@ static void modify_ppfs_setargs() {
 	uint32_t addr_ppfs = (uint32_t)(void *)&_ppfs_setargs;
 	// e9 a8 ff ff ff
 	//eb 35
+#ifdef TEST_LINUX
+	mprotect((void *)((addr_ppfs - 100 + 5) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+#endif
 	*(uint16_t *)(void *)(addr_ppfs + 0x71) = 0x35eb;
 //	*(uint32_t *)(void *)(addr_ppfs + 0x72) = 0xffffffa8;
 	 
