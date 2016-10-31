@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "FLOAT.h"
-#include <sys/mman.h>
+//#include <sys/mman.h>
 
 extern char _vfprintf_internal;
 extern char _fpmaxtostr;
@@ -43,7 +43,7 @@ static void modify_vfprintf() {
 //	printf("%x, %x, %x\n", addr_format, addr_vf, addr_fp);
 	uint32_t addr_call = addr_vf + 0x306;
 	uint32_t addr_delta = (*(uint32_t *)(void *)(addr_call+1)) + (addr_format - addr_fp);
-	mprotect((void *)((addr_call - 100 + 5) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+//	mprotect((void *)((addr_call - 100 + 5) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
 	*(uint32_t *)(void *)(addr_call+1) = addr_delta;
 //	printf("*addr_call = %x\n", *(uint16_t *)(void *)(addr_call+1));
 //	printf("%x, %x\n", addr_delta);
