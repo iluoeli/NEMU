@@ -30,7 +30,7 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	uint32_t ex = 1;
 	if((f >> 31) & 1 == 1)
 		i += fprintf(stream, "%c", '-');			
-	result = (f & 7fff0000) / 0x10000;
+	result = (f & 0x7fff0000) >> 16;
 //	i += sprintf(buf+i, "0x%08x", result);
 //	i += sprintf(buf+i, "0x%08x", '.');
 	i += fprintf(stream, "%d", result);
