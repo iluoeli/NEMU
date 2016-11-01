@@ -23,7 +23,7 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 */
 #ifdef TEST_LINUX
 	printf("f = %x\n", f);
-	f = 0x10000;
+//	f = 0x10000;
 #endif
 	char buf[80];
 	int i = 0;
@@ -145,12 +145,15 @@ static void modify_ppfs_setargs() {
 	 * the modification.
 	 */
 	uint32_t addr_ppfs = (uint32_t)(void *)&_ppfs_setargs;
+#ifdef TEST_LINUX
+	printf("addr_ppfs %x\n", addr_ppfs);
+#endif
 	// e9 a8 ff ff ff
 	//eb 35
 #ifdef TEST_LINUX
 	mprotect((void *)((addr_ppfs - 100 + 5) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
 #endif
-	*(uint16_t *)(void *)(addr_ppfs + 0x71) = 0x35eb;
+	*(uint16_t *)(void *)(addr_ppfs + 0x71) = 0x30eb;
 //	*(uint32_t *)(void *)(addr_ppfs + 0x72) = 0xffffffa8;
 	 
 	
@@ -160,7 +163,7 @@ static void modify_ppfs_setargs() {
 #if 0
 	enum {                          /* C type: */
 		PA_INT,                       /* int */
-		PA_CHAR,                      /* int, cast to char */
+		xPA_CHAR,                      /* int, cast to char */
 		PA_WCHAR,                     /* wide char */
 		PA_STRING,                    /* const char *, a '\0'-terminated string */
 		PA_WSTRING,                   /* const wchar_t *, wide character string */
@@ -228,7 +231,7 @@ static void modify_ppfs_setargs() {
 	 * target branch will also prepare a 64-bit argument, without
 	 * introducing floating point instructions. When this function
 	 * returns, the action of the code above should do the following:
-	 */
+ 	 */
 
 #if 0
 	while (i < ppfs->num_data_args) {
