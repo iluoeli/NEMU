@@ -90,7 +90,7 @@ static void modify_vfprintf() {
 //	printf("*addr_call = %x\n", *(uint16_t *)(void *)(addr_call+1));
 //	printf("%x, %x\n", addr_delta);
 	// modify instrucrions 
-	*(uint32_t *)(void *)(addr_vf + 0x2fc) = 0xff9030ff;	//ff 30 90 ff
+	*(uint32_t *)(void *)(addr_vf + 0x2fc) = 0xff9032ff;	//ff 30 90 ff
 //	printf("modyfy 3\n");
 	*(uint32_t *)(void *)(addr_vf + 0x2f9) = 0xff08ec83;	// 83 ec 08 ff
 	*(uint16_t *)(void *)(addr_vf + 0x2e8) = 0x9090;
