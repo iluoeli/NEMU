@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "FLOAT.h"
 
-#define TEST_LINUX
+//#define TEST_LINUX
 
 #ifdef TEST_LINUX
 #include <sys/mman.h>
