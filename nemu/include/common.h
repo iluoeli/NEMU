@@ -6,7 +6,6 @@
 /* You will define this macro in PA4 */
 //#define HAS_DEVICE
 
-volatile static int dummy;
 
 #define DEBUG
 #define LOG_FILE
