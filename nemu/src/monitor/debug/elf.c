@@ -132,7 +132,8 @@ static void load_stack_info()
 {
 	int i=0, j=0;
 	uint32_t ebp=cpu.ebp;
-
+	if(ebp == 0)
+		statab[0].ret_addr = 0;
 	for(i=0; ebp != 0; ++i){ 
 			printf("ebp %d:%x\n", i, ebp);
 			statab[i].ret_addr = swaddr_read(ebp+4, 4);
@@ -156,7 +157,7 @@ void print_stack_info()
 	if(func >= 0) {
 		printf("#0\t0x%x  in  %s(0x%x, 0x%x, 0x%x, 0x%x)  \n", symtab[func].st_value, strtab+symtab[func].st_name, swaddr_read(cpu.ebp+8, 4), swaddr_read(cpu.ebp+12, 4), swaddr_read(cpu.ebp+16, 4), swaddr_read(cpu.ebp+20, 4));
 	}
-	printf("print_stack_info\n");
+	if(statab[0].ret_addr == 0)	return;
 	do {
 		i++;
 		printf("prev_ebp: %x\tret_addr: %x\n", statab[i].prev_ebp, statab[i].ret_addr);
