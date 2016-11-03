@@ -8,7 +8,7 @@ static void do_execute()
 	reg_l(R_ESP) -= 4;
 #undef DATA_BYTE
 #define DATA_BYTE 4
-	MEM_W(reg_l(R_ESP), op_src->val);
+	MEM_W(reg_l(R_ESP), (DATA_TYPE_S)op_src->val);
 #undef DATA_BYTE
 #define DATA_BYTE 1
 
@@ -16,7 +16,7 @@ static void do_execute()
 	reg_l(R_ESP) -= 4;
 #undef DATA_BYTE
 #define DATA_BYTE 4
-	MEM_W(reg_l(R_ESP), op_src->val);
+	MEM_W(reg_l(R_ESP), (DATA_TYPE_S)op_src->val);
 #undef DATA_BYTE
 #define DATA_BYTE 2
 
