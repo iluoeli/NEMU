@@ -5,7 +5,7 @@
 int main()
 {
 	char s[10];
-	sprintf(s, "%d", 1);	
-	nemu_assert(strcmp(s, "1") == 0);
+	sprintf(s, "%d", -12);	
+	nemu_assert(strcmp(s, "-12") == 0);
 	return 0;
 }
