@@ -149,7 +149,7 @@ static void load_stack_info()
 				for(j=0; j < 4; ++j)
 					statab[i].args[j] = 0;
 			}
-				ebp = statab[i].prev_ebp;	
+			ebp = statab[i].prev_ebp;	
 			++nr_st;
 	}
 }
