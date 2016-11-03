@@ -138,11 +138,18 @@ static void load_stack_info()
 		nr_st = 0;
 	for(i=0; ebp != 0; ++i){ 
 			printf("ebp %d:%x\n", i, ebp);
-			statab[i].ret_addr = swaddr_read(ebp+4, 4);
 			statab[i].prev_ebp = swaddr_read(ebp, 4);
-			for(j=0; j < 4; ++j)
-				statab[i].args[j] = swaddr_read(ebp+8+j*4, 4);
-			ebp = statab[i].prev_ebp;	
+			if(statab[i].prev_ebp != 0) {
+				statab[i].ret_addr = swaddr_read(ebp+4, 4);
+				for(j=0; j < 4; ++j)
+					statab[i].args[j] = swaddr_read(ebp+8+j*4, 4);
+			}
+			else {
+				statab[i].ret_addr = 0;
+				for(j=0; j < 4; ++j)
+					statab[i].args[j] = 0;
+			}
+				ebp = statab[i].prev_ebp;	
 			++nr_st;
 	}
 }
