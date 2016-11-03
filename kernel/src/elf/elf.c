@@ -45,11 +45,11 @@ uint32_t loader() {
 		/* Scan the program header table, load each segment into memory */
 		ramdisk_read(buf_ph, ELF_OFFSET_IN_DISK+elf->e_phoff+i*elf->e_phentsize, elf->e_phentsize);
 		ph = (void *)buf_ph;
- 		if(ph->p_type == PT_LOAD) {
+  		if(ph->p_type == PT_LOAD) {
 
  			/* TO DO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
- 			 */
+  			 */
 			uint8_t buf_file[ph->p_filesz];
 			ramdisk_read(buf_file, ELF_OFFSET_IN_DISK+ph->p_offset, ph->p_filesz);	
 		//	ramdisk_write(buf_file, ph->p_vaddr, ph->p_filesz);	
@@ -57,14 +57,14 @@ uint32_t loader() {
 
   			/* TOD O: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
-			 */
-			int margin = ph->p_memsz-ph->p_filesz;
+ 			 */
+			int margin = ph->p_memsz - ph->p_filesz;
 			uint8_t buf_zero[margin];	
 			int j;
-			for (j=0; j < margin; ++j)
-				buf_zero[j] = 0;
+		//	for (j=0; j < margin; ++j)
+		//		buf_zero[j] = 0;
 			//ramdisk_write(buf_zero, ph->p_vaddr+ph->p_filesz, margin);
-			memcpy((void *)ph->p_vaddr + ph->p_filesz, buf_zero, margin);
+			memcpy((void *)ph->p_vaddr + ph->p_filesz, 0, margin);
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
