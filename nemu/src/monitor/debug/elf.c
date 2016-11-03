@@ -92,12 +92,8 @@ void load_elf_tables(int argc, char *argv[]) {
 uint32_t search_elf_obj(char *objName, bool *success)
 {
 	int i=0;
-	//	printf("execFile:: %s\n", exec_file);
-	//	printf("objName:: %s\n", objName);
-	for (; i < nr_symtab_entry; ++i){
-	//	printf("Name:: %d\n", symtab[i].st_name);
-	//	printf("strtab:: %s\n", strtab+symtab[i].st_name);
- 		if ((symtab[i].st_info == 17 || symtab[i].st_info == 18) && strcmp(objName, strtab+symtab[i].st_name) == 0){
+ 	for (; i < nr_symtab_entry; ++i){
+  		if ((symtab[i].st_info == 17 || symtab[i].st_info == 18) && strcmp(objName, strtab+symtab[i].st_name) == 0){
 			*success = true;
 			return symtab[i].st_value;
 		}
@@ -111,12 +107,12 @@ static void load_func_info()
 	int i = 0;
 	nr_func = 0;
 	for (; i < nr_symtab_entry; ++i){ 
-	//	printf("%d, %s\n", symtab[i].st_info, strtab+symtab[i].st_name);
-		if (symtab[i].st_info == 18){
+		printf("%d, %s\n", symtab[i].st_info, strtab+symtab[i].st_name);
+	 	if (symtab[i].st_info == 18){
 			func_info[nr_func][2] = i;
 			func_info[nr_func][0] = symtab[i].st_value;
 			func_info[nr_func][1] = func_info[nr_func][0] + symtab[i].st_size;		
-			//printf("func_num: %d, func_name: %s\tfunc_value: %x\n", func_info[nr_func][2],symtab[i].st_name+strtab, symtab[i].st_value);
+			printf("func_num: %d, func_name: %s\tfunc_value: %x\n", func_info[nr_func][2],symtab[i].st_name+strtab, symtab[i].st_value);
 			nr_func ++;
 		}
 	}	
@@ -138,7 +134,7 @@ static void load_stack_info()
 	uint32_t ebp=cpu.ebp;
 
 	for(i=0; ebp != 0; ++i){ 
-			//printf("ebp %d:%x\n", i, ebp);
+			printf("ebp %d:%x\n", i, ebp);
 			statab[i].ret_addr = swaddr_read(ebp+4, 4);
 			statab[i].prev_ebp = swaddr_read(ebp, 4);
 			for(j=0; j < 4; ++j)
@@ -160,10 +156,10 @@ void print_stack_info()
 	if(func >= 0) {
 		printf("#0\t0x%x  in  %s(0x%x, 0x%x, 0x%x, 0x%x)  \n", symtab[func].st_value, strtab+symtab[func].st_name, swaddr_read(cpu.ebp+8, 4), swaddr_read(cpu.ebp+12, 4), swaddr_read(cpu.ebp+16, 4), swaddr_read(cpu.ebp+20, 4));
 	}
-//	printf("print_stack_info\n");
+	printf("print_stack_info\n");
 	do {
 		i++;
-	//	printf("prev_ebp: %x\tret_addr: %x\n", statab[i].prev_ebp, statab[i].ret_addr);
+		printf("prev_ebp: %x\tret_addr: %x\n", statab[i].prev_ebp, statab[i].ret_addr);
 		func = is_func(statab[i].ret_addr);
 		if((func != -1)){
 		//	printf("func = %d\n", func);
