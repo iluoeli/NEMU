@@ -15,6 +15,7 @@ static int nr_symtab_entry;
 static PartOfStackFrame statab[SIZE];
 static int func_info[SIZE][3];	//fun_info[n][0]: start addr; fun_info[n][1]: end addr: fun _info[n][2]: nr in symtab
 static int nr_func = 0;	
+static int nr_st = 0;
 
 void load_elf_tables(int argc, char *argv[]) {
 	int ret;
@@ -131,9 +132,10 @@ int is_func(swaddr_t addr)
 static void load_stack_info()
 {
 	int i=0, j=0;
+	nr_st = 0;
 	uint32_t ebp=cpu.ebp;
 	if(ebp == 0)
-		statab[0].ret_addr = 0;
+		nr_st = 0;
 	for(i=0; ebp != 0; ++i){ 
 			printf("ebp %d:%x\n", i, ebp);
 			statab[i].ret_addr = swaddr_read(ebp+4, 4);
@@ -141,13 +143,14 @@ static void load_stack_info()
 			for(j=0; j < 4; ++j)
 				statab[i].args[j] = swaddr_read(ebp+8+j*4, 4);
 			ebp = statab[i].prev_ebp;	
+			++nr_st;
 	}
 }
 
 void print_stack_info()
 {
-	int i=-1;
-	int func=-1;
+	int i = 0;
+	int func = -1;
 	load_stack_info();
 	load_func_info();	
 
@@ -157,15 +160,13 @@ void print_stack_info()
 	if(func >= 0) {
 		printf("#0\t0x%x  in  %s(0x%x, 0x%x, 0x%x, 0x%x)  \n", symtab[func].st_value, strtab+symtab[func].st_name, swaddr_read(cpu.ebp+8, 4), swaddr_read(cpu.ebp+12, 4), swaddr_read(cpu.ebp+16, 4), swaddr_read(cpu.ebp+20, 4));
 	}
-	if(statab[0].ret_addr == 0)	return;
-	do {
-		i++;
+	for (i=0; i < nr_st; ++i) {
 		printf("prev_ebp: %x\tret_addr: %x\n", statab[i].prev_ebp, statab[i].ret_addr);
 		func = is_func(statab[i].ret_addr);
 		if((func != -1)){
 		//	printf("func = %d\n", func);
 			printf("#%d\t0x%x  in  %s(%x, %x, %x, %x)  \n", i+1, symtab[func].st_value, strtab+symtab[func].st_name, statab[i+1].args[0], statab[i+1].args[1], statab[i+1].args[2], statab[i+1].args[3]);
 		}
-	} while(statab[i].prev_ebp !=  0);
+	}
 
 }
