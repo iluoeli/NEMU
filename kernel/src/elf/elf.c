@@ -61,10 +61,10 @@ uint32_t loader() {
 			int margin = ph->p_memsz - ph->p_filesz;
 			uint32_t buf_zero[margin];	
 			int j;
-			for (j=0; 4*j < margin; ++j)
-				buf_zero[j] = 0x00000000;
-			ramdisk_write(buf_zero, ph->p_vaddr+ph->p_filesz, margin);
-		//	memcpy((void *)ph->p_vaddr + ph->p_filesz, 0, margin);
+		//	for (j=0; 4*j < margin; ++j)
+		//		buf_zero[j] = 0x00000000;
+			//ramdisk_write(buf_zero, ph->p_vaddr+ph->p_filesz, margin);
+			memset((void *)ph->p_vaddr + ph->p_filesz, 0, margin);
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
