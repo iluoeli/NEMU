@@ -24,14 +24,20 @@ int main() {
 
 	buf[0] = 0xaa; 
 	nemu_assert(getbit(buf, 0) == 0);
+//	set_bp();
 	nemu_assert(getbit(buf, 1) == 1);
+//	set_bp();
 	nemu_assert(getbit(buf, 2) == 0);
+//	set_bp();
 	nemu_assert(getbit(buf, 3) == 1);
+//	set_bp();
 	nemu_assert(getbit(buf, 4) == 0);
+//	set_bp();
 	nemu_assert(getbit(buf, 5) == 1);
+//	set_bp();
 	nemu_assert(getbit(buf, 6) == 0);
+//	set_bp();
 	nemu_assert(getbit(buf, 7) == 1);
-
 	setbit(buf, 8, 1);
 	setbit(buf, 9, 0);
 	setbit(buf, 10, 1);

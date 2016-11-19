@@ -1,5 +1,6 @@
 #include "monitor/monitor.h"
 #include "monitor/expr.h"
+#include "monitor/elf.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
 
@@ -22,7 +23,7 @@ char* rl_gets() {
 
 	line_read = readline("(nemu) ");
 
-   	if (line_read && *line_read) {
+    	if (line_read && *line_read) {
 		add_history(line_read);
  	}
 
@@ -61,19 +62,25 @@ static int cmd_info(char *args)
 	char *arg = strtok(NULL, " ");
 	if(NULL == arg) {
 		printf("Error: there must be a subcmd\n");
- 	}
- 	else if(0 == strcmp("r", arg)) {
+ 	} 
+    	else if(0 == strcmp("r", arg)) {
 		int i;
- 		for (i=0; i < 8; ++i) {
+   		for (i=0; i < 8; ++i) {
 			printf("%s\t0x%x", reg_name[i], cpu.gpr[i]._32);
 			if(i != R_ESP && i != R_EBP)
 				printf("\t%d\n", cpu.gpr[i]._32);
 			else
 				printf("\n");
- 	 	}
+ 	  	}
 		printf("%s\t0x%x\n", reg_name[i],cpu.eip);
+		printf("CF\t0x%x\n", cpu.EFLAGES.CF);
+		printf("OF\t0x%x\n", cpu.EFLAGES.OF);
+		printf("SF\t0x%x\n", cpu.EFLAGES.SF);
+		printf("ZF\t0x%x\n", cpu.EFLAGES.ZF);
+		printf("PF\t0x%x\n", cpu.EFLAGES.PF);
+		printf("DF\t0x%x\n", cpu.EFLAGES.DF);
  	} 
- 	else if(0 == strcmp("w", arg)) {
+  	else if(0 == strcmp("w", arg)) {
 	//TODO: add	cmd info w	
 		WP *current = h_wp();
 		printf("NO\tEXPR\n");
@@ -84,7 +91,7 @@ static int cmd_info(char *args)
 	}
   	else{
 		printf("Error: no match cmd as %s \n", arg);
-	}
+	} 
 	return 0;
 }
 
@@ -92,7 +99,7 @@ static int cmd_x(char *args)
 {
 	char *arg1 = strtok(NULL, " ");
 	char *arg2 = strtok(NULL, ".");
-	if(NULL == arg1 || NULL == arg2) {
+ 	if(NULL == arg1 || NULL == arg2) {
 		printf("Error: there must be 2 subcmds\n");
  	}
   	else {
@@ -106,7 +113,7 @@ static int cmd_x(char *args)
 				printf("0x%x\n", swaddr_read(addr+i*4, 4));
    			}			
  		}
- 	}
+  	}
 	return 0;
 }
 
@@ -120,15 +127,15 @@ static int cmd_p(char *args)
 //	Log("args = %s\n", args);
 	bool success = false;
 	uint32_t value = expr(arg, &success);
-	if(success == true) {
-		printf("%d\n", value);	
+ 	if(success == true) {
+		printf("0x%x\n", value);	
 	}
 	return 0;
 }
 
 static int cmd_w(char *args)
 {
-	char *arg = strtok(NULL, " ");
+	char *arg = strtok(NULL, ",");
 	if(NULL == arg) {
 		printf("Error: too few arguments\n");
 		return 0;
@@ -142,7 +149,7 @@ static int cmd_w(char *args)
 	}
 	strcpy(new->expr, arg);
 	new->expr[strlen(arg)] = '\0';
-	Log("new->expr = %s\n", new->expr);
+//	Log("new->expr = %s\n", new->expr);
 	// how to value a val??
 	new->oldValue = expr(new->expr, &success);
 	if(success == true) {
@@ -162,7 +169,7 @@ static int cmd_d(char *args)
 	//delete all the wp
 		printf("Are you sure to delete all the watchpoint(y/n)\n");
 		char c = getchar();
-		if('y' == c || 'Y' == c) {
+ 		if('y' == c || 'Y' == c) {
 			WP *current = h_wp();
 			while (current) {
 				free_wp(current);
@@ -171,7 +178,7 @@ static int cmd_d(char *args)
 		}
 		else {	}
 	}
-	else {
+ 	else {
 		bool success = false;
 		int NO = expr(arg, &success);
 		if(success)
@@ -179,6 +186,13 @@ static int cmd_d(char *args)
 	}
 	return 0;
 }
+
+static int cmd_bt(char *args)
+{
+	print_stack_info();		
+	return 0;	
+}
+
 
 static struct {
 	char *name;
@@ -198,6 +212,7 @@ static struct {
 	"\tA watchpoint stops execution of your program whenever the value of an expression changes", cmd_w },
 	{ "d", "delete watchpoints", cmd_d },
 	{ "x", "Usage: x N EXPR", cmd_x},
+	{ "bt", "print stack", cmd_bt},
 
 	/* TODO: Add more commands */
 
@@ -214,11 +229,11 @@ static int cmd_help(char *args) {
 		/* no argument given */
  		for(i = 0; i < NR_CMD; i ++) {
 			printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-  		}
- 	}
-  	else {
- 		for(i = 0; i < NR_CMD; i ++) {
- 			if(strcmp(arg, cmd_table[i].name) == 0) {
+   		}
+  	}
+   	else {
+  		for(i = 0; i < NR_CMD; i ++) {
+  			if(strcmp(arg, cmd_table[i].name) == 0) {
 				printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
 				return 0;
   			}
@@ -239,9 +254,9 @@ void ui_mainloop() {
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
-  		 */
+   		 */
 		char *args = cmd + strlen(cmd) + 1;
-  		if(args >= str_end) {
+   		if(args >= str_end) {
 			args = NULL;
 		}
 
@@ -252,13 +267,13 @@ void ui_mainloop() {
 
 		int i;
 		for(i = 0; i < NR_CMD; i ++) {
-			if(strcmp(cmd, cmd_table[i].name) == 0) {
+ 			if(strcmp(cmd, cmd_table[i].name) == 0) {
 				if(cmd_table[i].handler(args) < 0) { return; }
 				break;
   			}
-   		}
+    		}
 
 		if(i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
- 	}
+  	}
 	
 }

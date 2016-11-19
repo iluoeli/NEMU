@@ -10,7 +10,7 @@ LIB_COMMON_DIR := lib-common
 LIBC_INC_DIR := $(LIB_COMMON_DIR)/uclibc/include
 LIBC_LIB_DIR := $(LIB_COMMON_DIR)/uclibc/lib
 LIBC := $(LIBC_LIB_DIR)/libc.a
-#FLOAT := obj/$(LIB_COMMON_DIR)/FLOAT/FLOAT.a
+FLOAT := obj/$(LIB_COMMON_DIR)/FLOAT/FLOAT.a
 
 include config/Makefile.git
 include config/Makefile.build
@@ -55,8 +55,8 @@ count:
 
 ##### some convinient rules #####
 
-USERPROG := obj/testcase/mov-c
-ENTRY := $(USERPROG)
+USERPROG := obj/testcase/fact
+ENTRY := $(kernel_BIN)
 
 entry: $(ENTRY)
 	objcopy -S -O binary $(ENTRY) entry
@@ -75,3 +75,7 @@ test: $(nemu_BIN) $(testcase_BIN) entry
 
 submit: clean
 	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
+
+count:
+	wc -l `find nemu -name *.c -o -name *.h`
+   

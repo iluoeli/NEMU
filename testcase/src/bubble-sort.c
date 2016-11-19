@@ -7,8 +7,8 @@ int a[N] = {81, 37, 64, 23, 38, 65, 56, 15, 8, 33, 85, 39, 71, 12, 77, 6, 82, 89
 void bubble_sort() {
 	int i, j, t;
 	for(j = 0; j < N; j ++) {
-		for(i = 0; i < N - 1 - j; i ++) {
-			if(a[i] > a[i + 1]) {
+ 		for(i = 0; i < N - 1 - j; i ++) {
+ 			if(a[i] > a[i + 1]) {
 				t = a[i];
 				a[i] = a[i + 1];
 				a[i + 1] = t;
@@ -21,7 +21,7 @@ int main() {
 	bubble_sort();
 
 	int i;
-	for(i = 0; i < N; i ++) {
+ 	for(i = 0; i < N; i ++) {
 		nemu_assert(a[i] == i);
 	}
 
@@ -29,7 +29,7 @@ int main() {
 
 	bubble_sort();
 
-	for(i = 0; i < N; i ++) {
+ 	for(i = 0; i < N; i ++) {
 		nemu_assert(a[i] == i);
 	}
 

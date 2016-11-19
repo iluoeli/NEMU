@@ -9,9 +9,9 @@ make_helper(rep) {
 		/* repz ret */
 		exec(eip + 1);
 		len = 0;
-	}
-	else {
-		while(cpu.ecx) {
+ 	}
+   	else {
+  		while(cpu.ecx) {
 			exec(eip + 1);
 			count ++;
 			cpu.ecx --;
@@ -26,10 +26,14 @@ make_helper(rep) {
 				);
 
 			/* TODO: Jump out of the while loop if necessary. */
-
-		}
+			if(cpu.EFLAGES.ZF == 0 && (
+					ops_decoded.opcode == 0xa6
+				 || ops_decoded.opcode == 0xa7 
+				 || ops_decoded.opcode == 0xae 
+				 || ops_decoded.opcode == 0xaf))	break;
+  		}
 		len = 1;
-	}
+ 	}
 
 #ifdef DEBUG
 	char temp[80];
@@ -53,8 +57,13 @@ make_helper(repnz) {
 			  );
 
 		/* TODO: Jump out of the while loop if necessary. */
+		if(cpu.EFLAGES.ZF == 1 && (
+					ops_decoded.opcode == 0xa6
+				 || ops_decoded.opcode == 0xa7 
+				 || ops_decoded.opcode == 0xae 
+				 || ops_decoded.opcode == 0xaf))	break;
 
-	}
+  	}
 
 #ifdef DEBUG
 	char temp[80];

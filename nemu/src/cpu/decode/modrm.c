@@ -22,7 +22,7 @@ int load_addr(swaddr_t eip, ModR_M *m, Operand *rm) {
 		/* no SIB */
 		base_reg = m->R_M;
 		disp_offset = 1;
-	}
+ 	}
 
 	if(m->mod == 0) {
 		if(base_reg == R_EBP) { base_reg = -1; }
@@ -97,20 +97,20 @@ int read_ModR_M(swaddr_t eip, Operand *rm, Operand *reg) {
 			case 2: rm->val = reg_w(m.R_M); break;
 			case 4: rm->val = reg_l(m.R_M); break;
 			default: assert(0);
-		}
+ 		}
 #ifdef DEBUG
 		switch(rm->size) {
 			case 1: sprintf(rm->str, "%%%s", regsb[m.R_M]); break;
 			case 2: sprintf(rm->str, "%%%s", regsw[m.R_M]); break;
 			case 4: sprintf(rm->str, "%%%s", regsl[m.R_M]); break;
-		}
+ 		}
 #endif
 		return 1;
-	}
+ 	}
 	else {
 		int instr_len = load_addr(eip, &m, rm);
 		rm->val = swaddr_read(rm->addr, rm->size);
 		return instr_len;
-	}
+ 	}
 }
 

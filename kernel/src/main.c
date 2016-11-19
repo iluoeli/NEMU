@@ -44,7 +44,7 @@ void init_cond() {
 
 	/* Set the IDT by setting up interrupt and exception handlers.
 	 * Note that system call is the only exception implemented in NEMU.
-	 */
+ 	 */
 	init_idt();
 #endif
 
@@ -70,7 +70,7 @@ void init_cond() {
 	/* Output a welcome message.
 	 * Note that the output is actually performed only when
 	 * the serial port is available in NEMU.
-	 */
+ 	 */
 	Log("Hello, NEMU world!");
 
 #if defined(IA32_PAGE) && defined(HAS_DEVICE)
@@ -80,11 +80,12 @@ void init_cond() {
 
 	/* Load the program. */
 	uint32_t eip = loader();
+//	panic("load eip successful");
 	
 #if defined(IA32_PAGE) && defined(HAS_DEVICE)
 	/* Read data in the video memory to check whether 
 	 * the test data is written sucessfully.
-	 */
+ 	 */
 	video_mapping_read_test();
 
 	/* Clear the test data we just written in the video memory. */
@@ -92,7 +93,7 @@ void init_cond() {
 #endif
 
 #ifdef IA32_PAGE
-	/* Set the %esp for user program, which is one of the
+ 	/* Set the %esp for user program, which is one of the
 	 * convention of the "advanced" runtime environment. */
 	asm volatile("movl %0, %%esp" : : "i"(KOFFSET));
 #endif

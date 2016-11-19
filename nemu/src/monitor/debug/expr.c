@@ -5,11 +5,12 @@
  */
 #include <sys/types.h>
 #include <regex.h>
+#include "monitor/elf.h"
 
 int valid = true;	//to detect eval() valid
 
 enum {
-	 NOTYPE=256, OR, AND, NEQ, EQ, SUB, ADD, DIV, MUL, NOT, DEREF, NEG, LBR, RBR, NUM, HEX, REG
+	 NOTYPE=256, OR, AND, NEQ, EQ, SUB, ADD, DIV, MUL, NOT, DEREF, NEG, LBR, RBR, NUM, HEX, REG, OBJNAME
 	/* TODO: Add more token types */
 
 };
@@ -21,7 +22,7 @@ static struct rule {
 
 	/* TODO: Add more rules.
 	 * Pay attention to the precedence level of different rules.
-	 */
+	  */
 
 	{" +",	NOTYPE},				// spaces
 	{"\\+", ADD},					// plus
@@ -38,6 +39,7 @@ static struct rule {
 	{"!=", NEQ},
 	{"\\!", NOT},
 	{"\\$[a-z]{2,3}", REG},
+	{"([a-zA-Z]|\\_){1}[a-zA-Z0-9|\\_]*", OBJNAME}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -57,8 +59,8 @@ void init_regex() {
 		if(ret != 0) { 
 			regerror(ret, &re[i], error_msg, 128);
 			Assert(ret == 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
- 		}
- 	}
+  		}
+  	}
 }
 
 typedef struct token {
@@ -83,17 +85,17 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+			//	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 
 
 
- 				/* TODO: Now a new token is recognized with rules[i]. Add codes
+ 			 	/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array `tokens'. For certain types
 				 * of tokens, some extra actions should be performed.
  		 		 */
 
-  				switch(rules[i].token_type) {
+  			 	switch(rules[i].token_type) {
 					case EQ:
 						tokens[nr_token].type = EQ;
 						break;
@@ -133,26 +135,31 @@ static bool make_token(char *e) {
 						if(substr_len < 32) {
 							strncpy(tokens[nr_token].str, substr_start, substr_len);
 							tokens[nr_token].str[substr_len] = '\0';
-						}
+			 			}
 						else {
 							strncpy(tokens[nr_token].str, substr_start-32+substr_len, 31);		
 							tokens[nr_token].str[31] = '\0';
-						}
+			 			}
 						break;
 					case HEX:
 						tokens[nr_token].type = HEX;
 						// WARNING: substr_len no more than 32;
-						if(substr_len < 32) {
+			 			if(substr_len < 32) {
 							strncpy(tokens[nr_token].str, substr_start, substr_len);
 							tokens[nr_token].str[substr_len] = '\0';
 						}
 						else {
 							strncpy(tokens[nr_token].str, substr_start-32+substr_len, 31);		
 							tokens[nr_token].str[31] = '\0';
-						}
+			 			}
 						break;
 					case REG:
 						tokens[nr_token].type = REG;
+						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						tokens[nr_token].str[substr_len] = '\0';
+						break;
+					case OBJNAME:
+						tokens[nr_token].type = OBJNAME;
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						tokens[nr_token].str[substr_len] = '\0';
 						break;
@@ -165,14 +172,14 @@ static bool make_token(char *e) {
 				++nr_token;
 				break;
 
-  		 	}
-  		} 
+   		 	}
+   		} 
 
   		if(i == NR_REGEX) {
 			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
 			return false;
 		}
- 	}
+  	}
 
 	return true; 
 }
@@ -190,21 +197,21 @@ int check_parentheses(int p, int q)
 			if(buff < 1) {	/*Assert(0, "Error: bra not match\n")*/;
 				printf("Error: right bra not match");
 				return -1;
-			 	}
+ 			 	}
 			else
 				-- buff;
-		}
-	}
+ 		}
+ 	}
 	if(buff != 0) {
 	//	Assert(0, "Error; bra not match\n");
 		printf("Error: left bra not match\n");
 		return -1;
- 	}
-	Log("bra match\n");
+  	}
+//	Log("bra match\n");
 
 	if(tokens[p].type != LBR || tokens[q].type != RBR)
 		return false;
-	for (i=p+1; i < q; ++i) { 
+ 	for (i=p+1; i < q; ++i) { 
 		if(tokens[i].type == LBR || tokens[i].type == RBR)
 			return false;	
   	}
@@ -254,32 +261,32 @@ int dot_ope(int p, int q)
 			case LBR:
 				for (; tokens[i].type != RBR; ++i);	
 				break;
-	 	}
-	}
+ 	 	}
+ 	}
 	return op;
 }
 
 uint32_t eval(int p, int q)
 {
-	Log("p = %d, q = %d\n", p, q);
-	if(p > q) {
+//	Log("p = %d, q = %d\n", p, q);
+ 	if(p > q) {
 	//	Assert(0, "Error: error expression , p = %d, q = %d \n",p , q);		
 		printf("Error: bad expression\n");
 		valid = false;
 		return 0;
  	}
 	//p == q: number ; p = q-1: a neg+number or DEREF+number
-  	else if(p == q) {
+   	else if(p == q) {
 		int n = 0;
 		int i;
-		Log("str %s \n", tokens[p].str);
+//		Log("str %s \n", tokens[p].str);
 		//NUM
  		if(tokens[p].type == NUM) {
 			for (i=0; tokens[p].str[i] != '\0'; ++i) 
 				n = n*10 + tokens[p].str[i]-'0';
 			//Log("value = %d\n", n);
 			return n;
-  	 	}
+   	 	}
 		//HEX
   		else if(tokens[p].type == HEX) {
   	 		for (i=2; tokens[p].str[i] != '\0'; ++i) {
@@ -289,9 +296,9 @@ uint32_t eval(int p, int q)
 					n = n*16 + tokens[p].str[i] - 'a' + 10;
 				else 
 					n = n*16 + tokens[p].str[i] - 'A' + 10;
-			}
+ 			}
 			return n;
- 		}
+  		}
 
 		//REG
 		else if(tokens[p].type == REG) {
@@ -349,10 +356,15 @@ uint32_t eval(int p, int q)
 				printf("invalid regester name %s\n", tokens[p].str);
 				valid = false;
 				return 0;
-			}
- 	 	}
-		
- 	}
+ 			}
+  	 	}
+ 		else if(tokens[p].type == OBJNAME) {
+			uint32_t addr;
+			bool success = false;
+			addr = search_elf_obj(tokens[p].str, &success);
+			return success ? addr : -1;
+		}
+  	}
 	// may be can be delete for it's useless.
 /*	else if(p == q-1) {
 		if(tokens[p].type == NEG) {
@@ -380,7 +392,7 @@ uint32_t eval(int p, int q)
 	}
    	else {
 		int op = dot_ope(p, q);	
-		Log("op = %d\n", op);
+//		Log("op = %d\n", op);
 	//	int val1 = eval(p, op-1);
 	//	int val2 = eval(op+1, q);
 
@@ -407,7 +419,7 @@ uint32_t eval(int p, int q)
 
 
 uint32_t expr(char *e, bool *success) {
-	if(!make_token(e)) {
+ 	if(!make_token(e)) {
 		*success = false;
 		return 0;
  	}
@@ -419,13 +431,13 @@ uint32_t expr(char *e, bool *success) {
 				tokens[i].type = DEREF;
 		else if(tokens[i].type == SUB && (i == 0 || (tokens[i-1].type != HEX && tokens[i-1].type != NUM && tokens[i-1].type != REG && tokens[i-1].type != RBR)))	
 			tokens[i].type = NEG;
- 	}
+  	}
 //	panic("please implement me");
 	valid = true;
-	uint32_t n = eval(0, nr_token-1);
-	if(valid == true) {
+ 	uint32_t n = eval(0, nr_token-1);
+ 	if(valid == true) {
 		*success = true;
-		Log("Last value: %d\n", n);
+//		Log("Last value: %d\n", n);
 	}
 	else
 		*success = false;

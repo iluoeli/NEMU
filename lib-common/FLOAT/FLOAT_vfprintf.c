@@ -2,8 +2,15 @@
 #include <stdint.h>
 #include "FLOAT.h"
 
+//#define TEST_LINUX
+
+#ifdef TEST_LINUX
+#include <sys/mman.h>
+#endif
+
 extern char _vfprintf_internal;
 extern char _fpmaxtostr;
+extern char _ppfs_setargs;
 extern int __stdio_fwrite(char *buf, int len, FILE *stream);
 
 __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
@@ -14,20 +21,84 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 *         0x00010000    "1.000000"
 	 *         0x00013333    "1.199996"
 	 */
-
+#ifdef TEST_LINUX
+	printf("f = %x\n", f);
+//	f = 0x10000;
+#endif
 	char buf[80];
-	int len = sprintf(buf, "0x%08x", f);
-	return __stdio_fwrite(buf, len, stream);
+	int i = 0;
+	int j = 15;
+	uint32_t result = 0;
+	uint32_t ex = 1;
+	if((f >> 31) & 1 == 1) {
+		i += sprintf(buf, "%c", '-');
+		f = ~f + 1;
+	}
+	result = (f & 0x7fff0000) >> 16;
+#ifdef TEST_LINUX
+	printf("result = %d\n", result);
+#endif
+	i += sprintf(buf+i, "%d", result);
+	i += sprintf(buf+i, "%c", '.');
+	result = 0;
+	for(ex = 500000000; j >= 0; --j) {
+		result += ((f >> j) & 1) * ex;
+		ex /= 2;
+	}
+	result /= 1000;
+
+	i += sprintf(buf+i, "%06d", result);
+#ifdef TEST_LINUX
+	printf("result = %d\n", result);
+#endif
+	/*bad 
+	uint32_t result = (f & 0x80000000);
+	if(result)	f = ~f;
+	int8_t e = 0;
+	for (; (f & 0x40000000) == 0 && e < 32; e++)
+		f = f << 1;
+	e = 14 - e;
+	result = result | ((f & 0x3fffffff) >> 8);
+	result = result | ((e + 127) << 23);
+	result = result & 0xfffffeff;*/ 
+//	int len = sprintf(buf, "0x%08x", f);
+#ifdef TEST_LINUX
+	printf("buf = %s, len = %d\n", buf, i);
+#endif
+	return __stdio_fwrite(buf, i, stream);
 }
 
 static void modify_vfprintf() {
-	/* TODO: Implement this function to hijack the formating of "%f"
+ 	/* TODO: Implement this function to hijack the formating of "%f"
 	 * argument during the execution of `_vfprintf_internal'. Below
 	 * is the code section in _vfprintf_internal() relative to the
 	 * hijack.
 	 */
 
-#if 0
+	uint32_t addr_format = (uint32_t)(format_FLOAT);
+	uint32_t addr_vf = (uint32_t)(void *)&_vfprintf_internal;
+	uint32_t addr_fp = (uint32_t)(void *)&_fpmaxtostr;
+//	printf("%x, %x, %x\n", addr_format, addr_vf, addr_fp);
+	uint32_t addr_call = addr_vf + 0x306;
+	uint32_t addr_delta = (*(uint32_t *)(void *)(addr_call+1)) + (addr_format - addr_fp);
+
+#ifdef TEST_LINUX
+	mprotect((void *)((addr_call - 100 + 5) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+#endif
+
+	*(uint32_t *)(void *)(addr_call+1) = addr_delta;
+//	printf("*addr_call = %x\n", *(uint16_t *)(void *)(addr_call+1));
+//	printf("%x, %x\n", addr_delta);
+	// modify instrucrions 
+	*(uint32_t *)(void *)(addr_vf + 0x2fc) = 0xff9032ff;	//ff 30 90 ff
+//	printf("modyfy 3\n");
+	*(uint32_t *)(void *)(addr_vf + 0x2f9) = 0xff08ec83;	// 83 ec 08 ff
+	*(uint16_t *)(void *)(addr_vf + 0x2e8) = 0x9090;
+	*(uint16_t *)(void *)(addr_vf + 0x2e4) = 0x9090;
+//	printf("modyfy 4\n");
+
+
+# if 0
 	else if (ppfs->conv_num <= CONV_A) {  /* floating point */
 		ssize_t nf;
 		nf = _fpmaxtostr(stream,
@@ -42,6 +113,7 @@ static void modify_vfprintf() {
 		*count += nf;
 
 		return 0;
+		p
 	} else if (ppfs->conv_num <= CONV_S) {  /* wide char or string */
 #endif
 
@@ -72,11 +144,26 @@ static void modify_ppfs_setargs() {
 	 * Below is the code section in _vfprintf_internal() relative to
 	 * the modification.
 	 */
+	uint32_t addr_ppfs = (uint32_t)(void *)&_ppfs_setargs;
+#ifdef TEST_LINUX
+	printf("addr_ppfs %x\n", addr_ppfs);
+#endif
+	// e9 a8 ff ff ff
+	//eb 35
+#ifdef TEST_LINUX
+	mprotect((void *)((addr_ppfs - 100 + 5) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+#endif
+	*(uint16_t *)(void *)(addr_ppfs + 0x71) = 0x30eb;
+//	*(uint32_t *)(void *)(addr_ppfs + 0x72) = 0xffffffa8;
+	 
+	
+
+
 
 #if 0
 	enum {                          /* C type: */
 		PA_INT,                       /* int */
-		PA_CHAR,                      /* int, cast to char */
+		xPA_CHAR,                      /* int, cast to char */
 		PA_WCHAR,                     /* wide char */
 		PA_STRING,                    /* const char *, a '\0'-terminated string */
 		PA_WSTRING,                   /* const wchar_t *, wide character string */
@@ -144,7 +231,7 @@ static void modify_ppfs_setargs() {
 	 * target branch will also prepare a 64-bit argument, without
 	 * introducing floating point instructions. When this function
 	 * returns, the action of the code above should do the following:
-	 */
+ 	 */
 
 #if 0
 	while (i < ppfs->num_data_args) {

@@ -10,7 +10,7 @@ int switch_case(int n) {
 		case 8: case 9: case 10: case 11: ret = 10; break;
 		case 12: ret = 15; break;
 		default: ret = -1; break;
-	}
+ 	}
 
 	return ret;
 }
@@ -20,6 +20,7 @@ int ans[] = {-1, 0, 2, 5, 5, 8, 8, 8, 8, 10, 10, 10, 10, 15, -1};
 int main() {
 	int i;
 	for(i = 0; i < 15; i ++) {
+	//	set_bp();
 		nemu_assert(switch_case(i - 1) == ans[i]);
 	}
 

@@ -32,7 +32,8 @@ make_helper(concat(decode_si_, SUFFIX)) {
 	 *
 	op_src->simm = ???
 	 */
-	panic("please implement me");
+	 op_src->simm = (DATA_TYPE_S)instr_fetch(eip, DATA_BYTE);
+//	panic("please implement me");
 
 	op_src->val = op_src->simm;
 
@@ -132,6 +133,7 @@ make_helper(concat(decode_rm_, SUFFIX)) {
 	return decode_rm_internal(eip, op_src, op_src2);		/* op_src2 not use here */
 }
 
+
 make_helper(concat(decode_r_, SUFFIX)) {
 	return decode_r_internal(eip, op_src);
 }
@@ -184,5 +186,21 @@ void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 	else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src); }
 	else { assert(0); }
 }
+
+make_helper(concat(decode_rmb2r_, SUFFIX)) {
+//	concat(decode_r_, SUFFIX)(eip);
+//	decode_r_internal(eip, op_dest);
+	concat(decode_rm2r_, SUFFIX)(eip);
+	return decode_rm_b(eip);
+}
+#if DATA_BYTE == 4
+make_helper(concat(decode_rmw2r_, SUFFIX)) {
+//	decode_r_l(eip);
+//	decode_r_internal(eip, op_dest);
+	decode_rm2r_l(eip);
+	return decode_rm_w(eip);
+}
+#endif
+
 
 #include "cpu/exec/template-end.h"
