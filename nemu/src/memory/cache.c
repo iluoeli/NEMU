@@ -97,7 +97,11 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 		if(cache[set][i].valid && cache[set][i].tag == tag){
 			hit = true;
 			//write through
-			*((uint32_t *)cache[set][i].data + block) = data;			
+			int j=0;
+			for (; j < len; ++j) {
+				cache[set][i].data[block] = (data >> (4 * j)) & 0xff;
+			}
+			//*((uint32_t *)cache[set][i].data + block) = data;			
 			dram_write(addr, len, data);
 		}	
 	}
