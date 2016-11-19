@@ -12,6 +12,7 @@
 #define BLOCK_SIZE (1 << BLOCK_WIDTH)
 #define NR_WAY (1 << WAY_WIDTH)
 #define NR_SET (1 << SET_WIDTH)
+#define NR_BLOCK (1 << (WAY_WIDTH + SET_WIDTH))
 
 #define CACHE_MASK (BLOCK_SIZE - 1)
 
@@ -96,3 +97,13 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 	}
 }
 
+
+void init_cache()
+{
+	int i = 0;
+	int j = 0;
+	for (; i < NR_SET; ++i){
+		for (j=0; j < NR_WAY; ++j)
+			cache[i][j].valid = false;
+	}	
+}
