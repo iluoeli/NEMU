@@ -99,7 +99,7 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 			//write through
 			int j=0;
 			for (; j < len; ++j) {
-				cache[set][i].data[block] = (data >> (4 * j)) & 0xff;
+				cache[set][i].data[block+j] = (data >> (4 * j)) & 0xff;
 			}
 			//*((uint32_t *)cache[set][i].data + block) = data;			
 			dram_write(addr, len, data);
