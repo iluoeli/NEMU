@@ -72,8 +72,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	if(!hit) {
 		int j=0;
 		uint32_t addr_block = addr & 0xffffffc0;
-		for (; 4*j < BLOCK_SIZE; ++j) {
-			*((uint32_t *)cache[set][random].data + 4*j) = dram_read(addr_block + 4*j, 4);
+		for (; j < BLOCK_SIZE; ++j) {
+			cache[set][random].data[j] = dram_read(addr_block + j, 1);
 		}	
 		//cache[set][random].data = dram_read(addr_block , BLOCK_SIZE);
 		//memcpy(cache[set][random].data, dram_read(addr_block, BLOCK_SIZE), BLOCK_SIZE);
