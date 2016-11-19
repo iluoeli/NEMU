@@ -33,7 +33,7 @@ typedef struct{
 	bool valid;	
 //	bool dirty;
 	uint32_t tag;
-	uint8_t set;
+	uint32_t set;
 	uint8_t data[BLOCK_SIZE];
 } CacheSlot;
 
@@ -63,14 +63,15 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	for (; i < NR_WAY; ++i){
 		if(cache[set][i].valid && cache[set][i].tag == tag) {
 			hit = true;
-			return *((uint32_t *)cache[set][i].data + block);	
+		//	return *((uint32_t *)cache[set][i].data + block);	
+			return unalign_rw(cache[set][i].data + block, 4);
 		}	
 	}
 
 	uint32_t random = randomGenerator() % NR_WAY;
 	if(!hit) {
 		int j=0;
-		uint32_t addr_block = addr & ~CACHE_MASK;
+		uint32_t addr_block = addr & 0xffffffc0;
 		for (; 4*j < BLOCK_SIZE; ++j) {
 			*((uint32_t *)cache[set][random].data + 4*j) = dram_read(addr_block + 4*j, 4);
 		}	
@@ -79,7 +80,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 		cache[set][random].tag = tag;
 		cache[set][random].valid = true;
 	}
-	return *((uint32_t *)cache[set][random].data + block);
+//	return *((uint32_t *)cache[set][random].data + block);
+	return unalign_rw(cache[set][random].data + block, 4);
 }
 
 void cache_write(hwaddr_t addr, size_t len, uint32_t data)
@@ -103,7 +105,6 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 	if(!hit){
 		//not write allocate
 		dram_write(addr, len, data);
-		
 	}
 }
 
