@@ -39,6 +39,16 @@ typedef struct{
 
 CacheSlot cache[NR_SET][NR_WAY];
 
+void init_cache()
+{
+	int i = 0;
+	int j = 0;
+	for (; i < NR_SET; ++i){
+		for (j=0; j < NR_WAY; ++j)
+			cache[i][j].valid = false;
+	}	
+}
+
 uint32_t cache_read(hwaddr_t addr, size_t len)
 {
 //   Assert(addr < HW_MEM_SIZE, "physical address %x is outside of the physical memory!", addr);
@@ -98,12 +108,3 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 }
 
 
-void init_cache()
-{
-	int i = 0;
-	int j = 0;
-	for (; i < NR_SET; ++i){
-		for (j=0; j < NR_WAY; ++j)
-			cache[i][j].valid = false;
-	}	
-}
