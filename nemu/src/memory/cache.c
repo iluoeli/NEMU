@@ -52,7 +52,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	for (; i < NR_WAY; ++i){
 		if(cache[set][i].valid && cache[set][i].tag == tag) {
 			hit = true;
-			return cache[set][i].data[block];	
+			return *((uint32_t *)cache[set][i].data + block);	
 		}	
 	}
 
