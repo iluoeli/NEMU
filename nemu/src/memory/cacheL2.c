@@ -33,7 +33,7 @@ typedef struct{
 	bool valid;	
 	bool dirty;
 	uint32_t tag;
-	uint32_t set;
+//	uint32_t set;
 	uint8_t data[BLOCK_SIZE];
 } cacheL2Slot;
 
@@ -102,8 +102,8 @@ uint32_t cacheL2_read(hwaddr_t addr, size_t len)
 	//if cross block
 	if((temp.block+ offset + len) > BLOCK_SIZE) 
 		buf[1] = cacheL2_read((temp.addr + 4), 4);
-/*	else 
-		buf[1] = *(uint32_t *)(cacheL2[set][i].data + block+4);*/
+	else 
+		buf[1] = *(uint32_t *)(cacheL2[set][i].data + block+4);
 	return unalign_rw((uint8_t *)buf + offset, 4);
 }
 

@@ -90,9 +90,9 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	//if cross block
 	if((temp.block+ offset + len) > BLOCK_SIZE) 
 		buf[1] = cache_read((temp.addr + 4), 4);
-/*	else 
+	else 
 		buf[1] = *(uint32_t *)(cache[set][i].data + block+4);
-*/
+
 	return unalign_rw((uint8_t *)buf + offset, 4);
 }
 
