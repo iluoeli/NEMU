@@ -11,6 +11,7 @@
 char *reg_name[9] = { "eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "eip"} ;
 
 void cpu_exec(uint32_t);
+void print_cache(uint32_t);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -136,14 +137,14 @@ static int cmd_p(char *args)
 static int cmd_w(char *args)
 {
 	char *arg = strtok(NULL, ",");
-	if(NULL == arg) {
+ 	if(NULL == arg) {
 		printf("Error: too few arguments\n");
 		return 0;
 	}
 
 	bool success = false;
 	WP *new = new_wp();
-	if(new == NULL) {
+ 	if(new == NULL) {
 		printf("Error: no more watchpoints\n");
 		return 0;
 	}
@@ -174,16 +175,16 @@ static int cmd_d(char *args)
 			while (current) {
 				free_wp(current);
 				current = current->next;	
-			}
-		}
+ 			}
+ 		}
 		else {	}
-	}
+ 	}
  	else {
 		bool success = false;
 		int NO = expr(arg, &success);
 		if(success)
 			free_wp(nr_wp(NO));
-	}
+ 	}
 	return 0;
 }
 
@@ -193,6 +194,21 @@ static int cmd_bt(char *args)
 	return 0;	
 }
 
+static int cmd_cache(char *args)
+{
+	char *arg = strtok(NULL, ";");			
+	if(NULL == arg){
+		printf("Error: too few arguments\n");
+		return 0;			
+	}
+	else {
+		bool success = false;
+		uint32_t addr = expr(arg, &success);
+		if(success)
+			print_cache(addr);
+	}
+	return 0;
+}
 
 static struct {
 	char *name;
@@ -203,7 +219,7 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Step one instruction exactly.Use si[N] to step N times.",cmd_si },
-	{ "info", "Generic command for showing things about the program being debuffed.\n"
+ 	{ "info", "Generic command for showing things about the program being debuffed.\n"
 		"\tinfo r -- Print the information of registers\n"
 		"\tinfo w -- Print the value of watchpoints", cmd_info },
 	{ "p", "Print value of expression EXP", cmd_p },
@@ -213,7 +229,7 @@ static struct {
 	{ "d", "delete watchpoints", cmd_d },
 	{ "x", "Usage: x N EXPR", cmd_x},
 	{ "bt", "print stack", cmd_bt},
-
+	{"cache", "print cache information", cmd_cache},
 	/* TODO: Add more commands */
 
 };

@@ -129,4 +129,28 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 	}
 }
 
+void print_cache(uint32_t addr)
+{
+	cache_addr temp;
+	temp.addr = addr;
+	uint32_t set = temp.set;
+	uint32_t tag = temp.tag;
+	bool hit = false;
+	int i=0; 
+	for(; i < NR_WAY; ++i){
+		if(cache[set][i].valid && cache[set][i].tag == tag)	{
+			hit = true;	break;
+		}
+	}
 
+	if(hit){
+		int j=0;
+		for(; j < BLOCK_SIZE; ++j){
+			printf("%x", cache[set][i].data[j]);	
+			if(j % 4 == 0)	printf("\t");
+			if(j % 16 == 0)	printf("\n");
+		}	
+	}
+	else
+		printf("no record at cache\n");
+}
