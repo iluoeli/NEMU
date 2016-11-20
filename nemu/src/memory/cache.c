@@ -79,13 +79,14 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 		cache[set][i].tag = tag;
 		cache[set][i].valid = true;
 	}
-//	memset(buf, 0, 8);
+	memset(buf, 0, 8);
 	uint32_t offset = block & 3;
 	block = block & (~3);
 	buf[0] = *(uint32_t *)(cache[set][i].data + block);
+	buf[1] = *(uint32_t *)(cache[set][i].data + block+4);
 	//if cross block
-	//if((block + len) > BLOCK_SIZE) {
-	buf[1] = cache_read(addr+4, 4);
+	if((block + len) > BLOCK_SIZE) 
+		buf[1] = cache_read((addr & ~3) + 4, 4);
 	return unalign_rw(buf + offset, 4);
 //	return unalign_rw(cache[set][random].data + block, 4);
 }
