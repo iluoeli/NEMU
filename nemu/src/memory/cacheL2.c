@@ -85,11 +85,11 @@ uint32_t cacheL2_read(hwaddr_t addr, size_t len)
 			dram_addr.set = set;
 			dram_addr.block = 0;
 			for (; j < BLOCK_SIZE; ++j){
-				dram_write(dram_addr.addr + j, cacheL2[set][i].data[j], 1);	
+				dram_write(dram_addr.addr + j, 1, cacheL2[set][i].data[j]);	
 			}
 		}
 
-		for (; j < BLOCK_SIZE; ++j) {
+		for (j=0; j < BLOCK_SIZE; ++j) {
 			cacheL2[set][i].data[j] = dram_read(addr_block + j, 1);
 		}	
 		cacheL2[set][i].tag = tag;
@@ -138,11 +138,11 @@ void cacheL2_write(hwaddr_t addr, size_t len, uint32_t data)
 			dram_addr.set = set;
 			dram_addr.block = 0;
 			for (; j < BLOCK_SIZE; ++j){
-				dram_write(dram_addr.addr + j, cacheL2[set][i].data[j], 1);	
+				dram_write(dram_addr.addr + j, 1, cacheL2[set][i].data[j]);	
 			}
 		}
 
-		for (; j < BLOCK_SIZE; ++j) {
+		for (j=0; j < BLOCK_SIZE; ++j) {
 			cacheL2[set][i].data[j] = dram_read(addr_block + j, 1);
 		}	
 		cacheL2[set][i].tag = tag;
