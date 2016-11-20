@@ -4,7 +4,7 @@
 
 #define seed 12345678
 #define factor 479174
-#define mod 8
+#define mod 32767
 
 uint32_t randomGenerator();
 

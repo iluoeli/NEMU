@@ -108,7 +108,8 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 			for (; j < len; ++j) {
 				if((block + j) > BLOCK_SIZE)
 					cache_write(addr+j, 1, (data >> (8*j)) & 0xff);
-				cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
+				else
+					cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
 			}
 			//*((uint32_t *)cache[set][i].data + block) = data;			
 			dram_write(addr, len, data);
