@@ -134,7 +134,7 @@ void cacheL2_write(hwaddr_t addr, size_t len, uint32_t data)
 		if(cacheL2[set][i].valid && cacheL2[set][i].dirty){
 			int j=0;
 			cacheL2_addr dram_addr;
-			dram_addr.tag = cacheL2[set][i].tag;
+			dram_addr.tag = tag;
 			dram_addr.set = set;
 			dram_addr.block = 0;
 			for (; j < BLOCK_SIZE; ++j){
