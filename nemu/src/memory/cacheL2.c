@@ -102,8 +102,8 @@ uint32_t cacheL2_read(hwaddr_t addr, size_t len)
 	//if cross block
 	if((temp.block+ offset + len) > BLOCK_SIZE) 
 		buf[1] = cacheL2_read((temp.addr + 4), 4);
-	else 
-		buf[1] = *(uint32_t *)(cacheL2[set][i].data + block+4);
+/*	else 
+		buf[1] = *(uint32_t *)(cacheL2[set][i].data + block+4);*/
 	return unalign_rw((uint8_t *)buf + offset, 4);
 }
 
@@ -134,14 +134,14 @@ void cacheL2_write(hwaddr_t addr, size_t len, uint32_t data)
 		if(cacheL2[set][i].valid && cacheL2[set][i].dirty){
 			int j=0;
 			cacheL2_addr dram_addr;
-			dram_addr.tag = tag;
+			dram_addr.tag = cacheL2[set][i].tag;
 			dram_addr.set = set;
 			dram_addr.block = 0;
 			for (; j < BLOCK_SIZE; ++j){
 				dram_write(dram_addr.addr + j, 1, cacheL2[set][i].data[j]);	
 			}
 		}
-
+		
 		for (j=0; j < BLOCK_SIZE; ++j) {
 			cacheL2[set][i].data[j] = dram_read(addr_block + j, 1);
 		}	
