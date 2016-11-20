@@ -19,6 +19,10 @@
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
 
+uint32_t cacheL2_read(hwaddr_t addr, size_t len);
+void cacheL2_write(hwaddr_t addr, size_t len, uint32_t data);
+
+
 typedef union{
 	struct {
 		uint32_t block	: BLOCK_WIDTH;
