@@ -70,16 +70,17 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 		if(cache[set][i].valid && cache[set][i].tag == tag) {
 			hit = true;
 			break;
-		}	
-	}
+	 	}	
+	} 
 
 	if(!hit) {
 		uint32_t random = randomGenerator() % NR_WAY;
 		i = random;
 		int j=0;
 		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
-		for (; j < BLOCK_SIZE; ++j) {
-			cache[set][i].data[j] = dram_read(addr_block + j, 1);
+	 	for (; j < BLOCK_SIZE; ++j) {
+			//cache[set][i].data[j] = dram_read(addr_block + j, 1);
+			cache[set][i].data[j] = cacheL2_read(addr_block + j, 1);
 		}	
 		cache[set][i].tag = tag;
 		cache[set][i].valid = true;
@@ -104,7 +105,7 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 	bool hit = false;
 	int i = 0;
 	for (; i < NR_WAY; ++i){
-		if(cache[set][i].valid && cache[set][i].tag == tag){
+	 	if(cache[set][i].valid && cache[set][i].tag == tag){
 			hit = true;
 			//write through
 			int j=0;
@@ -114,15 +115,16 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 					cache_write(addr+j, 1, (data >> (8*j)) & 0xff);
 				else
 					cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
-			}
-			//*((uint32_t *)cache[set][i].data + block) = data;			
-			dram_write(addr, len, data);
+ 			}
+			//dram_write(addr, len, data);
+			cacheL2_write(addr, len, data);
 		}	
 	}
 	
 	if(!hit){
 		//not write allocate
-		dram_write(addr, len, data);
+	//	dram_write(addr, len, data);
+		cacheL2_write(addr, len, data);
 	}
 }
 
