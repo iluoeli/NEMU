@@ -148,7 +148,6 @@ void print_cache(uint32_t addr)
 		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
 		for(; 4*j < BLOCK_SIZE; ++j){
 			printf("%8x: %8x\t", addr_block+4*j, *((uint32_t *)cache[set][i].data + j));	
-		//	if((j+1) % 4 == 0)	printf("\t");
 			if((j+1) % 2 == 0)	printf("\n");
 		}	
 	}
