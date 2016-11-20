@@ -59,7 +59,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	uint32_t set = temp.set;
 	uint32_t tag = temp.tag;
 	bool hit = false;
-	uint8_t buf[8];
+	uint32_t buf[2];
 	int i=0;
 	for (; i < NR_WAY; ++i){
 		if(cache[set][i].valid && cache[set][i].tag == tag) {
@@ -80,14 +80,13 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 		cache[set][i].valid = true;
 	}
 	memset(buf, 0, 8);
-	*(uint32_t *)(buf+1) = *(uint32_t *)(cache[set][i].data + block);
-//	*(uint32_t *)(buf + 0) = unalign_rw(cache[set][i].data + block, 4);
+	buf[0] = *(uint32_t *)(cache[set][i].data + block);
 	//if cross block
 	if((block + len) > BLOCK_SIZE) {
 		int margin = block + len - BLOCK_SIZE + 1;
 		*(uint32_t *)(buf + 4 - margin + 1) = cache_read(addr+4-margin, 4);
 	}
-	return unalign_rw(buf + 1, 4);
+	return unalign_rw(buf, 4);
 //	return unalign_rw(cache[set][random].data + block, 4);
 }
 
