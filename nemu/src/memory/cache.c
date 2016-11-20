@@ -59,30 +59,36 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	uint32_t set = temp.set;
 	uint32_t tag = temp.tag;
 	bool hit = false;
-	//uint8_t temp[4];
+	uint8_t buf[8];
 	int i=0;
 	for (; i < NR_WAY; ++i){
 		if(cache[set][i].valid && cache[set][i].tag == tag) {
 			hit = true;
-		//	return *((uint32_t *)cache[set][i].data + block);	
-			return unalign_rw(cache[set][i].data + block, 4);
+			break;
 		}	
 	}
 
-	uint32_t random = randomGenerator() % NR_WAY;
 	if(!hit) {
+		uint32_t random = randomGenerator() % NR_WAY;
+		i = random;
 		int j=0;
 		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
 		for (; j < BLOCK_SIZE; ++j) {
-			cache[set][random].data[j] = dram_read(addr_block + j, 1);
+			cache[set][i].data[j] = dram_read(addr_block + j, 1);
 		}	
-		//cache[set][random].data = dram_read(addr_block , BLOCK_SIZE);
-		//memcpy(cache[set][random].data, dram_read(addr_block, BLOCK_SIZE), BLOCK_SIZE);
-		cache[set][random].tag = tag;
-		cache[set][random].valid = true;
+		cache[set][i].tag = tag;
+		cache[set][i].valid = true;
 	}
-//	return *((uint32_t *)cache[set][random].data + block);
-	return unalign_rw(cache[set][random].data + block, 4);
+	memset(buf, 0, 8);
+	*(uint32_t *)(buf+1) = *(uint32_t *)(cache[set][i].data + block);
+//	*(uint32_t *)(buf + 0) = unalign_rw(cache[set][i].data + block, 4);
+	//if cross block
+	if((block + len) > BLOCK_SIZE) {
+		int margin = block + len - BLOCK_SIZE + 1;
+		*(uint32_t *)(buf + 4 - margin + 1) = cache_read(addr+4-margin, 4);
+	}
+	return unalign_rw(buf + 1, 4);
+//	return unalign_rw(cache[set][random].data + block, 4);
 }
 
 void cache_write(hwaddr_t addr, size_t len, uint32_t data)
