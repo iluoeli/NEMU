@@ -59,6 +59,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	uint32_t set = temp.set;
 	uint32_t tag = temp.tag;
 	bool hit = false;
+	//uint8_t temp[4];
 	int i=0;
 	for (; i < NR_WAY; ++i){
 		if(cache[set][i].valid && cache[set][i].tag == tag) {
@@ -71,7 +72,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	uint32_t random = randomGenerator() % NR_WAY;
 	if(!hit) {
 		int j=0;
-		uint32_t addr_block = addr & CACHE_MASK;
+		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
 		for (; j < BLOCK_SIZE; ++j) {
 			cache[set][random].data[j] = dram_read(addr_block + j, 1);
 		}	
