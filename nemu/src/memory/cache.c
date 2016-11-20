@@ -146,7 +146,7 @@ void print_cache(uint32_t addr)
 	if(hit){
 		int j=0;
 		for(; 4*j < BLOCK_SIZE; ++j){
-			printf("%x", *((uint32_t *)cache[set][i].data + j));	
+			printf("%x\t", *((uint32_t *)cache[set][i].data + j));	
 		//	if((j+1) % 4 == 0)	printf("\t");
 			if((j+1) % 2 == 0)	printf("\n");
 		}	
