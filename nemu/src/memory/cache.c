@@ -85,7 +85,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	buf[0] = *(uint32_t *)(cache[set][i].data + block);
 	buf[1] = *(uint32_t *)(cache[set][i].data + block+4);
 	//if cross block
-	if((block + len) > BLOCK_SIZE) 
+	if((temp.block + len) > BLOCK_SIZE) 
 		buf[1] = cache_read((addr & ~3) + 4, 4);
 	return unalign_rw(buf + offset, 4);
 //	return unalign_rw(cache[set][random].data + block, 4);
