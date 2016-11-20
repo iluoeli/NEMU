@@ -154,9 +154,9 @@ void cacheL2_write(hwaddr_t addr, size_t len, uint32_t data)
 	int j=0;
 	for (; j < len; ++j){
 		if((block + j) > BLOCK_SIZE)	
-			cacheL2_write(addr+j, 1, (data >> (4*j))&0xff);
+			cacheL2_write(addr+j, 1, (data >> (8*j))&0xff);
 		else
-			cacheL2[set][i].data[block+j] =  (data >> (4*j)) & 0xff;
+			cacheL2[set][i].data[block+j] =  (data >> (8*j)) & 0xff;
 	}
 	cacheL2[set][i].dirty = true;
 }
