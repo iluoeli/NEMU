@@ -71,7 +71,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	uint32_t random = randomGenerator() % NR_WAY;
 	if(!hit) {
 		int j=0;
-		uint32_t addr_block = addr & 0xffffffe0;
+		uint32_t addr_block = addr & 0xffffffc0;
 		for (; j < BLOCK_SIZE; ++j) {
 			cache[set][random].data[j] = dram_read(addr_block + j, 1);
 		}	
