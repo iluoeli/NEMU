@@ -79,7 +79,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 		cache[set][i].tag = tag;
 		cache[set][i].valid = true;
 	}
-	memset(buf, 0, 8);
+//	memset(buf, 0, 8);
 	uint32_t offset = block & 3;
 	block = block & (~3);
 	buf[0] = *(uint32_t *)(cache[set][i].data + block);
