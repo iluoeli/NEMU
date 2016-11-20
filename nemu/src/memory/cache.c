@@ -147,8 +147,8 @@ void print_cache(uint32_t addr)
 		int j=0;
 		for(; j < BLOCK_SIZE; ++j){
 			printf("%x", cache[set][i].data[j]);	
-			if(j % 4 == 0)	printf("\t");
-			if(j % 16 == 0)	printf("\n");
+			if((j+1) % 4 == 0)	printf("\t");
+			if((j+1) % 16 == 0)	printf("\n");
 		}	
 	}
 	else
