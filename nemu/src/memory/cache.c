@@ -147,7 +147,7 @@ void print_cache(uint32_t addr)
 		int j=0;
 		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
 		for(; 4*j < BLOCK_SIZE; ++j){
-			printf("0x%8x: 0x%8x\t", addr_block+4*j, *((uint32_t *)cache[set][i].data + j));	
+			printf("%8x: %8x\t", addr_block+4*j, *((uint32_t *)cache[set][i].data + j));	
 			if((j+1) % 2 == 0)	printf("\n");
 		}	
 	}
