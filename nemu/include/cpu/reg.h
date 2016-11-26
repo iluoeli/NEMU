@@ -71,6 +71,20 @@ typedef	struct {
 		};
 	};
 	
+	union {
+ 	 	union {
+			uint16_t _16;
+			struct {
+				uint16_t RPL:	2;
+				uint16_t TI:	1;
+				uint16_t index:	13;		
+			};
+  		} sr[6];
+		struct{
+			uint16_t CS, SS, DS, ES, FS, GS;	
+		};
+	};
+
 	Eflages EFLAGES;	
 	SEG_GDTR GDTR;
 	SEG_CR0 CR0;
