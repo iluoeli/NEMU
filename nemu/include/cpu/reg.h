@@ -56,6 +56,22 @@ typedef union{
 }SEG_CR0;
 	
 
+
+typedef union {
+	struct {
+		uint32_t _32;
+		uint16_t _16;
+	};
+	struct {
+		uint32_t cache:	32;
+		uint16_t RPL:	2;
+		uint16_t TI:	1;
+		uint16_t index:	13;		
+	};
+}SEG_SR;
+
+
+
 typedef	struct {
 	//General Registers define here
 	union {
@@ -71,18 +87,16 @@ typedef	struct {
 		};
 	};
 	
-	union {
- 	 	union {
-			uint16_t _16;
-			struct {
-				uint16_t RPL:	2;
-				uint16_t TI:	1;
-				uint16_t index:	13;		
-			};
-  		} sr[6];
-		struct{
-			uint16_t CS, SS, DS, ES, FS, GS;	
-		};
+	union{
+		SEG_SR sr[6];
+		struct {
+			SEG_SR CS;		
+			SEG_SR SS;		
+			SEG_SR DS;		
+			SEG_SR ES;		
+			SEG_SR FS;		
+			SEG_SR GS;		
+		};	
 	};
 
 	Eflages EFLAGES;	
