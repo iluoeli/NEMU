@@ -60,7 +60,7 @@ typedef union{
 typedef union {
 	struct {
 		uint32_t _32;
-		uint16_t _16;
+		uint16_t selector;
 	};
 	struct {
 		uint32_t cache:	32;
