@@ -36,6 +36,12 @@ typedef union {
 	};
 	uint32_t eflages;
 }Eflages;
+
+typedef struct{
+	uint16_t limit;	
+	uint32_t seg_base;
+} SEG_GDTR;
+
 typedef	struct {
 	//General Registers define here
 	union {
@@ -52,6 +58,7 @@ typedef	struct {
 	};
 	
 	Eflages EFLAGES;	
+	SEG_GDTR GDTR;
 	//EIP
 	swaddr_t eip;
 } CPU_state;
