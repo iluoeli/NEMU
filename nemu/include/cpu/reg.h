@@ -42,6 +42,20 @@ typedef struct{
 	uint32_t seg_base;
 } SEG_GDTR;
 
+typedef union{
+	struct {
+		uint32_t PE:	1;	
+		uint32_t MP:	1;	
+		uint32_t EM:	1;	
+		uint32_t TS:	1;	
+		uint32_t ET:	1;	
+		uint32_t RESERVED:	26;	
+		uint32_t PG:	1;	
+	};
+	uint32_t _32;
+}SEG_CR0;
+	
+
 typedef	struct {
 	//General Registers define here
 	union {
@@ -59,6 +73,7 @@ typedef	struct {
 	
 	Eflages EFLAGES;	
 	SEG_GDTR GDTR;
+	SEG_CR0 CR0;
 	//EIP
 	swaddr_t eip;
 } CPU_state;
