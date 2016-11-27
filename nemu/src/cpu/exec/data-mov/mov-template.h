@@ -28,4 +28,16 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 	return 5;
 }
 
+#if DATA_BYTE == 4
+make_helper(mov_cr2r)
+{
+	int len = decode_r_l(cpu.eip);	
+	OPERAND_W(op_src, cpu.CR0._32);
+
+	print_asm("movl" " CR0,%%%s", REG_NAME(R_EAX));
+	return len;
+}
+
+#endif
+
 #include "cpu/exec/template-end.h"
