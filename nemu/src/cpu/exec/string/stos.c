@@ -2,7 +2,7 @@
 
 make_helper(stos_b)
 {
-	swaddr_write(reg_l(R_EDI), 1, reg_b(R_AL));
+	swaddr_write(reg_l(R_EDI), 1, reg_b(R_AL), 0);
 	reg_l(R_EDI) += cpu.EFLAGES.DF?-1:1;
 	
 	print_asm("stosb");
@@ -11,7 +11,7 @@ make_helper(stos_b)
 
 make_helper(stos_w)
 {
-	swaddr_write(reg_l(R_EDI), 2, reg_w(R_AX));
+	swaddr_write(reg_l(R_EDI), 2, reg_w(R_AX), 0);
 	reg_l(R_EDI) += cpu.EFLAGES.DF?-2:2;
 	
 	print_asm("stosw");
@@ -20,7 +20,7 @@ make_helper(stos_w)
 
 make_helper(stos_l)
 {
-	swaddr_write(reg_l(R_EDI),4 , reg_l(R_EAX));
+	swaddr_write(reg_l(R_EDI),4 , reg_l(R_EAX), 0);
 	reg_l(R_EDI) += cpu.EFLAGES.DF?-4:4;
 	
 	print_asm("stosl");

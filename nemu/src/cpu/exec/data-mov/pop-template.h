@@ -4,7 +4,7 @@
 
 static void do_execute()
 {
-	OPERAND_W(op_src, MEM_R(reg_l(R_ESP)));
+	OPERAND_W(op_src, MEM_R(reg_l(R_ESP), 2));
 	//reg_l(R_ESP) += DATA_BYTE;
 //	REG(op_src->reg) = MEM_R(REG(R_ESP));
 	reg_l(R_ESP) += 4;

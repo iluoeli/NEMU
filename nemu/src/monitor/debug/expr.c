@@ -396,7 +396,7 @@ uint32_t eval(int p, int q)
 	//	int val1 = eval(p, op-1);
 	//	int val2 = eval(op+1, q);
 
- 		switch(tokens[op].type) {
+ 	 	switch(tokens[op].type) {
 			case ADD: return eval(p, op-1) + eval(op+1, q);
 			case SUB: return eval(p, op-1) - eval(op+1, q);
 			case MUL: return eval(p, op-1) * eval(op+1, q);
@@ -406,7 +406,7 @@ uint32_t eval(int p, int q)
 			case AND:	return eval(p, op-1) && eval(op+1, q);
 			case OR:	return eval(p, op-1) || eval(op+1, q);
 			case NOT:	return !eval(p+1, q);
-			case DEREF:	return swaddr_read(eval(p+1, q), 4);
+			case DEREF:	return swaddr_read(eval(p+1, q), 4, 3);
 			case NEG:	return -eval(p+1, q);
 			default:// Assert(0,"Error: when eval tokens[op]\n");
 				printf("Error: invalid expression at position %d ~ %d\n", p, q);

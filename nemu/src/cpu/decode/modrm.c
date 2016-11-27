@@ -18,7 +18,7 @@ int load_addr(swaddr_t eip, ModR_M *m, Operand *rm) {
 
 		if(s.index != R_ESP) { index_reg = s.index; }
 	}
-	else {
+ 	else {
 		/* no SIB */
 		base_reg = m->R_M;
 		disp_offset = 1;
@@ -27,11 +27,11 @@ int load_addr(swaddr_t eip, ModR_M *m, Operand *rm) {
 	if(m->mod == 0) {
 		if(base_reg == R_EBP) { base_reg = -1; }
 		else { disp_size = 0; }
-	}
+ 	}
 	else if(m->mod == 1) { disp_size = 1; }
 
 	instr_len = disp_offset;
-	if(disp_size != 0) {
+ 	if(disp_size != 0) {
 		/* has disp */
 		disp = instr_fetch(eip + disp_offset, disp_size);
 		if(disp_size == 1) { disp = (int8_t)disp; }
@@ -42,9 +42,9 @@ int load_addr(swaddr_t eip, ModR_M *m, Operand *rm) {
 
 	if(base_reg != -1) {
 		addr += reg_l(base_reg);
-	}
+ 	}
 
-	if(index_reg != -1) {
+ 	if(index_reg != -1) {
 		addr += reg_l(index_reg) << scale;
 	}
 
@@ -88,29 +88,32 @@ int read_ModR_M(swaddr_t eip, Operand *rm, Operand *reg) {
 	m.val = instr_fetch(eip, 1);
 	reg->type = OP_TYPE_REG;
 	reg->reg = m.reg;
+	// contain BP, use SS; otherwise use DS
+	if(reg->reg == 4)	reg->sreg = 2;	//SS
+	else	reg->sreg = 3;		//DS
 
 	if(m.mod == 3) {
 		rm->type = OP_TYPE_REG;
 		rm->reg = m.R_M;
-		switch(rm->size) {
+ 		switch(rm->size) {
 			case 1: rm->val = reg_b(m.R_M); break;
 			case 2: rm->val = reg_w(m.R_M); break;
 			case 4: rm->val = reg_l(m.R_M); break;
 			default: assert(0);
  		}
 #ifdef DEBUG
-		switch(rm->size) {
+ 		switch(rm->size) {
 			case 1: sprintf(rm->str, "%%%s", regsb[m.R_M]); break;
 			case 2: sprintf(rm->str, "%%%s", regsw[m.R_M]); break;
 			case 4: sprintf(rm->str, "%%%s", regsl[m.R_M]); break;
  		}
 #endif
 		return 1;
- 	}
+ 	}  
 	else {
 		int instr_len = load_addr(eip, &m, rm);
-		rm->val = swaddr_read(rm->addr, rm->size);
+		rm->val = swaddr_read(rm->addr, rm->size, 3);
 		return instr_len;
- 	}
+  	}
 }
 

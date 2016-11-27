@@ -109,7 +109,7 @@ static void load_func_info()
 	nr_func = 0;
 	for (; i < nr_symtab_entry; ++i){ 
 		//printf("%d, %s\n", symtab[i].st_info, strtab+symtab[i].st_name);
-	  	if (symtab[i].st_info == 18){
+ 	  	if (symtab[i].st_info == 18){
 			func_info[nr_func][2] = i;
 			func_info[nr_func][0] = symtab[i].st_value;
 			func_info[nr_func][1] = func_info[nr_func][0] + symtab[i].st_size;		
@@ -125,7 +125,7 @@ int is_func(swaddr_t addr)
 	for ( ; i < nr_func; i++){
 		if(addr >= func_info[i][0] && addr <= func_info[i][1])
 			return func_info[i][2];
- 	}
+  	}
 	return -1;
 }
 
@@ -138,14 +138,14 @@ static void load_stack_info()
 		nr_st = 0;
 	for(i=0; ebp != 0; ++i){ 
 			//printf("ebp %d:%x\n", i, ebp);
-			statab[i].prev_ebp = swaddr_read(ebp, 4);
+			statab[i].prev_ebp = swaddr_read(ebp, 4, 2);
 			if((ebp+4) < 0x8000000)
-				statab[i].ret_addr = swaddr_read(ebp+4, 4);
+				statab[i].ret_addr = swaddr_read(ebp+4, 4, 2);
 			else
 				statab[i].ret_addr = 0;
 			for(j=0; j < 4; ++j)
 				if((ebp+8+j*4) < 0x8000000)
-					statab[i].args[j] = swaddr_read(ebp+8+j*4, 4);
+					statab[i].args[j] = swaddr_read(ebp+8+j*4, 4, 2);
 				else
 					statab[i].args[j] = 0;
 
@@ -164,13 +164,13 @@ void print_stack_info()
 
 	//print current func stack
 	func = is_func(cpu.eip);
-	if(func >= 0) {
-		printf("#0\t0x%x  in  %s(0x%x, 0x%x, 0x%x, 0x%x)  \n", symtab[func].st_value, strtab+symtab[func].st_name, swaddr_read(cpu.ebp+8, 4), swaddr_read(cpu.ebp+12, 4), swaddr_read(cpu.ebp+16, 4), swaddr_read(cpu.ebp+20, 4));
-	}
+ 	if(func >= 0) {
+		printf("#0\t0x%x  in  %s(0x%x, 0x%x, 0x%x, 0x%x)  \n", symtab[func].st_value, strtab+symtab[func].st_name, swaddr_read(cpu.ebp+8, 4, 2), swaddr_read(cpu.ebp+12, 4, 2), swaddr_read(cpu.ebp+16, 4, 2), swaddr_read(cpu.ebp+20, 4, 2));
+ 	}
 	for (i=0; i < (nr_st-1); ++i) {
 		//printf("prev_ebp: %x\tret_addr: %x\n", statab[i].prev_ebp, statab[i].ret_addr);
 		func = is_func(statab[i].ret_addr);
-		if((func != -1)){
+	 	if((func != -1)){
 		//	printf("func = %d\n", func);
 			printf("#%d\t0x%x  in  %s(0x%x, 0x%x, 0x%x, 0x%x)  \n", i+1, symtab[func].st_value, strtab+symtab[func].st_name, statab[i+1].args[0], statab[i+1].args[1], statab[i+1].args[2], statab[i+1].args[3]);
  		}

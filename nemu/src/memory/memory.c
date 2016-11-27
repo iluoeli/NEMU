@@ -1,4 +1,22 @@
 #include "common.h"
+#include "nemu.h"
+
+
+typedef struct SegmentDescriptor {
+	uint32_t limit_15_0          : 16;
+    uint32_t base_15_0           : 16;
+    uint32_t base_23_16          : 8;
+    uint32_t type                : 4;
+	uint32_t segment_type        : 1;
+	uint32_t privilege_level     : 2;
+	uint32_t present             : 1;
+	uint32_t limit_19_16         : 4;
+	uint32_t soft_use            : 1;
+	uint32_t operation_size      : 1;
+	uint32_t pad0                : 1;
+	uint32_t granularity         : 1;
+	uint32_t base_31_24          : 8;
+} SegDesc;
 
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
@@ -28,31 +46,36 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	hwaddr_write(addr, len, data);
 }
 
-uint32_t swaddr_read(swaddr_t addr, size_t len) {
+uint32_t swaddr_read(swaddr_t addr, size_t len, uint8_t sreg) {
 #ifdef DEBUG
 	assert(len == 1 || len == 2 || len == 4);
-	//Inaddr_t Inaddr = seg_translate(addr, len, sreg);
+	lnaddr_t lnaddr = seg_translate(addr, len, sreg);
 #endif
-	//return lnaddr_read(Inaddr, len);
-	return lnaddr_read(addr, len);
+	return lnaddr_read(lnaddr, len);
+	//return lnaddr_read(addr, len);
 }
 
-void swaddr_write(swaddr_t addr, size_t len, uint32_t data) {
+void swaddr_write(swaddr_t addr, size_t len, uint32_t data, uint8_t sreg) {
 #ifdef DEBUG
 	assert(len == 1 || len == 2 || len == 4);
+	lnaddr_t lnaddr = seg_translate(addr, len, sreg);
 #endif
-	lnaddr_write(addr, len, data);
+	lnaddr_write(lnaddr, len, data);
 }
-/*
+
 uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 {
 	assert(sreg <= 5 && sreg >= 0);
-	if(cpu.sr[sreg].TI == 0){
-		uint32_t gdt_addr = cpu.GDTR.gdt_addr;
-		SegmentDescriptor *SegDesc = (void *)(gdt_addr + cpu.sr[sreg].index);	
-		uint32_t base_addr = (SegDesc->base_31_24 << 24) + (SegDesc->base_23_16 << 16) + SegDesc->base_15_0;
-		uint32_t offset_addr = addr;
-		return (base_addr = offset_addr);
-	}			
+	// mode
+	if(cpu.CR0.PE == 1){
+		if(cpu.sr[sreg].TI == 0){
+			uint32_t gdt_addr = cpu.GDTR.base;
+			SegDesc *SegDesc = (void *)(gdt_addr + cpu.sr[sreg].index);	
+			uint32_t base_addr = (SegDesc->base_31_24 << 24) + (SegDesc->base_23_16 << 16) + SegDesc->base_15_0;
+			uint32_t offset_addr = addr;
+			return (base_addr + offset_addr);
+		}			
+	}
+	return addr;
 }
-*/
+

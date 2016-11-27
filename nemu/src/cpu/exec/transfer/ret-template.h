@@ -6,11 +6,11 @@
 static void do_execute()
 {
 	if(ops_decoded.is_operand_size_16) {
-		cpu.eip = MEM_R(REG(R_ESP)) & 0x0000ffff;
+		cpu.eip = MEM_R(REG(R_ESP), 2) & 0x0000ffff;
 		reg_w(R_SP) += 2;
 	}
-  	else {
-		cpu.eip = MEM_R(REG(R_ESP));
+   	else {
+		cpu.eip = MEM_R(REG(R_ESP), 2);
 		reg_l(R_ESP) += 4;
 	}
 //	REG(R_ESP) += DATA_BYTE;	

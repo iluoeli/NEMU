@@ -108,11 +108,11 @@ static int cmd_x(char *args)
 		uint32_t addr;
 		bool success = false;
 		addr = expr(arg2, &success);
-   		if( (n = atoi(arg1)) && success) {
+    		if( (n = atoi(arg1)) && success) {
 			int i;
   			for (i=0; i < n; ++i) {
-				printf("0x%x\n", swaddr_read(addr+i*4, 4));
-   			}			
+				printf("0x%x\n", swaddr_read(addr+i*4, 4, 3));
+    			}			
  		}
   	}
 	return 0;
