@@ -35,9 +35,17 @@ make_helper(mov_cr2r)
 	OPERAND_W(op_src, cpu.CR0._32);
 
 	print_asm("movl" " CR0,%%%s", REG_NAME(R_EAX));
-	return len;
+	return len+2;
 }
 
+make_helper(mov_r2cr)
+{
+	int len = decode_r_l(cpu.eip);	
+	cpu.CR0._32 = REG(op_src->reg);
+
+	print_asm("movl" " %%%s, CR0", REG_NAME(R_EAX));
+	return len+2;
+}
 #endif
 
 #include "cpu/exec/template-end.h"
