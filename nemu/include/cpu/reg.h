@@ -39,7 +39,7 @@ typedef union {
 
 typedef struct{
 	uint16_t limit;	
-	uint32_t base;
+	uint32_t gdt_addr;
 } SEG_GDTR;
 
 typedef union{
