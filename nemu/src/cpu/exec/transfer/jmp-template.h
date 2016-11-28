@@ -33,7 +33,7 @@ make_helper(jmp_ptrw_l)
 {
 	uint32_t addr_eip = instr_fetch(cpu.eip+1, 4);
 	uint16_t addr_cs = instr_fetch(cpu.eip+5, 2);
-	cpu.eip = addr_eip;
+	cpu.eip = addr_eip - 7;
 	cpu.sr[1].selector = addr_cs;
 	
 	return 7;	
