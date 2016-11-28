@@ -7,7 +7,8 @@ make_helper(lgdt)
 	uint8_t sreg = op_src->sreg;
 	cpu.GDTR.limit = swaddr_read(addr, 2, sreg);
 	cpu.GDTR.base = swaddr_read(addr+2, 4, sreg);
-	printf("%x, %x\n", cpu.GDTR.limit, cpu.GDTR.base);
+	print_asm("lgdt %x:%x,gdtr", cpu.GDTR.limit, cpu.GDTR.base);
+//	printf("%x, %x\n", cpu.GDTR.limit, cpu.GDTR.base);
 	return len + 1;
 }
 
