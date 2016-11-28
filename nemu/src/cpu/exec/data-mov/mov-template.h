@@ -62,13 +62,14 @@ make_helper(mov_r2sr_w)
 	sr_name[2] = '\0';
 	sr_name[1] = 'S';
 	switch(nr_sr){
-		case 0:	sr_name[0] = 'E';	
-		case 1:	sr_name[0] = 'C';	
-		case 2:	sr_name[0] = 'S';	
-		case 3:	sr_name[0] = 'D';	
-		case 4:	sr_name[0] = 'F';	
-		case 5:	sr_name[0] = 'G';	
-		default :sr_name[0] = 'S';
+		case 0:	sr_name[0] = 'E';	break;
+		case 1:	sr_name[0] = 'C';	break;
+		case 2:	sr_name[0] = 'S';	break;
+		case 3:	sr_name[0] = 'D';	break;
+		case 4:	sr_name[0] = 'F';	break;
+		case 5:	sr_name[0] = 'G';	break;
+		default :sr_name[0] = 'E';
+				sr_name[1] = 'R';
 	}
 	
 
