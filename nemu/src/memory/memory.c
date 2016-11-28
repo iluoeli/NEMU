@@ -68,6 +68,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 	assert(sreg <= 5 && sreg >= 0);
 	// mode
 	if(cpu.CR0.PE == 1){
+		printf("protect mod\n");
 		if(cpu.sr[sreg].TI == 0){
 			uint32_t gdt_addr = cpu.GDTR.base;
 			SegDesc *SegDesc = (void *)(gdt_addr + cpu.sr[sreg].index);	
