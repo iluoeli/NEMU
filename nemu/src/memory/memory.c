@@ -72,14 +72,14 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 		if(cpu.sr[sreg].TI == 0){
 			printf("TI == 0\n");
 			uint32_t gdt_addr = cpu.GDTR.base;
-			printf("gdt_addr: %x", gdt_addr);
-			SegDesc *SegDesc = (void *)(gdt_addr + cpu.sr[sreg].index);	
-			uint32_t base_addr = (SegDesc->base_31_24 << 24) + (SegDesc->base_23_16 << 16) + SegDesc->base_15_0;
-			uint32_t offset_addr = addr;
+			printf("gdt_addr: %x\n", gdt_addr);
+		//	SegDesc *SegDesc = (void *)(gdt_addr + cpu.sr[sreg].index);	
+		//	uint32_t base_addr = (SegDesc->base_31_24 << 24) + (SegDesc->base_23_16 << 16) + SegDesc->base_15_0;
+		//	uint32_t offset_addr = addr;
 
-			printf("offset_addr: %x", offset_addr);
-			printf("base_addr: %x", base_addr);
-			return (base_addr + offset_addr);
+		//	printf("offset_addr: %x", offset_addr);
+		//	printf("base_addr: %x", base_addr);
+		//	return (base_addr + offset_addr);
 		}			
 	}
 	return addr;
