@@ -2,9 +2,11 @@
 
 make_helper(lgdt)
 {
-	uint32_t addr = swaddr_read(cpu.eip, 4,  3);
-	cpu.GDTR.base = swaddr_read(addr, 4, 3);
-	cpu.GDTR.limit = swaddr_read(addr+4, 2, 3);
-	return 6;
+	int len = decode_rm_l(cpu.eip);
+	uint32_t addr = op_src->addr;
+	uint8_t sreg = op_src->sreg;
+	cpu.GDTR.base = swaddr_read(addr, 4, sreg);
+	cpu.GDTR.limit = swaddr_read(addr+4, 2, sreg);
+	return len + 2;
 }
 
