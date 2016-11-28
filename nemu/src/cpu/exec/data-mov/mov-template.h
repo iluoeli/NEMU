@@ -52,7 +52,7 @@ make_helper(mov_r2cr)
 
 //opcode 8e; mov rw to segment registers
 #if DATA_BYTE == 2
-make_helper(mov_r2sr)
+make_helper(mov_r2sr_w)
 {
 	uint8_t modRM = instr_fetch(eip+1, 1);
 	uint8_t nr_sr = (modRM & 0x38) >> 3;
@@ -65,7 +65,7 @@ make_helper(mov_r2sr)
 	}
 */	
 
-	print_asm("movw" " %%%s, sr", REG_NAME(nr_gpr));
+	print_asm("movw" " %%%s, sr[%d]", REG_NAME(nr_gpr), nr_sr);
 	return 2;
 }
 
