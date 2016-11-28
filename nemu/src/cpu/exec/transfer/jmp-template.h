@@ -31,8 +31,8 @@ make_helper(concat(jmp_rm_, SUFFIX))
 #if DATA_BYTE == 4
 make_helper(jmp_ptrw_l)
 {
-	uint32_t addr_cs = instr_fetch(cpu.eip+1, 2);
-	uint16_t addr_eip = instr_fetch(cpu.eip+3, 4);
+	uint32_t addr_eip = instr_fetch(cpu.eip+1, 4);
+	uint16_t addr_cs = instr_fetch(cpu.eip+5, 2);
 	cpu.eip = addr_eip;
 	cpu.sr[1].selector = addr_cs;
 	
