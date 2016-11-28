@@ -35,7 +35,7 @@ make_helper(mov_cr2r)
 	OPERAND_W(op_src, cpu.CR0._32);
 
 	print_asm("movl" " CR0,%%%s", REG_NAME(op_src->reg));
-	return len+2;
+	return len + 1;
 }
 
 make_helper(mov_r2cr)
@@ -44,7 +44,7 @@ make_helper(mov_r2cr)
 	cpu.CR0._32 = REG(op_src->reg);
 
 	print_asm("movl" " %%%s, CR0", REG_NAME(op_src->reg));
-	return len+2;
+	return len+1;
 }
 #endif
 
