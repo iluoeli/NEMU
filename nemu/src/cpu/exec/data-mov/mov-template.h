@@ -58,14 +58,22 @@ make_helper(mov_r2sr_w)
 	uint8_t nr_sr = (modRM & 0x38) >> 3;
 	uint8_t nr_gpr = (modRM & 0x07);
 	cpu.sr[nr_sr].selector = cpu.gpr[nr_gpr]._16;	
-/*	char sr_name[3];
+	char sr_name[3];
+	sr_name[2] = '\0';
+	sr_name[1] = 'S';
 	switch(nr_sr){
-		case 0:	sr_name = "";	
-		
+		case 0:	sr_name[0] = 'E';	
+		case 1:	sr_name[0] = 'C';	
+		case 2:	sr_name[0] = 'S';	
+		case 3:	sr_name[0] = 'D';	
+		case 4:	sr_name[0] = 'F';	
+		case 5:	sr_name[0] = 'G';	
+		default :sr_name[0] = 'S';
 	}
-*/	
+	
 
-	print_asm("movw" " %%%s, sr[%d]", REG_NAME(nr_gpr), nr_sr);
+	//print_asm("movw" " %%%s, sr[%d]", REG_NAME(nr_gpr), nr_sr);
+	print_asm("movw" " %%%s,%s",  REG_NAME(nr_gpr), sr_name);
 	return 2;
 }
 
