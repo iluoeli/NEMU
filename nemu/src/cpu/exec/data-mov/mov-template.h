@@ -31,21 +31,42 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 #if DATA_BYTE == 4
 make_helper(mov_cr2r)
 {
-	int len = decode_r_l(cpu.eip);	
+	int len = decode_r_l(cpu.eip+1);	
 	OPERAND_W(op_src, cpu.CR0._32);
 
-	print_asm("movl" " CR0,%%%s", REG_NAME(R_EAX));
+	print_asm("movl" " CR0,%%%s", REG_NAME(op_src->reg));
 	return len+2;
 }
 
 make_helper(mov_r2cr)
 {
-	int len = decode_r_l(cpu.eip);	
+	int len = decode_r_l(cpu.eip+1);	
 	cpu.CR0._32 = REG(op_src->reg);
 
-	print_asm("movl" " %%%s, CR0", REG_NAME(R_EAX));
+	print_asm("movl" " %%%s, CR0", REG_NAME(op_src->reg));
 	return len+2;
 }
 #endif
+
+//opcode 8e; mov rw to segment registers
+#if DATA_BYTE == 4
+make_helper(mov_r2sr)
+{
+	uint8_t modRM = instr_fetch(eip+1, 1);
+	uint8_t nr_sr = (modRM & 0x38) >> 3;
+	uint8_t nr_gpr = (modRM & 0x07);
+	cpu.sr[nr_sr].selector = cpu.gpr[nr_gpr]._16;	
+/*	char sr_name[3];
+	switch(nr_sr){
+		case 0:	sr_name = "";	
+		
+	}
+*/	
+
+	print_asm("movw" " %%%s, sr", REG_NAME(nr_gpr));
+	return 2;
+}
+
+#endif 
 
 #include "cpu/exec/template-end.h"

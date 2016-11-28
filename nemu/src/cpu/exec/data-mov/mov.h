@@ -19,5 +19,6 @@ make_helper(mov_moffs2a_v);
 //mov to/from Special Registers
 make_helper(mov_cr2r);
 make_helper(mov_r2cr);
+make_helper(mov_r2sr);
 
 #endif
