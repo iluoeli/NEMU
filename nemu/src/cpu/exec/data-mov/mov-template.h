@@ -31,7 +31,7 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 #if DATA_BYTE == 4
 make_helper(mov_cr2r)
 {
-	int len = decode_r_l(cpu.eip+2);	
+	int len = decode_r_l(cpu.eip+1);	
 	OPERAND_W(op_src, cpu.CR0._32);
 
 	print_asm("movl" " CR0,%%%s", REG_NAME(op_src->reg));
@@ -40,7 +40,7 @@ make_helper(mov_cr2r)
 
 make_helper(mov_r2cr)
 {
-	int len = decode_r_l(cpu.eip+2);	
+	int len = decode_r_l(cpu.eip+1);	
 	cpu.CR0._32 = op_src->val;
 
 	print_asm("movl" " %%%s, CR0", REG_NAME(op_src->reg));
