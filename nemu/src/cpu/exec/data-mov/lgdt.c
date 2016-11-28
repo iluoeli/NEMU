@@ -8,6 +8,6 @@ make_helper(lgdt)
 	cpu.GDTR.limit = swaddr_read(addr, 2, sreg);
 	cpu.GDTR.base = swaddr_read(addr+2, 4, sreg);
 	printf("%x, %x\n", cpu.GDTR.limit, cpu.GDTR.base);
-	return len + 1;
+	return len + 2;
 }
 
