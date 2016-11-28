@@ -71,11 +71,11 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 		printf("protect mod: %x\n", addr);
 		if(cpu.sr[sreg].TI == 0){
 			printf("TI == 0\n");
-			uint32_t gdt_addr = cpu.GDTR.base;
-			printf("gdt_addr: %x\n", gdt_addr);
-			SegDesc *SegDesc = (void *)(gdt_addr + cpu.sr[sreg].index);	
-			printf("segDesc: %x\n", (uint32_t)SegDesc);
-			uint32_t base_addr = (SegDesc->base_31_24 << 24) + (SegDesc->base_23_16 << 16) + SegDesc->base_15_0;
+			uint32_t gdt_base = cpu.GDTR.base;
+			printf("gdt_base: %x\n", gdt_base);
+			SegDesc *gdt = (SegDesc *)(void *)(gdt_base + cpu.sr[sreg].index);	
+			printf("gdt: %x\n", (uint32_t)gdt);
+			uint32_t base_addr = (gdt->base_31_24 << 24) + (gdt->base_23_16 << 16) + gdt->base_15_0;
 			uint32_t offset_addr = addr;
 
 			printf("offset_addr: %x", offset_addr);
