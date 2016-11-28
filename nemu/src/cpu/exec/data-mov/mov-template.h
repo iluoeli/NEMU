@@ -51,7 +51,7 @@ make_helper(mov_r2cr)
 #endif
 
 //opcode 8e; mov rw to segment registers
-#if DATA_BYTE == 4
+#if DATA_BYTE == 2
 make_helper(mov_r2sr)
 {
 	uint8_t modRM = instr_fetch(eip+1, 1);
