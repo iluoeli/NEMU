@@ -42,7 +42,7 @@ make_helper(mov_r2cr)
 {
 	int len = decode_r_l(cpu.eip+2);	
 	cpu.CR0._32 = cpu.eax;
-	printf("cpu.eip: %x\n", cpu.eip);
+//	printf("cpu.eip: %x\n", cpu.eip);
 //	printf("mov_r2cr: %x\n", op_src->reg);
 
 	print_asm("movl" " %%%s, CR0", REG_NAME(op_src->reg));
