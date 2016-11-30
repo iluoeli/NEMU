@@ -51,7 +51,7 @@ typedef union{
 		uint32_t ET:	1;	
 		uint32_t RESERVED:	26;	
 		uint32_t PG:	1;	
-	};
+ 	};
 	uint32_t _32;
 }SEG_CR0;
 	
@@ -69,6 +69,20 @@ typedef union {
 		uint16_t index:	13;		
 	};
 }SEG_SR;
+
+
+//CR3
+typedef union CR3 {
+	struct {
+		uint32_t pad0					:3;
+		uint32_t page_write_through		:1;
+		uint32_t page_cache_disable		:1;
+		uint32_t pad1					:7;
+		uint32_t page_directory_base	:20;	
+	};
+	uint32_t val;	
+} CR3;
+
 
 
 
@@ -102,6 +116,7 @@ typedef	struct {
 	Eflages EFLAGES;	
 	SEG_GDTR GDTR;
 	SEG_CR0 CR0;
+	CR3 CR3;
 /*
 	union{
 		struct {
