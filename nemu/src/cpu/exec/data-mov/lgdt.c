@@ -4,7 +4,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len);
 
 make_helper(lgdt)
 {
-	int len = decode_rm_l(cpu.eip+2);
+	int len = decode_rm_l(cpu.eip+3);
 	printf("cpu.eip: %x\n", cpu.eip);
 	uint32_t addr = op_src->addr;
 	uint8_t sreg = op_src->sreg;
