@@ -2,7 +2,7 @@
 
 make_helper(lgdt)
 {
-	int len = decode_rm_l(cpu.eip+1);
+	int len = decode_rm_l(cpu.eip+2);
 	printf("cpu.eip: %x\n", cpu.eip);
 	uint32_t addr = op_src->addr;
 	uint8_t sreg = op_src->sreg;
