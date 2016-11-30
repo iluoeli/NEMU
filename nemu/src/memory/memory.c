@@ -67,7 +67,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 {
 	assert(sreg <= 5 && sreg >= 0);
 	// mode
-/*	if(cpu.CR0.PE == 1){
+	if(cpu.CR0.PE == 1){
 		printf("protect mod: %x\n", addr);
 		if(cpu.sr[sreg].TI == 0){
 			printf("TI == 0\n");
@@ -83,6 +83,6 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 			return (base_addr + offset_addr);
 		}			
 	}
-*/	return addr;
+	return addr;
 }
 
