@@ -1,6 +1,6 @@
 #include "common.h"
 #include "nemu.h"
-
+//#include "x86.h"
 
 typedef struct SegmentDescriptor {
 	uint32_t limit_15_0          : 16;
@@ -67,13 +67,14 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 {
 	assert(sreg <= 5 && sreg >= 0);
 	// mode
-/*	if(cpu.CR0.PE == 1){
+	if(cpu.CR0.PE == 1){
 		printf("protect mod: %x\n", addr);
-		if(cpu.sr[sreg].TI == 0){
+	 	if(cpu.sr[sreg].TI == 0){
 			printf("TI == 0\n");
 			uint32_t gdt_base = cpu.GDTR.base;
 			printf("gdt_base: %x\n", gdt_base);
-			SegDesc *gdt = (SegDesc *)(void *)(gdt_base + cpu.sr[sreg].index);	
+			SegDesc *gdt;
+			gdt =  (SegDesc *)(void *)(gdt_base + cpu.sr[sreg].index);	
 			printf("gdt: %x\n", (uint32_t)gdt);
 			uint32_t base_addr = (gdt->base_31_24 << 24) + (gdt->base_23_16 << 16) + gdt->base_15_0;
 			uint32_t offset_addr = addr;
@@ -83,6 +84,6 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 			return (base_addr + offset_addr);
 		}			
 	}
-*/	return addr;
+	return addr;
 }
 

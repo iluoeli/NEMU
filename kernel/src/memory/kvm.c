@@ -95,7 +95,7 @@ init_segment(void) {
 	set_segment(&gdt[SEG_KERNEL_CODE], DPL_KERNEL, SEG_EXECUTABLE | SEG_READABLE);
 	set_segment(&gdt[SEG_KERNEL_DATA], DPL_KERNEL, SEG_WRITABLE );
 
-	printf("gdt_addr:	%x\n", gdt);
+	printf("gdt_addr:	%x\n", &gdt[0]);
 	write_gdtr(gdt, sizeof(gdt));
 }
 
