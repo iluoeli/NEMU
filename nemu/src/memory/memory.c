@@ -73,7 +73,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 			printf("TI == 0\n");
 			uint32_t gdt_base = cpu.GDTR.base;
 			printf("gdt_base: %x\n", gdt_base);
-			SegDesc *pgdt = NULL;
+			SegDesc *pgdt = malloc(sizeof(SegDesc));
 			pgdt =  (SegDesc *)(void *)(gdt_base + cpu.sr[sreg].index);	
 			SegDesc gdt = *pgdt;
 			printf("pgdt: %x\n", (uint32_t)pgdt);
