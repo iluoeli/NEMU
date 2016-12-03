@@ -91,6 +91,7 @@ void restart() {
 
 	cpu.EFLAGES.eflages = 0x00000002;
 	cpu.CR0.PE = 0;
+	cpu.CR0.PG = 0;
 	cpu.CS.selector = 0x0000;
 	cpu.DS.selector = 0x0000;
 	cpu.ES.selector = 0x0000;

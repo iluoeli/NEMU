@@ -29,7 +29,7 @@ void init_page(void) {
 
 	/* fill PTEs */
 
-	/* We use inline assembly here to fill PTEs for efficiency.
+ 	/* We use inline assembly here to fill PTEs for efficiency.
 	 * If you do not understand it, refer to the C code below.
 	 */
 
@@ -95,6 +95,7 @@ init_segment(void) {
 	set_segment(&gdt[SEG_KERNEL_CODE], DPL_KERNEL, SEG_EXECUTABLE | SEG_READABLE);
 	set_segment(&gdt[SEG_KERNEL_DATA], DPL_KERNEL, SEG_WRITABLE );
 
+	printf("gdt_addr:	%x\n", &gdt);
 	write_gdtr(gdt, sizeof(gdt));
 }
 
