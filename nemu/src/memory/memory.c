@@ -53,9 +53,9 @@ typedef union PageDirectoryEntry {
 
 typedef union{
 	struct{
-		uint32_t pde_index:		10;
-		uint32_t pte_index:		10;	
 		uint32_t offset	:		12;
+		uint32_t pte_index:		10;	
+		uint32_t pde_index:		10;
 	};
 	uint32_t addr;	
 } PAGE_ADDR;
