@@ -147,12 +147,13 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 	//		printf("gdt_base: %x\n", gdt_base);
 			SegDesc gdt;
 			uint32_t tmp_addr =  (gdt_base + 8*cpu.sr[sreg].index);	
+			printf("tmp_addr: %x\n", tmp_addr);
 			gdt.val_1 = lnaddr_read(tmp_addr, 4);
 			gdt.val_2 = lnaddr_read(tmp_addr+4, 4);
 			uint32_t base_addr = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
 
 			assert(base_addr == 0);
-	//		return (base_addr + addr);
+			return (base_addr + addr);
 		}			
 	}
 	return addr;
