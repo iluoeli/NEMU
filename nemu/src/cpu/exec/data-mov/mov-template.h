@@ -33,15 +33,16 @@ make_helper(mov_cr2r)
 {
 	int len = decode_r_l(cpu.eip+2);	
 	uint8_t cr_reg = instr_fetch(cpu.eip+2, 1);
+	uint8_t reg = cr_reg & 0x07;
 	cr_reg &= 0x38;
 	cr_reg = cr_reg >> 3;
 	if(cr_reg == 0) {
 		OPERAND_W(op_src, cpu.CR0._32);
-		print_asm("movl" " CR0,%%%s", REG_NAME(op_src->reg));
+		print_asm("movl" " CR0,%%%s", REG_NAME(reg));
 	}
 	else if(cr_reg == 3) {
 		OPERAND_W(op_src, cpu.CR3.val);	
-		print_asm("movl" " CR3,%%%s", REG_NAME(op_src->reg));
+		print_asm("movl" " CR3,%%%s", REG_NAME(reg));
 	}
 	return len+2;
 }
