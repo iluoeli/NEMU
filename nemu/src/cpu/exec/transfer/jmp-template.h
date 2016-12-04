@@ -37,6 +37,7 @@ make_helper(jmp_ptrw_l)
 	cpu.eip = addr_eip - 7;
 	cpu.sr[1].selector = addr_cs;
 	
+	print_asm("jmp %x:%x", addr_cs,addr_eip);
 	return 7;	
 }
 
