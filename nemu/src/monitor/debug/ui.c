@@ -12,6 +12,7 @@ char *reg_name[9] = { "eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "e
 
 void cpu_exec(uint32_t);
 void print_cache(uint32_t);
+void print_page(uint32_t);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -201,11 +202,27 @@ static int cmd_cache(char *args)
 		printf("Error: too few arguments\n");
 		return 0;			
 	}
-	else {
+ 	else {
 		bool success = false;
 		uint32_t addr = expr(arg, &success);
 		if(success)
 			print_cache(addr);
+	}
+	return 0;
+}
+
+static int cmd_page(char *args)
+{
+	char *arg = strtok(NULL, ";");			
+	if(NULL == arg){
+		printf("Error: too few arguments\n");
+		return 0;			
+	}
+ 	else {
+		bool success = false;
+		uint32_t addr = expr(arg, &success);
+		if(success)
+			print_page(addr);
 	}
 	return 0;
 }
@@ -230,6 +247,7 @@ static struct {
 	{ "x", "Usage: x N EXPR", cmd_x},
 	{ "bt", "print stack", cmd_bt},
 	{"cache", "print cache information", cmd_cache},
+	{"page", "print page translated address", cmd_page},
 	/* TODO: Add more commands */
 
 };

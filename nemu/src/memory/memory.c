@@ -177,3 +177,37 @@ uint32_t page_translate(hwaddr_t addr)
 
 	else return addr;	
 }
+
+// for ui.c
+void print_page(uint32_t addr)
+{
+	uint32_t target_addr = addr;
+	bool success = true;	
+	if(cpu.CR0.PE == 1 && cpu.CR0.PG == 1){
+		PAGE_ADDR paddr;
+		paddr.addr = addr;
+		uint32_t tmp_addr = ((cpu.CR3.page_directory_base << 12) + 4*paddr.pde_index);			
+		uint32_t val = hwaddr_read(tmp_addr, 4);
+		PDE pde;
+		pde.val = val;
+		if(pde.present == 0){
+			success = false;
+		}
+		
+		tmp_addr = ((pde.page_frame << 12) + 4*paddr.pte_index);
+		PTE pte;
+		val = hwaddr_read(tmp_addr, 4);
+		pte.val = val;
+		if(pte.present == 0){
+			success = false;	
+		}	
+		target_addr = ((pte.page_frame << 12) + paddr.offset);
+	}
+	if(success){
+		printf("0x%x\n", target_addr);	
+	}
+	else 
+		printf("Error:	translate failed\n");
+	
+}
+
