@@ -146,7 +146,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 			uint32_t gdt_base = cpu.GDTR.base;
 	//		printf("gdt_base: %x\n", gdt_base);
 			SegDesc gdt;
-			uint32_t addr =  (gdt_base + cpu.sr[sreg].index);	
+			uint32_t addr =  (gdt_base + 8*cpu.sr[sreg].index);	
 			gdt.val_1 = lnaddr_read(addr, 4);
 			gdt.val_2 = lnaddr_read(addr+4, 4);
 			uint32_t base_addr = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
