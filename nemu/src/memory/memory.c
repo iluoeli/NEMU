@@ -68,7 +68,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 	assert(sreg <= 5 && sreg >= 0);
 	// mode
 	if(cpu.CR0.PE == 1){
-		printf("protect mod: %x\n", addr);
+/*		printf("protect mod: %x\n", addr);
 	 	if(cpu.sr[sreg].TI == 0){
 			printf("TI == 0\n");
 			uint32_t gdt_base = cpu.GDTR.base;
@@ -83,7 +83,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 			printf("offset_addr: %x", offset_addr);
 			printf("base_addr: %x", base_addr);
 			return (base_addr + offset_addr);
-		}			
+		}*/			
 	}
 	return addr;
 }
