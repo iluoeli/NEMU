@@ -152,7 +152,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 			uint32_t base_addr = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
 
 			assert(base_addr == 0);
-			return (base_addr + addr);
+	//		return (base_addr + addr);
 		}			
 	}
 	return addr;
