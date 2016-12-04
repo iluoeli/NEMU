@@ -138,16 +138,12 @@ void swaddr_write(swaddr_t addr, size_t len, uint32_t data, uint8_t sreg) {
 uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 {
 	assert(sreg <= 5 && sreg >= 0);
-	// mode
+	
 	if(cpu.CR0.PE == 1){
-	//	printf("protect mod: %x\n", addr);
 	 	if(cpu.sr[sreg].TI == 0){
-	//		printf("TI == 0\n");
 			uint32_t gdt_base = cpu.GDTR.base;
-	//		printf("gdt_base: %x\n", gdt_base);
 			SegDesc gdt;
 			uint32_t tmp_addr =  (gdt_base + 8*cpu.sr[sreg].index);	
-			//printf("tmp_addr: %x\n", tmp_addr);
 			gdt.val_1 = hwaddr_read(tmp_addr, 4);
 			gdt.val_2 = hwaddr_read(tmp_addr+4, 4);
 			uint32_t base_addr = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
