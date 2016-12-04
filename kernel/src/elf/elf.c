@@ -63,7 +63,7 @@ uint32_t loader() {
  	 		 */
 			int margin = ph->p_memsz - ph->p_filesz;
 		//	memset((void *)ph->p_vaddr + ph->p_filesz, 0, margin);
-			memset(pvaddr + ph->p_filesz, 0, margin);
+			memset((void *)(vaddr + ph->p_filesz), 0, margin);
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
@@ -71,7 +71,7 @@ uint32_t loader() {
 			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
 			if(cur_brk < new_brk) { max_brk = cur_brk = new_brk; }
 #endif
- 	i	}
+ 		}
 	}
 
 	volatile uint32_t entry = elf->e_entry;
