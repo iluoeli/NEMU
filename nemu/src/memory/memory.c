@@ -2,20 +2,26 @@
 #include "nemu.h"
 //#include "x86.h"
 
-typedef struct SegmentDescriptor {
-	uint32_t limit_15_0          : 16;
-    uint32_t base_15_0           : 16;
-    uint32_t base_23_16          : 8;
-    uint32_t type                : 4;
-	uint32_t segment_type        : 1;
-	uint32_t privilege_level     : 2;
-	uint32_t present             : 1;
-	uint32_t limit_19_16         : 4;
-	uint32_t soft_use            : 1;
-	uint32_t operation_size      : 1;
-	uint32_t pad0                : 1;
-	uint32_t granularity         : 1;
-	uint32_t base_31_24          : 8;
+typedef union SegmentDescriptor {
+	struct {
+		uint32_t limit_15_0          : 16;
+		uint32_t base_15_0           : 16;
+		uint32_t base_23_16          : 8;
+		uint32_t type                : 4;
+		uint32_t segment_type        : 1;
+		uint32_t privilege_level     : 2;
+		uint32_t present             : 1;
+		uint32_t limit_19_16         : 4;
+		uint32_t soft_use            : 1;
+		uint32_t operation_size      : 1;
+		uint32_t pad0                : 1;
+		uint32_t granularity         : 1;
+		uint32_t base_31_24          : 8;
+	};
+	struct {
+		uint32_t val_1;
+		uint32_t val_2;	
+	};
 } SegDesc;
 
 
@@ -134,22 +140,22 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 	assert(sreg <= 5 && sreg >= 0);
 	// mode
 	if(cpu.CR0.PE == 1){
-/*		printf("protect mod: %x\n", addr);
+	//	printf("protect mod: %x\n", addr);
 	 	if(cpu.sr[sreg].TI == 0){
-			printf("TI == 0\n");
+	//		printf("TI == 0\n");
 			uint32_t gdt_base = cpu.GDTR.base;
-			printf("gdt_base: %x\n", gdt_base);
-			SegDesc *pgdt = malloc(sizeof(SegDesc));
-			pgdt =  (SegDesc *)(void *)(gdt_base + cpu.sr[sreg].index);	
-			SegDesc gdt = *pgdt;
-			printf("pgdt: %x\n", (uint32_t)pgdt);
+	//		printf("gdt_base: %x\n", gdt_base);
+			SegDesc gdt;
+			uint32_t addr =  (gdt_base + cpu.sr[sreg].index);	
+			gdt.val_1 = lnaddr_read(addr, 4);
+			gdt.val_2 = lnaddr_read(addr+4, 4);
 			uint32_t base_addr = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
 			uint32_t offset_addr = addr;
 
 			printf("offset_addr: %x", offset_addr);
 			printf("base_addr: %x", base_addr);
 			return (base_addr + offset_addr);
-		}*/			
+		}			
 	}
 	return addr;
 }
