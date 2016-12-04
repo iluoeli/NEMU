@@ -158,6 +158,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 uint32_t page_translate(hwaddr_t addr)
 {	
 	if(cpu.CR0.PE == 1 && cpu.CR0.PG == 1){
+		printf("page\n");
 		PAGE_ADDR paddr;
 		paddr.addr = addr;
 		PDE *pde = (PDE *)((cpu.CR3.page_directory_base << 12) + paddr.pde_index);			
