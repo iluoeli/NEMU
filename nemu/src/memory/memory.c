@@ -150,12 +150,9 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 			gdt.val_1 = lnaddr_read(tmp_addr, 4);
 			gdt.val_2 = lnaddr_read(tmp_addr+4, 4);
 			uint32_t base_addr = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
-			uint32_t offset_addr = addr;
 
-//			printf("offset_addr: %x", offset_addr);
-//			printf("base_addr: %x\n", base_addr);
 			assert(base_addr == 0);
-			return (base_addr + offset_addr);
+			return (base_addr + addr);
 		}			
 	}
 	return addr;
