@@ -166,7 +166,6 @@ uint32_t page_translate(hwaddr_t addr)
 	if(cpu.CR0.PE == 1 && cpu.CR0.PG == 1){
 		PAGE_ADDR paddr;
 		paddr.addr = addr;
-		printf("page\n");
 		uint32_t addr = ((cpu.CR3.page_directory_base << 12) + 4*paddr.pde_index);			
 		uint32_t val = hwaddr_read(addr, 4);
 		PDE pde;
