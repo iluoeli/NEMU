@@ -4,10 +4,10 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len);
 
 make_helper(lgdt)
 {
-	int len = decode_rm_l(cpu.eip+2);
-//	int len = 5;
-//	uint32_t addr = instr_fetch(cpu.eip+3, 4);
-	uint32_t addr = op_src->addr;
+//	int len = decode_rm_l(cpu.eip+2);
+	int len = 5;
+	uint32_t addr = instr_fetch(cpu.eip+3, 4);
+//	uint32_t addr = op_src->addr;
 //	uint8_t sreg = op_src->sreg;
 //	printf("lgdt: %x, %x\n", addr, sreg);
 	cpu.GDTR.limit = lnaddr_read(addr, 2);
