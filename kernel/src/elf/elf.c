@@ -17,6 +17,8 @@ void ramdisk_write(uint8_t *buf, uint32_t offset, uint32_t len);
 void create_video_mapping();
 uint32_t get_ucr3();
 
+uint32_t mm_malloc(uint32_t va, int len);
+
 uint32_t loader() {
 	Elf32_Ehdr *elf;
 	Elf32_Phdr *ph = NULL;
@@ -49,22 +51,19 @@ uint32_t loader() {
 
  			/* TO DO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
-  			 */
+  	 		 */
 			uint8_t buf_file[ph->p_filesz];
 			ramdisk_read(buf_file, ELF_OFFSET_IN_DISK+ph->p_offset, ph->p_filesz);	
 		//	ramdisk_write(buf_file, ph->p_vaddr, ph->p_filesz);	
-			memcpy((void *)ph->p_vaddr, buf_file, ph->p_filesz);
+			uint32_t vaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
+			memcpy((void *)vaddr, buf_file, ph->p_filesz);
 
   			/* TOD O: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
- 			 */
+ 	 		 */
 			int margin = ph->p_memsz - ph->p_filesz;
-			uint32_t buf_zero[margin];	
-			int j;
-		//	for (j=0; 4*j < margin; ++j)
-		//		buf_zero[j] = 0x00000000;
-			//ramdisk_write(buf_zero, ph->p_vaddr+ph->p_filesz, margin);
-			memset((void *)ph->p_vaddr + ph->p_filesz, 0, margin);
+		//	memset((void *)ph->p_vaddr + ph->p_filesz, 0, margin);
+			memset(pvaddr + ph->p_filesz, 0, margin);
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
@@ -72,7 +71,7 @@ uint32_t loader() {
 			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
 			if(cur_brk < new_brk) { max_brk = cur_brk = new_brk; }
 #endif
- 		}
+ 	i	}
 	}
 
 	volatile uint32_t entry = elf->e_entry;
