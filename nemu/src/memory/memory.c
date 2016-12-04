@@ -18,6 +18,50 @@ typedef struct SegmentDescriptor {
 	uint32_t base_31_24          : 8;
 } SegDesc;
 
+
+typedef union PageDirectoryEntry {
+ 	struct {
+	        uint32_t present             : 1;		 
+	        uint32_t read_write          : 1;
+	        uint32_t user_supervisor     : 1;
+	        uint32_t page_write_through  : 1;
+	        uint32_t page_cache_disable  : 1;
+	        uint32_t accessed            : 1;
+		    uint32_t pad0                : 6;
+            uint32_t page_frame          : 20;
+     };
+		    uint32_t val;
+} PDE;
+				
+ /* the 32bit Page Table Entry(second level page table) data structure */
+ typedef union PageTableEntry {
+ 		struct {
+			  uint32_t present             : 1;
+		      uint32_t read_write          : 1;
+		      uint32_t user_supervisor     : 1;
+		      uint32_t page_write_through  : 1;
+	          uint32_t page_cache_disable  : 1;
+		      uint32_t accessed            : 1;
+	          uint32_t dirty               : 1;
+	          uint32_t pad0                : 1;
+	          uint32_t global              : 1;
+              uint32_t pad1                : 3;
+	          uint32_t page_frame          : 20;
+	    };
+    uint32_t val;
+} PTE;
+
+typedef union{
+	struct{
+		uint32_t pde_index:		10;
+		uint32_t pte_index:		10;	
+		uint32_t offset	:		12;
+	};
+	uint32_t addr;	
+} PAGE_ADDR;
+
+											    
+
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
 
@@ -25,6 +69,7 @@ uint32_t cache_read(hwaddr_t, size_t);
 void cache_write(hwaddr_t, size_t, uint32_t);
 
 uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg);
+uint32_t page_translate(hwaddr_t addr);
 
 /* Memory accessing interfaces */
 
@@ -39,11 +84,32 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-	return hwaddr_read(addr, len);
+	assert(len == 1 || len == 2 || len == 4);
+/*	if(data corss the page boundary){
+		assert(0);
+	}*/
+//	else 
+	{
+		hwaddr_t hwaddr = page_translate(addr);
+		return hwaddr_read(hwaddr, len);
+	
+	}
+
+
+	//return hwaddr_read(addr, len);
 }
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
-	hwaddr_write(addr, len, data);
+//	hwaddr_write(addr, len, data);
+	assert(len == 1 || len == 2 || len == 4);
+/*	if(data corss the page boundary){
+		assert(0);
+	}*/
+//	else 
+	{
+		hwaddr_t hwaddr = page_translate(addr);
+		return hwaddr_write(hwaddr, len, data);
+	}
 }
 
 uint32_t swaddr_read(swaddr_t addr, size_t len, uint8_t sreg) {
@@ -88,3 +154,18 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 	return addr;
 }
 
+
+uint32_t page_translate(hwaddr_t addr)
+{	
+	if(cpu.CR0.PE == 1 && cpu.CR0.PG == 1){
+		PAGE_ADDR paddr;
+		paddr.addr = addr;
+		PDE *pde = (PDE *)((cpu.CR3.page_directory_base << 12) + paddr.pde_index);			
+		assert(pde->present == 1);		
+		PTE *pte = (PTE *)((pde->page_frame << 12) + paddr.pte_index);
+		assert(pte->present == 1);	
+		return ((pte->page_frame << 12) + paddr.offset);
+	}
+
+	else return addr;	
+}
