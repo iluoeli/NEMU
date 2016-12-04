@@ -158,19 +158,21 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 uint32_t page_translate(hwaddr_t addr)
 {	
 	if(cpu.CR0.PE == 1 && cpu.CR0.PG == 1){
-		printf("page\n");
 		PAGE_ADDR paddr;
 		paddr.addr = addr;
-		uint32_t a = ((cpu.CR3.page_directory_base << 12) + paddr.pde_index);			
-		printf("a:%x\n", a);
-		uint32_t val = *(uint32_t *)((cpu.CR3.page_directory_base << 12) + paddr.pde_index);			
+
+		uint32_t addr = ((cpu.CR3.page_directory_base << 12) + paddr.pde_index);			
+		uint32_t val = hwaddr_read(addr, 4);
 		PDE pde;
 		pde.val = val;
-		printf("page2\n");
 		assert(pde.present == 1);		
-		PTE *pte = (PTE *)((pde.page_frame << 12) + paddr.pte_index);
-		assert(pte->present == 1);	
-		return ((pte->page_frame << 12) + paddr.offset);
+		
+		addr = ((pde.page_frame << 12) + paddr.pte_index);
+		PTE pte;
+		val = hwaddr_read(addr, 4);
+		pte.val = val;
+		assert(pte.present == 1);	
+		return ((pte.page_frame << 12) + paddr.offset);
 	}
 
 	else return addr;	
