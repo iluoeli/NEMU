@@ -114,7 +114,7 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 //	else 
 	{
 		hwaddr_t hwaddr = page_translate(addr);
-		return hwaddr_write(hwaddr, len, data);
+		hwaddr_write(hwaddr, len, data);
 	}
 }
 
@@ -154,6 +154,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 
 //			printf("offset_addr: %x", offset_addr);
 //			printf("base_addr: %x\n", base_addr);
+			assert(base_addr == 0);
 			return (base_addr + offset_addr);
 		}			
 	}
