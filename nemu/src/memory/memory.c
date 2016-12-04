@@ -152,8 +152,8 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 			uint32_t base_addr = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
 			uint32_t offset_addr = addr;
 
-			printf("offset_addr: %x", offset_addr);
-			printf("base_addr: %x", base_addr);
+//			printf("offset_addr: %x", offset_addr);
+	//		printf("base_addr: %x", base_addr);
 			return (base_addr + offset_addr);
 		}			
 	}
