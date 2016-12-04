@@ -167,13 +167,13 @@ uint32_t page_translate(hwaddr_t addr)
 		PAGE_ADDR paddr;
 		paddr.addr = addr;
 		printf("page\n");
-		uint32_t addr = ((cpu.CR3.page_directory_base << 12) + paddr.pde_index);			
+		uint32_t addr = ((cpu.CR3.page_directory_base << 12) + 4*paddr.pde_index);			
 		uint32_t val = hwaddr_read(addr, 4);
 		PDE pde;
 		pde.val = val;
 		assert(pde.present == 1);		
 		
-		addr = ((pde.page_frame << 12) + paddr.pte_index);
+		addr = ((pde.page_frame << 12) + 4*paddr.pte_index);
 		PTE pte;
 		val = hwaddr_read(addr, 4);
 		pte.val = val;
