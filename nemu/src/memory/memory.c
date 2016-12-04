@@ -161,9 +161,12 @@ uint32_t page_translate(hwaddr_t addr)
 		printf("page\n");
 		PAGE_ADDR paddr;
 		paddr.addr = addr;
-		PDE *pde = (PDE *)((cpu.CR3.page_directory_base << 12) + paddr.pde_index);			
-		assert(pde->present == 1);		
-		PTE *pte = (PTE *)((pde->page_frame << 12) + paddr.pte_index);
+		uint32_t val = *(uint32_t *)((cpu.CR3.page_directory_base << 12) + paddr.pde_index);			
+		PDE pde;
+		pde.val = val;
+		printf("page2\n");
+		assert(pde.present == 1);		
+		PTE *pte = (PTE *)((pde.page_frame << 12) + paddr.pte_index);
 		assert(pte->present == 1);	
 		return ((pte->page_frame << 12) + paddr.offset);
 	}
