@@ -8,8 +8,8 @@ make_helper(lgdt)
 //	int len = 5;
 //	uint32_t addr = instr_fetch(cpu.eip+3, 4);
 	uint32_t addr = op_src->addr;
-	uint8_t sreg = op_src->sreg;
-	printf("lgdt: %x, %x\n", addr, sreg);
+//	uint8_t sreg = op_src->sreg;
+//	printf("lgdt: %x, %x\n", addr, sreg);
 	cpu.GDTR.limit = lnaddr_read(addr, 2);
 	cpu.GDTR.base = lnaddr_read(addr+2, 4);
 //	cpu.GDTR.base = swaddr_read(addr, 4, sreg);
