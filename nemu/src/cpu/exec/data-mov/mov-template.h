@@ -32,20 +32,38 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 make_helper(mov_cr2r)
 {
 	int len = decode_r_l(cpu.eip+2);	
-	OPERAND_W(op_src, cpu.CR0._32);
-
-	print_asm("movl" " CR0,%%%s", REG_NAME(op_src->reg));
+	uint8_t cr_reg = instr_fetch(cpu.eip+2, 1);
+	cr_reg &= 0x38;
+	cr_reg = cr_reg >> 3;
+	if(cr_reg == 0) {
+		OPERAND_W(op_src, cpu.CR0._32);
+		print_asm("movl" " CR0,%%%s", REG_NAME(op_src->reg));
+	}
+	else if(cr_reg == 3) {
+		OPERAND_W(op_src, cpu.CR3.val);	
+		print_asm("movl" " CR3,%%%s", REG_NAME(op_src->reg));
+	}
 	return len+2;
 }
 
 make_helper(mov_r2cr)
 {
 	int len = decode_r_l(cpu.eip+2);	
-	cpu.CR0._32 = REG(R_EAX);
+	uint8_t cr_reg = instr_fetch(cpu.eip+2, 1);
+	uint8_t reg = cr_reg & 0x07;
+	cr_reg &= 0x38;
+	cr_reg = cr_reg >> 3;
+	if(cr_reg == 0){
+		cpu.CR0._32 = REG(R_EAX);
+		print_asm("movl" " %%%s, CR0", REG_NAME(reg));
+	}
+	else if(cr_reg == 3){
+		cpu.CR3.val = REG(R_EAX);
+		print_asm("movl" " %%%s, CR3", REG_NAME(reg));
+	}
 //	printf("cpu.eip: %x\n", cpu.eip);
 //	printf("mov_r2cr: %x\n", op_src->reg);
 
-	print_asm("movl" " %%%s, CR0", REG_NAME(op_src->reg));
 	return len+2;
 }
 #endif
