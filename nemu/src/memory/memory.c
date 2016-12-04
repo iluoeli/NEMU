@@ -162,7 +162,7 @@ uint32_t page_translate(hwaddr_t addr)
 		PAGE_ADDR paddr;
 		paddr.addr = addr;
 		uint32_t a = ((cpu.CR3.page_directory_base << 12) + paddr.pde_index);			
-		printf("a:%x\n", *(uint32_t *)a);
+		printf("a:%x\n", a);
 		uint32_t val = *(uint32_t *)((cpu.CR3.page_directory_base << 12) + paddr.pde_index);			
 		PDE pde;
 		pde.val = val;
