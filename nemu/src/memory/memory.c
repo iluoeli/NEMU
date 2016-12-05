@@ -18,7 +18,7 @@ typedef union SegmentDescriptor {
 		uint32_t granularity         : 1;
 		uint32_t base_31_24          : 8;
 	};
-	struct {
+ 	struct {
 		uint32_t val_1;
 		uint32_t val_2;	
 	};
@@ -26,7 +26,7 @@ typedef union SegmentDescriptor {
 
 
 typedef union PageDirectoryEntry {
- 	struct {
+  	struct {
 	        uint32_t present             : 1;		 
 	        uint32_t read_write          : 1;
 	        uint32_t user_supervisor     : 1;
@@ -41,7 +41,7 @@ typedef union PageDirectoryEntry {
 				
  /* the 32bit Page Table Entry(second level page table) data structure */
  typedef union PageTableEntry {
- 		struct {
+  		struct {
 			  uint32_t present             : 1;
 		      uint32_t read_write          : 1;
 		      uint32_t user_supervisor     : 1;
@@ -76,6 +76,7 @@ void cache_write(hwaddr_t, size_t, uint32_t);
 
 uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg);
 uint32_t page_translate(hwaddr_t addr);
+uint32_t tlb_read(lnaddr_t);
 
 /* Memory accessing interfaces */
 
@@ -161,7 +162,7 @@ uint32_t page_translate(hwaddr_t addr)
 	if(cpu.CR0.PE == 1 && cpu.CR0.PG == 1){
 		PAGE_ADDR paddr;
 		paddr.addr = addr;
-		uint32_t tmp_addr = ((cpu.CR3.page_directory_base << 12) + 4*paddr.pde_index);			
+/*		uint32_t tmp_addr = ((cpu.CR3.page_directory_base << 12) + 4*paddr.pde_index);			
 		uint32_t val = hwaddr_read(tmp_addr, 4);
 		PDE pde;
 		pde.val = val;
@@ -173,6 +174,8 @@ uint32_t page_translate(hwaddr_t addr)
 		pte.val = val;
 		assert(pte.present == 1);	
 		return ((pte.page_frame << 12) + paddr.offset);
+*/
+		return (tlb_read(addr)<<12) + paddr.offset;
 	}
 
 	else return addr;	
@@ -183,7 +186,7 @@ void print_page(uint32_t addr)
 {
 	uint32_t target_addr = addr;
 	bool success = true;	
-	if(cpu.CR0.PE == 1 && cpu.CR0.PG == 1){
+ 	if(cpu.CR0.PE == 1 && cpu.CR0.PG == 1){
 		PAGE_ADDR paddr;
 		paddr.addr = addr;
 		uint32_t tmp_addr = ((cpu.CR3.page_directory_base << 12) + 4*paddr.pde_index);			
