@@ -12,6 +12,7 @@ void init_wp_pool();
 void init_ddr3();
 void init_cache();
 void init_cacheL2();
+void init_TLB();
 
 FILE *log_fp = NULL;
 
@@ -104,6 +105,7 @@ void restart() {
 
 	/* Initialize DRAM. */
 	init_ddr3();
+	init_TLB();
 	init_cache();
 	init_cacheL2();
 }
