@@ -141,8 +141,8 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 	assert(sreg <= 5 && sreg >= 0);
 	
 	if(cpu.CR0.PE == 1){
-	 	if(cpu.sr[sreg].TI == 0){
-			uint32_t gdt_base = cpu.GDTR.base;
+ 	 	if(cpu.sr[sreg].TI == 0){
+	/*		uint32_t gdt_base = cpu.GDTR.base;
 			SegDesc gdt;
 			uint32_t tmp_addr =  (gdt_base + 8*cpu.sr[sreg].index);	
 			gdt.val_1 = hwaddr_read(tmp_addr, 4);
@@ -150,7 +150,8 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 			uint32_t base_addr = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
 
 			assert(base_addr == 0);
-			return (base_addr + addr);
+			return (base_addr + addr);*/
+			return (cpu.sr[sreg].base+addr);
 		}			
 	}
 	return addr;

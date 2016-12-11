@@ -40,7 +40,7 @@ make_helper(mov_cr2r)
 		OPERAND_W(op_src, cpu.CR0._32);
 		print_asm("movl" " CR0,%%%s", REG_NAME(reg));
 	}
-	else if(cr_reg == 3) {
+ 	else if(cr_reg == 3) {
 		OPERAND_W(op_src, cpu.CR3.val);	
 		print_asm("movl" " CR3,%%%s", REG_NAME(reg));
 	}
@@ -54,14 +54,14 @@ make_helper(mov_r2cr)
 	uint8_t reg = cr_reg & 0x07;
 	cr_reg &= 0x38;
 	cr_reg = cr_reg >> 3;
-	if(cr_reg == 0){
+ 	if(cr_reg == 0){
 		cpu.CR0._32 = REG(R_EAX);
 		print_asm("movl" " %%%s, CR0", REG_NAME(reg));
 	}
 	else if(cr_reg == 3){
 		cpu.CR3.val = REG(R_EAX);
 		print_asm("movl" " %%%s, CR3", REG_NAME(reg));
-	}
+ 	}
 //	printf("cpu.eip: %x\n", cpu.eip);
 //	printf("mov_r2cr: %x\n", op_src->reg);
 
@@ -69,8 +69,34 @@ make_helper(mov_r2cr)
 }
 #endif
 
-//opcode 8e; mov rw to segment registers
+
+
+
 #if DATA_BYTE == 2
+typedef union SegmentDescriptor {
+	struct {
+		uint32_t limit_15_0          : 16;
+		uint32_t base_15_0           : 16;
+		uint32_t base_23_16          : 8;
+		uint32_t type                : 4;
+		uint32_t segment_type        : 1;
+		uint32_t privilege_level     : 2;
+		uint32_t present             : 1;
+		uint32_t limit_19_16         : 4;
+		uint32_t soft_use            : 1;
+		uint32_t operation_size      : 1;
+		uint32_t pad0                : 1;
+		uint32_t granularity         : 1;
+		uint32_t base_31_24          : 8;
+	};
+	struct {
+		uint32_t val_1;
+		uint32_t val_2;
+	};
+} SegDesc;
+
+
+//opcode 8e; mov rw to segment registers
 make_helper(mov_r2sr_w)
 {
 	uint8_t modRM = instr_fetch(eip+1, 1);
@@ -89,8 +115,22 @@ make_helper(mov_r2sr_w)
 		case 5:	sr_name[0] = 'G';	break;
 		default :sr_name[0] = 'E';
 				sr_name[1] = 'R';
-	}
-	
+ 	}
+
+//every time sr changed, cache will  update
+	 assert(nr_sr <= 5 && nr_sr >= 0);
+
+	 if(cpu.CR0.PE == 1 && cpu.sr[nr_sr].TI == 0){
+		uint32_t gdt_base = cpu.GDTR.base;
+		SegDesc gdt;
+		uint32_t tmp_addr =  (gdt_base + 8*cpu.sr[nr_sr].index);
+		gdt.val_1 = hwaddr_read(tmp_addr, 4);
+		gdt.val_2 = hwaddr_read(tmp_addr+4, 4);
+		assert(gdt.present == 1);
+		cpu.sr[nr_sr].base = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
+		cpu.sr[nr_sr].limit = (gdt.limit_19_16 << 16) + gdt.limit_15_0;	 
+		cpu.sr[nr_sr].DPL = gdt.privilege_level;
+	}	
 
 	//print_asm("movw" " %%%s, sr[%d]", REG_NAME(nr_gpr), nr_sr);
 	print_asm("movw" " %%%s,%s",  REG_NAME(nr_gpr), sr_name);
