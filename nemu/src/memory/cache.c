@@ -22,6 +22,8 @@ void dram_write(hwaddr_t, size_t, uint32_t);
 uint32_t cacheL2_read(hwaddr_t addr, size_t len);
 void cacheL2_write(hwaddr_t addr, size_t len, uint32_t data);
 
+//test cache 
+uint64_t count=0;
 
 typedef union{
 	struct {
@@ -70,10 +72,10 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 		if(cache[set][i].valid && cache[set][i].tag == tag) {
 			hit = true;
 			break;
-	 	}	
-	} 
+ 	 	}	
+ 	} 
 
-	if(!hit) {
+ 	if(!hit) {count+=2;
 		uint32_t random = randomGenerator() % NR_WAY;
 		i = random;
 		int j=0;
@@ -81,10 +83,11 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	 	for (; j < BLOCK_SIZE; ++j) {
 			//cache[set][i].data[j] = dram_read(addr_block + j, 1);
 			cache[set][i].data[j] = cacheL2_read(addr_block + j, 1);
-		}	
+ 		}	
 		cache[set][i].tag = tag;
 		cache[set][i].valid = true;
 	}
+	else count+=200;
 	memset(buf, 0, 8);
 	buf[0] = *(uint32_t *)(cache[set][i].data + block);
 	//if cross block
@@ -116,17 +119,18 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 					cache_write(addr+j, 1, (data >> (8*j)) & 0xff);
 				else
 					cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
- 			}
+  			}
 			//dram_write(addr, len, data);
 			cacheL2_write(addr, len, data);
-		}	
-	}
+ 		}	
+ 	}
 	
-	if(!hit){
+ 	if(!hit){count +=2;
 		//not write allocate
 	//	dram_write(addr, len, data);
 		cacheL2_write(addr, len, data);
 	}
+	else count +=200;
 }
 
 void print_cache(uint32_t addr)
@@ -140,8 +144,8 @@ void print_cache(uint32_t addr)
 	for(; i < NR_WAY; ++i){
 		if(cache[set][i].valid && cache[set][i].tag == tag)	{
 			hit = true;	break;
-		}
-	}
+ 		}
+ 	}
 
 	if(hit){
 		int j=0;
@@ -150,7 +154,7 @@ void print_cache(uint32_t addr)
 			printf("%8x: %8x\t", addr_block+4*j, *((uint32_t *)cache[set][i].data + j));	
 			if((j+1) % 2 == 0)	printf("\n");
 		}	
-	}
+ 	}
 	else
 		printf("no record at cache\n");
 }
