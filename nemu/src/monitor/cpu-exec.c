@@ -45,7 +45,6 @@ void cpu_exec(volatile uint32_t n) {
 		return;
  	}
 	nemu_state = RUNNING;
-	printf("count: %lu\n", (unsigned long)count);
 
 #ifdef DEBUG
 	volatile uint32_t n_temp = n;
@@ -106,4 +105,5 @@ void cpu_exec(volatile uint32_t n) {
  	}
 
 	if(nemu_state == RUNNING) { nemu_state = STOP; }
+	printf("count: %lu\n", (unsigned long)count);
 }
