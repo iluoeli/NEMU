@@ -21,10 +21,10 @@ void dram_write(hwaddr_t, size_t, uint32_t);
 
 uint32_t cacheL2_read(hwaddr_t addr, size_t len);
 void cacheL2_write(hwaddr_t addr, size_t len, uint32_t data);
-
+/*
 //test cache 
 uint64_t count=0;
-
+*/
 typedef union{
 	struct {
 		uint32_t block	: BLOCK_WIDTH;
@@ -75,7 +75,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
  	 	}	
  	} 
 
- 	if(!hit) {count+=2;
+ 	if(!hit) {//count+=2;
 		uint32_t random = randomGenerator() % NR_WAY;
 		i = random;
 		int j=0;
@@ -87,7 +87,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 		cache[set][i].tag = tag;
 		cache[set][i].valid = true;
 	}
-	else count+=200;
+//	else count+=200;
 	memset(buf, 0, 8);
 	buf[0] = *(uint32_t *)(cache[set][i].data + block);
 	//if cross block
@@ -125,12 +125,12 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
  		}	
  	}
 	
- 	if(!hit){count +=2;
+ 	if(!hit){//count +=2;
 		//not write allocate
 	//	dram_write(addr, len, data);
 		cacheL2_write(addr, len, data);
 	}
-	else count +=200;
+	//else count +=200;
 }
 
 void print_cache(uint32_t addr)

@@ -11,8 +11,6 @@
  */
 #define MAX_INSTR_TO_PRINT 32
 
-extern uint64_t count;
-
 int nemu_state = STOP;
 
 int exec(swaddr_t);
@@ -40,10 +38,10 @@ void do_int3() {
 
 /* Simulate how the CPU works. */
 void cpu_exec(volatile uint32_t n) {
-	if(nemu_state == END) {	printf("count: %lu\n", (unsigned long)count);
+	if(nemu_state == END) {
 		printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
 		return;
- 	}
+	}
 	nemu_state = RUNNING;
 
 #ifdef DEBUG
@@ -105,5 +103,4 @@ void cpu_exec(volatile uint32_t n) {
  	}
 
 	if(nemu_state == RUNNING) { nemu_state = STOP; }
-	printf("count: %lu\n", (unsigned long)count);
 }
