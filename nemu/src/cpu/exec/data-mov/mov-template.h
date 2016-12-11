@@ -47,6 +47,7 @@ make_helper(mov_cr2r)
 	return len+2;
 }
 
+void init_TLB();
 make_helper(mov_r2cr)
 {
 	int len = decode_r_l(cpu.eip+2);	
@@ -60,8 +61,10 @@ make_helper(mov_r2cr)
 	}
 	else if(cr_reg == 3){
 		cpu.CR3.val = REG(R_EAX);
+		//when updata CR3, brush TLB in case of error
+		init_TLB();
 		print_asm("movl" " %%%s, CR3", REG_NAME(reg));
- 	}
+  	}
 //	printf("cpu.eip: %x\n", cpu.eip);
 //	printf("mov_r2cr: %x\n", op_src->reg);
 
