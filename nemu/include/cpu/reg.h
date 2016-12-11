@@ -59,11 +59,18 @@ typedef union{
 
 typedef union {
 	struct {
-		uint32_t _32;
+		uint64_t _64;
 		uint16_t selector;
 	};
 	struct {
-		uint32_t cache:	32;
+		union {
+			struct{
+				uint32_t base;
+				uint32_t limit	:20;
+				uint32_t DPL	:2;	
+			};
+			uint64_t cache;
+		};
 		uint16_t RPL:	2;
 		uint16_t TI:	1;
 		uint16_t index:	13;		
