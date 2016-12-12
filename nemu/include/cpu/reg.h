@@ -42,6 +42,11 @@ typedef struct{
 	uint32_t base;
 } SEG_GDTR;
 
+typedef struct{
+	uint16_t limit;	
+	uint32_t base;
+} SEG_IDTR;
+
 typedef union{
 	struct {
 		uint32_t PE:	1;	
@@ -122,6 +127,7 @@ typedef	struct {
 
 	Eflages EFLAGES;	
 	SEG_GDTR GDTR;
+	SEG_IDTR IDTR;
 	SEG_CR0 CR0;
 	CR3 CR3;
 /*

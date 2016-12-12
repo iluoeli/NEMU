@@ -12,3 +12,13 @@ make_helper(lgdt)
 	return len + 1;
 }
 
+make_helper(lidt)
+{
+	int len = decode_rm_l(cpu.eip+2);
+	uint32_t addr = op_src->addr;
+	cpu.IDTR.limit = lnaddr_read(addr, 2);
+	cpu.IDTR.base = lnaddr_read(addr+2, 4);
+	print_asm("lidt %x:%x,idtr", cpu.IDTR.limit, cpu.IDTR.base);
+	return len + 1;
+}
+
