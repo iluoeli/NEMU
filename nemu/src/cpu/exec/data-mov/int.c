@@ -20,6 +20,8 @@ make_helper(int_i_b)
 	cpu.esp -= 4;
 	swaddr_write(cpu.esp, 2, cpu.eip+len+1, 1);
 
+	print_asm("intb");
+
 	//then jmp eroor process
 //	cpu.eip -= (len + 1);
 	raise_intr(op_src->val);
@@ -41,12 +43,17 @@ make_helper(iret)
 	cpu.EFLAGES.eflages = swaddr_read(cpu.esp, 4, 1);
 	cpu.esp += 4;
 
+	print_asm("iret");
+
 	return 1;		
 }
 
 make_helper(cli)
 {
 	cpu.EFLAGES.IF = 0;	
+
+	print_asm("cli");
+
 	return 1;
 }
 
@@ -70,6 +77,8 @@ make_helper(pusha)
 	cpu.esp -= 4;
 	swaddr_write(cpu.esp, 4, cpu.edi, 1);	
 
+	print_asm("pusha");
+
 	return 1;
 }
 
@@ -92,6 +101,7 @@ make_helper(popa)
 	cpu.eax = swaddr_read(cpu.esp, 4, 1);
 	cpu.esp += 4;		
 
+	print_asm("popa");
 	return 1;
 }
 
