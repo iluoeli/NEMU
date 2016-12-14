@@ -15,7 +15,7 @@ typedef union GateDescriptor{
 		uint32_t present          : 1;
 		uint32_t offset_31_16     : 16;
 	};
-	struct {
+ 	struct {
 		uint32_t val_l;
 		uint32_t val_h;	
 	};
@@ -38,5 +38,4 @@ void raise_intr(uint8_t NO)
 
 /*Jump back to cpu_exec() */	
 	longjmp(jbuf, 1);
-		
 }
