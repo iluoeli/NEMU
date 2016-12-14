@@ -7,7 +7,7 @@ make_helper(int_i_b)
 	int len = decode_i_b(cpu.eip+1);
 	//real-address-mode
 	//push eflages, push cs, push eip
-	assert(cpu.CR0.PE == 0);
+//	assert(cpu.CR0.PE == 0);
 	cpu.esp -= 4;	
 	swaddr_write(cpu.esp, 4, cpu.EFLAGES.eflages, 1);
 
