@@ -39,8 +39,7 @@ void raise_intr(uint8_t NO)
 	assert(idt.present == 1);
 
 	cpu.CS.selector = idt.segment;
-	//SegDesc gdt;
-	//gdt.valdd	
+	//updata cs cache	
 	if(cpu.CR0.PE == 1 && cpu.CS.TI == 0){
 		uint32_t gdt_base = cpu.GDTR.base;
 		SegDesc gdt;
@@ -53,7 +52,7 @@ void raise_intr(uint8_t NO)
 		cpu.CS.DPL = gdt.privilege_level;
 	}
 
-	cpu.eip = (idt.offset_31_16 << 16) + idt.offset_15_0;
+	cpu.eip = (idt.offset_31_16 << 16) + idt.offset_15_0 + cpu.CS.base;
 	printf("cpu.eip:%x\n", cpu.eip);
 //	cpu.eip -= 2;
 /*Jump back to cpu_exec() */	
