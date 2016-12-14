@@ -4,7 +4,7 @@ void raise_intr(uint8_t NO);
 
 make_helper(int_i_b)
 {
-	printf("int\n");
+	printf("int, eip:%x\n", cpu.eip);
 	int len = decode_i_b(cpu.eip+1);
 	//real-address-mode
 	//push eflages, push cs, push eip
