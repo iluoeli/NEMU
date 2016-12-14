@@ -28,6 +28,7 @@ void raise_intr(uint8_t NO)
 /* TODO: Trigger an interrupt/exception with 'NO'
  *That is, use 'NO' to index the IDT.
 */
+	printf("raise_intr\n");
 	uint32_t idt_addr = cpu.IDTR.base + 4 * NO;
 	GateDesc idt;
 	idt.val_l = swaddr_read(idt_addr, 4, 1);
