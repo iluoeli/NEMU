@@ -14,8 +14,8 @@ typedef union GateDescriptor{
 		uint32_t privilege_level  : 2;
 		uint32_t present          : 1;
 		uint32_t offset_31_16     : 16;
-	};
- 	struct {
+ 	};
+  	struct {
 		uint32_t val_l;
 		uint32_t val_h;	
 	};
@@ -30,6 +30,7 @@ void raise_intr(uint8_t NO)
 */
 	printf("raise_intr\n");
 	uint32_t idt_addr = cpu.IDTR.base + 4 * NO;
+	printf("idt_addr: %x\n", idt_addr);
 	GateDesc idt;
 	idt.val_l = swaddr_read(idt_addr, 4, 1);
 	idt.val_h = swaddr_read(idt_addr+4, 4, 1);
@@ -37,6 +38,7 @@ void raise_intr(uint8_t NO)
 
 	cpu.CS.selector = idt.segment;
 	cpu.eip = (idt.offset_31_16 << 16) + idt.offset_15_0;
+	printf("cpu.eip:%x\n", cpu.eip);
 //	cpu.eip -= 2;
 /*Jump back to cpu_exec() */	
 	longjmp(jbuf, 1);
