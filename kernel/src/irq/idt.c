@@ -55,7 +55,6 @@ void irq_empty();
 
 void init_idt() {
 	int i;
-	printf("init_idt\n");
 	for (i = 0; i < NR_IRQ; i ++) {
 		set_trap(idt + i, SEG_KERNEL_CODE << 3, (uint32_t)irq_empty, DPL_KERNEL);
 	}
