@@ -29,7 +29,7 @@ void raise_intr(uint8_t NO)
  *That is, use 'NO' to index the IDT.
 */
 	printf("raise_intr\n");
-	uint32_t idt_addr = cpu.IDTR.base + 4 * NO;
+	uint32_t idt_addr = cpu.IDTR.base + 8 * NO;
 	printf("idt_base: %x  ,idt_addr: %x\n", cpu.IDTR.base, idt_addr);
 	GateDesc idt;
 	idt.val_l = swaddr_read(idt_addr, 4, 1);
