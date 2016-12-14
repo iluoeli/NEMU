@@ -23,6 +23,8 @@ make_helper(int_i_b)
 	//then jmp eroor process
 	raise_intr(op_src->val);
 
+	cpu.eip -= (len+1);
+
 	return len+1;	
 }
 
