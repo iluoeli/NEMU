@@ -4,6 +4,7 @@ void raise_intr(uint8_t NO);
 
 make_helper(int_i_b)
 {
+	printf("int\n");
 	int len = decode_i_b(cpu.eip+1);
 	//real-address-mode
 	//push eflages, push cs, push eip
@@ -33,6 +34,7 @@ make_helper(int_i_b)
 
 make_helper(iret)
 {
+	printf("iret\n");
 	//pop %eip
 	cpu.eip = swaddr_read(cpu.esp, 4, 1)-1;
 	cpu.esp += 4;
@@ -50,6 +52,7 @@ make_helper(iret)
 
 make_helper(cli)
 {
+	printf("cli\n");
 	cpu.EFLAGES.IF = 0;	
 
 	print_asm("cli");
@@ -59,6 +62,7 @@ make_helper(cli)
 
 make_helper(pusha)
 {
+	printf("pusha\n");
 	uint32_t temp = cpu.esp;
 	cpu.esp -= 4;
 	swaddr_write(cpu.esp, 4, cpu.eax, 1);	
@@ -84,6 +88,7 @@ make_helper(pusha)
 
 make_helper(popa)
 {
+	printf("popa\n");
 	cpu.edi = swaddr_read(cpu.esp, 4, 1);
 	cpu.esp += 4;		
 	cpu.esi = swaddr_read(cpu.esp, 4, 1);
