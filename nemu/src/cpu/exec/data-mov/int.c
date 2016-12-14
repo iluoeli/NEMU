@@ -40,3 +40,33 @@ make_helper(iret)
 
 	return 1;		
 }
+
+make_helper(cli)
+{
+	cpu.EFLAGES.IF = 0;	
+	return 1;
+}
+
+make_helper(pusha)
+{
+	uint32_t temp = cpu.esp;
+	cpu.esp -= 4;
+	swaddr_write(cpu.esp, 4, cpu.eax, 1);	
+	cpu.esp -= 4;
+	swaddr_write(cpu.esp, 4, cpu.ecx, 1);	
+	cpu.esp -= 4;
+	swaddr_write(cpu.esp, 4, cpu.edx, 1);	
+	cpu.esp -= 4;
+	swaddr_write(cpu.esp, 4, cpu.ebx, 1);	
+	cpu.esp -= 4;
+	swaddr_write(cpu.esp, 4, temp, 1);	
+	cpu.esp -= 4;
+	swaddr_write(cpu.esp, 4, cpu.ebp, 1);	
+	cpu.esp -= 4;
+	swaddr_write(cpu.esp, 4, cpu.esi, 1);	
+	cpu.esp -= 4;
+	swaddr_write(cpu.esp, 4, cpu.edi, 1);	
+
+	return 1;
+}
+
