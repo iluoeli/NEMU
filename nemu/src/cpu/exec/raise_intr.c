@@ -2,10 +2,12 @@
 #include <common.h>
 #include "nemu.h"
 #include "common.h"
-extern jmp_buf jbuf;
+#include "mmu.h"
 
+extern jmp_buf jbuf;
+/*
 typedef union GateDescriptor{
-	struct {
+ 	struct {
 		uint32_t offset_15_0      : 16;
 		uint32_t segment          : 16;
 		uint32_t pad0             : 8;
@@ -15,12 +17,12 @@ typedef union GateDescriptor{
 		uint32_t present          : 1;
 		uint32_t offset_31_16     : 16;
  	};
-  	struct {
+   	struct {
 		uint32_t val_l;
 		uint32_t val_h;	
 	};
 } GateDesc;
-
+*/
 
 
 void raise_intr(uint8_t NO)	
@@ -37,6 +39,9 @@ void raise_intr(uint8_t NO)
 	assert(idt.present == 1);
 
 	cpu.CS.selector = idt.segment;
+	
+
+
 	cpu.eip = (idt.offset_31_16 << 16) + idt.offset_15_0;
 	printf("cpu.eip:%x\n", cpu.eip);
 //	cpu.eip -= 2;
