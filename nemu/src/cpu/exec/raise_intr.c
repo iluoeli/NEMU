@@ -32,7 +32,8 @@ void raise_intr(uint8_t NO)
 	GateDesc idt;
 	idt.val_l = swaddr_read(idt_addr, 4, 1);
 	idt.val_h = swaddr_read(idt_addr+4, 4, 1);
-	
+	assert(idt.present == 1);
+
 	cpu.CS.selector = idt.segment;
 	cpu.eip = (idt.offset_31_16 << 16) + idt.offset_15_0;
 //	cpu.eip -= 2;
