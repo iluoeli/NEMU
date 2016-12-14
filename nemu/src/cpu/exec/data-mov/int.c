@@ -14,7 +14,7 @@ make_helper(int_i_b)
 	cpu.EFLAGES.IF = 0;
 	cpu.EFLAGES.TF = 0;
 
-	cpu.esp -= 2;
+	cpu.esp -= 4;
 	swaddr_write(cpu.esp, 2, cpu.CS.selector, 1);
 
 	cpu.esp -= 4;
@@ -24,4 +24,19 @@ make_helper(int_i_b)
 	raise_intr(op_src->val);
 
 	return len+1;	
+}
+
+make_helper(iret)
+{
+	//pop %eip
+	cpu.eip = swaddr_read(cpu.esp, 4, 1)-1;
+	cpu.esp += 4;
+	
+	cpu.CS.selector = swaddr_read(cpu.esp, 2, 1);
+	cpu.esp += 4;
+
+	cpu.EFLAGES.eflages = swaddr_read(cpu.esp, 4, 1);
+	cpu.esp += 4;
+
+	return 1;		
 }
