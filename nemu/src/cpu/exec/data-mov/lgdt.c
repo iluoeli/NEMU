@@ -14,6 +14,7 @@ make_helper(lgdt)
 
 make_helper(lidt)
 {
+	printf("lidt:\n");
 	int len = decode_rm_l(cpu.eip+2);
 	uint32_t addr = op_src->addr;
 	cpu.IDTR.limit = lnaddr_read(addr, 2);
