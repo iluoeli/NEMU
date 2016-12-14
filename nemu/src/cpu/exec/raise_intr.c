@@ -35,7 +35,7 @@ void raise_intr(uint8_t NO)
 	
 	cpu.CS.selector = idt.segment;
 	cpu.eip = (idt.offset_31_16 << 16) + idt.offset_15_0;
-	cpu.eip -= 2;
+//	cpu.eip -= 2;
 /*Jump back to cpu_exec() */	
 	longjmp(jbuf, 1);
 }
