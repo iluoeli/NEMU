@@ -70,3 +70,12 @@ make_helper(pusha)
 	return 1;
 }
 
+make_helper(popa)
+{
+	cpu.edi = swaddr_read(cpu.esp, 4, 1);
+	cpu.esp += 4;		
+
+	return 1;
+}
+
+
