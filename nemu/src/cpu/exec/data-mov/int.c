@@ -21,7 +21,7 @@ make_helper(int_i_b)
 	swaddr_write(cpu.esp, 2, cpu.eip+len+1, 1);
 
 	//then jmp eroor process
-	cpu.eip -= (len + 1);
+//	cpu.eip -= (len + 1);
 	raise_intr(op_src->val);
 
 //	cpu.eip -= (len+1);
