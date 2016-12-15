@@ -1,6 +1,8 @@
 #include "cpu/exec/template-start.h"
 
 //#define instr in
+uint32_t pio_read(ioaddr_t addr, size_t len);
+void pio_write(ioaddr_t addr, size_t len, uint32_t data);
 
 make_helper(concat(in_i2a_, SUFFIX))
 {
@@ -13,11 +15,11 @@ make_helper(concat(in_i2a_, SUFFIX))
 	return len+1;
 }
 
-make_helper(concat(in_d2a_, SUFFIX_))
+make_helper(concat(in_d2a_, SUFFIX))
 {
 	REG(R_EAX) = pio_read(reg_w(R_EDX), DATA_BYTE);	
 
-	print_asm("in" str(SUFFIX) "%DX, %%%s", REG_NAME(R_EAX));
+	print_asm("in" str(SUFFIX) "%%DX, %%%s", REG_NAME(R_EAX));
 
 	return 1;
 }
@@ -34,11 +36,11 @@ make_helper(concat(out_a2i_, SUFFIX))
 	return len+1;
 }
 
-make_helper(concat(out_a2d_, SUFFIX_))
+make_helper(concat(out_a2d_, SUFFIX))
 {
 	pio_write(reg_w(R_EDX), DATA_BYTE, REG(R_EAX));	
 
-	print_asm("out" str(SUFFIX) "%%%s, %DX",  REG_NAME(R_EAX));
+	print_asm("out" str(SUFFIX) "%%%s, %%DX",  REG_NAME(R_EAX));
 
 	return 1;
 }
