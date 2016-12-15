@@ -16,9 +16,9 @@ static void sys_ioctl(TrapFrame *tf) {
 
 static void sys_write(TrapFrame *tf)
 {
-	int fd = *(int *)(tf->old_esp+4);		
-	void *buf = *(uint32_t *)(tf->old_esp+8);
-	uint32_t len = *(uint32_t *)(tf->old_esp+12);
+	int fd = *(int *)(tf->old_esp+8);		
+	void *buf = *(uint32_t *)(tf->old_esp+12);
+	uint32_t len = *(uint32_t *)(tf->old_esp+16);
 	assert(fd == 1 || fd == 2);
 	if(fd == 1 || fd == 2){
 		asm volatile (".byte 0xd6" : : "a"(2), "c"(buf), "d"(len));	
