@@ -45,20 +45,28 @@ uint32_t loader() {
 	uint8_t buf_ph[elf->e_phentsize];
 	for(i=0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, load each segment into memory */
+#ifdef HAS_DEVICE
+		ide_read(buf_ph, ELF_OFFSET_IN_DISK+elf->e_phoff+i*elf->e_phentsize, elf->e_phentsize);
+#else
 		ramdisk_read(buf_ph, ELF_OFFSET_IN_DISK+elf->e_phoff+i*elf->e_phentsize, elf->e_phentsize);
+#endif
 		ph = (void *)buf_ph;
-  		if(ph->p_type == PT_LOAD) {
+  		if(ph->p_type == PT_LOAD) { 
 
  			/* TO DO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
-  	 		 */
+  	 		 */ 
 			uint8_t buf_file[ph->p_filesz];
+#ifdef HAS_DEVICE
+			ide_read(buf_file, ELF_OFFSET_IN_DISK+ph->p_offset, ph->p_filesz);	
+#else
 			ramdisk_read(buf_file, ELF_OFFSET_IN_DISK+ph->p_offset, ph->p_filesz);	
+#endif
 		//	ramdisk_write(buf_file, ph->p_vaddr, ph->p_filesz);	
 			uint32_t vaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
 			memcpy((void *)vaddr, buf_file, ph->p_filesz);
 
-  			/* TOD O: zero the memory region 
+   			/* TOD O: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
  	 		 */
 			int margin = ph->p_memsz - ph->p_filesz;
