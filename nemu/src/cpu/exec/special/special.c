@@ -35,7 +35,7 @@ make_helper(nemu_trap) {
 		case 2:
 			len = cpu.edx;
 			for (i=0; i < len; ++i)
-				buf[i] = instr_fetch(cpu.ecx, 1);
+				buf[i] = instr_fetch(cpu.ecx+i, 1);
 			printf("%s", buf);
 		   	break;
 
