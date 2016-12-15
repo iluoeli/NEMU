@@ -27,8 +27,16 @@ make_helper(inv) {
 make_helper(nemu_trap) {
 	print_asm("nemu trap (eax = %d)", cpu.eax);
 
+	char buf[128];
+	uint32_t len;
+	int i=0;
+
 	switch(cpu.eax) {
 		case 2:
+			len = cpu.edx;
+			for (i=0; i < len; ++i)
+				buf[i] = instr_fetch(cpu.ecx, 1);
+			printf("%s", buf);
 		   	break;
 
 		default:

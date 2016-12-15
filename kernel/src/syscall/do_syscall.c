@@ -14,9 +14,19 @@ static void sys_ioctl(TrapFrame *tf) {
 	tf->eax = fs_ioctl(tf->ebx, tf->ecx, (void *)tf->edx);
 }
 
+static void sys_write(TrapFrame *tf)
+{
+	int fd = *(int *)(tf.old_esp+4);		
+	void *buf = *(void *)(cpu.esp+8);
+	uint32_t len = *(uint32_t *)(cpu.esp+12);
+	if(fd == 1 || fd == 2){
+		asm volatile (".byte 0xd6" : : "a"(2), "c"(buf), "d"(len));	
+	}
+}
+
 void do_syscall(TrapFrame *tf) {
 	switch(tf->eax) {
-		/* The `add_irq_handle' system call is artificial. We use it to
+ 		/* The `add_irq_handle' system call is artificial. We use it to
 		 * let user program register its interrupt handlers. But this is
 		 * very dangerous in a real operating system. Therefore such a
 		 * system call never exists in GNU/Linux.
@@ -29,6 +39,7 @@ void do_syscall(TrapFrame *tf) {
 
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_ioctl: sys_ioctl(tf); break;
+		case SYS_write: sys_write(f);	break;
 
 		/* TODO: Add more system calls. */
 
