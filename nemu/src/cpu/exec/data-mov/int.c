@@ -19,7 +19,7 @@ make_helper(int_i_b)
 	swaddr_write(cpu.esp, 2, cpu.CS.selector, 1);
 
 	cpu.esp -= 4;
-	swaddr_write(cpu.esp, 2, cpu.eip+len+1, 1);
+	swaddr_write(cpu.esp, 4, cpu.eip+len+1, 1);
 
 	print_asm("intb");
 
