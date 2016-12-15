@@ -16,9 +16,9 @@ static void sys_ioctl(TrapFrame *tf) {
 
 static void sys_write(TrapFrame *tf)
 {
-	int fd = *(int *)(tf.old_esp+4);		
-	void *buf = *(void *)(cpu.esp+8);
-	uint32_t len = *(uint32_t *)(cpu.esp+12);
+	int fd = *(int *)(tf->old_esp+4);		
+	void *buf = *(uint32_t *)(tf->old_esp+8);
+	uint32_t len = *(uint32_t *)(tf->old_esp+12);
 	if(fd == 1 || fd == 2){
 		asm volatile (".byte 0xd6" : : "a"(2), "c"(buf), "d"(len));	
 	}
@@ -39,7 +39,7 @@ void do_syscall(TrapFrame *tf) {
 
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_ioctl: sys_ioctl(tf); break;
-		case SYS_write: sys_write(f);	break;
+		case SYS_write: sys_write(tf);	break;
 
 		/* TODO: Add more system calls. */
 
