@@ -36,7 +36,6 @@ make_helper(iret)
 {
 	printf("iret\n");
 	//pop %eip
-	assert(cpu.CR0.PE == 0);
 	cpu.eip = swaddr_read(cpu.esp, 4, 1)-1;
 	cpu.esp += 4;
 	
