@@ -48,3 +48,11 @@ make_helper(nemu_trap) {
 	return 1;
 }
 
+make_helper(hlt)
+{
+	while(true){
+		if(!cpu.EFLAGES.IF || cpu.INTR)
+			break;
+	}	
+	return 1;
+}
