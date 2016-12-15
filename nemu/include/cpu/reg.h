@@ -66,14 +66,14 @@ typedef union {
 	struct {
 		uint64_t _64;
 		uint16_t selector;
-	};
+	}; 
 	struct {
 		union {
 			struct{
 				uint32_t base;
 				uint32_t limit	:20;
 				uint32_t DPL	:2;	
-			};
+		 	};
 			uint64_t cache;
 		};
 		uint16_t RPL:	2;
@@ -130,6 +130,7 @@ typedef	struct {
 	SEG_IDTR IDTR;
 	SEG_CR0 CR0;
 	CR3 CR3;
+	bool INTR;
 /*
 	union{
 		struct {
