@@ -11,6 +11,11 @@
  */
 #define MAX_INSTR_TO_PRINT 32
 
+uint8_t i8259_query_intr();
+void i8259_ack_intr();
+void raise_intr(uint8_t NO);
+
+
 int nemu_state = STOP;
 
 int exec(swaddr_t);
@@ -53,13 +58,13 @@ void cpu_exec(volatile uint32_t n) {
 	for(; n > 0; n --) {
 #ifdef DEBUG
 		swaddr_t eip_temp = cpu.eip;
- 		if((n & 0xffff) == 0) {
+  		if((n & 0xffff) == 0) {
 			/* Output some dots while executing the program. */
 			fputc('.', stderr);
 		}
 #endif
 
-		/* Execute one instruction, including instruction fetch,
+ 		/* Execute one instruction, including instruction fetch,
 		 * instruction decode, and the actual execution. */
 		int instr_len = exec(cpu.eip);
 
@@ -71,7 +76,7 @@ void cpu_exec(volatile uint32_t n) {
 		Log_write("%s\n", asm_buf);
  		if(n_temp < MAX_INSTR_TO_PRINT) {
 			printf("%s\n", asm_buf);
-		}
+ 		}
 #endif
 
 		/* TODO: check watchpoints here. */
@@ -86,12 +91,12 @@ void cpu_exec(volatile uint32_t n) {
 			}
 			current = current->next;
 		}
-		*/
+ 		*/
 		bool change = false;
 		detect_wp(&change);
 		if(change == true) {
 			nemu_state = STOP;	
-		}
+ 		}
 	
 
 #ifdef HAS_DEVICE
@@ -100,6 +105,13 @@ void cpu_exec(volatile uint32_t n) {
 #endif
 
 		if(nemu_state != RUNNING) { return; }
+//INTE
+		if(cpu.INTR & cpu.EFLAGES.IF){
+			uint32_t intr_no = i8259_query_intr();
+			i8259_ack_intr();
+			raise_intr(intr_no);
+		}
+
  	}
 
 	if(nemu_state == RUNNING) { nemu_state = STOP; }
