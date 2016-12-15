@@ -17,7 +17,7 @@ make_helper(concat(in_i2a_, SUFFIX))
 
 make_helper(concat(in_d2a_, SUFFIX))
 {
-	REG(R_EAX) = pio_read(reg_w(R_EDX), DATA_BYTE);	
+	REG(R_EAX) = pio_read(reg_w(R_DX), DATA_BYTE);	
 
 	print_asm("in" str(SUFFIX) "%%DX, %%%s", REG_NAME(R_EAX));
 
@@ -38,7 +38,7 @@ make_helper(concat(out_a2i_, SUFFIX))
 
 make_helper(concat(out_a2d_, SUFFIX))
 {
-	pio_write(reg_w(R_EDX), DATA_BYTE, REG(R_EAX));	
+	pio_write(reg_w(R_DX), DATA_BYTE, REG(R_EAX));	
 
 	print_asm("out" str(SUFFIX) "%%%s, %%DX",  REG_NAME(R_EAX));
 
