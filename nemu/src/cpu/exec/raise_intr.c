@@ -30,9 +30,9 @@ void raise_intr(uint8_t NO)
 /* TODO: Trigger an interrupt/exception with 'NO'
  *That is, use 'NO' to index the IDT.
 */
-	printf("raise_intr\n");
+//	printf("raise_intr\n");
 	uint32_t idt_addr = cpu.IDTR.base + 8 * NO;
-	printf("idt_base: %x  ,idt_addr: %x\n", cpu.IDTR.base, idt_addr);
+//	printf("idt_base: %x  ,idt_addr: %x\n", cpu.IDTR.base, idt_addr);
 	GateDesc idt;
 	idt.val_l = swaddr_read(idt_addr, 4, 1);
 	idt.val_h = swaddr_read(idt_addr+4, 4, 1);
@@ -53,7 +53,7 @@ void raise_intr(uint8_t NO)
 	}
 
 	cpu.eip = (idt.offset_31_16 << 16) + idt.offset_15_0 + cpu.CS.base;
-	printf("cpu.eip:%x\n", cpu.eip);
+//	printf("cpu.eip:%x\n", cpu.eip);
 //	cpu.eip -= 2;
 /*Jump back to cpu_exec() */	
 	longjmp(jbuf, 1);
