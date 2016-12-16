@@ -38,6 +38,7 @@ void raise_intr(uint8_t NO)
 	idt.val_h = swaddr_read(idt_addr+4, 4, 1);
 	assert(idt.present == 1);
 
+	cpu.esp -= 4;
 	swaddr_write(cpu.esp, 4, cpu.EFLAGES.eflages, 1);
 	cpu.EFLAGES.IF = 0;
 	cpu.EFLAGES.TF = 0;
@@ -58,7 +59,7 @@ void raise_intr(uint8_t NO)
 		cpu.CS.base = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16)     + gdt.base_15_0;
 		cpu.CS.limit = (gdt.limit_19_16 << 16) + gdt.limit_15_0;
 		cpu.CS.DPL = gdt.privilege_level;
-	}
+ 	}
 
 	cpu.eip = (idt.offset_31_16 << 16) + idt.offset_15_0;
 //	printf("cpu.eip:%x\n", cpu.eip);
