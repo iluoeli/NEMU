@@ -17,7 +17,7 @@ typedef union{
 		uint32_t offset	:12;
 		uint32_t tag	:20;	
 	};
-	struct {
+ 	struct {
 		uint32_t :	12;
 		uint32_t pte_index:	10;
 		uint32_t pde_index:	10;	
@@ -93,16 +93,16 @@ uint32_t tlb_read(hwaddr_t addr)
 	//		assert(pde.present == 1);
 			if(pde.present != 1)
 			{	printf("invalid addr: %x\n", addr);
-				assert(0);
+				assert(pde.present == 1);
 			}
 
-			tmp_addr = (pde.page_frame << 12) + 4*temp.pte_index;
+			 tmp_addr = (pde.page_frame << 12) + 4*temp.pte_index;
 			PTE pte;
 			pte.val = hwaddr_read(tmp_addr, 4);
 		//	assert(pte.present == 1);
 			if(pte.present != 1){
 				printf("invalid addr: %x\n", addr);
-				assert(0);	
+				assert(pte.present == 1);	
 			}
 					
 			tlb[i].tag = temp.tag;
