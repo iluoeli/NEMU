@@ -60,6 +60,15 @@ make_helper(cli)
 	return 1;
 }
 
+make_helper(sti)
+{
+	cpu.EFLAGES.IF = 1;
+
+	print_asm("sti");
+
+	return 1;	
+}
+
 make_helper(pusha)
 {
 //	printf("pusha\n");
