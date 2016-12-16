@@ -41,12 +41,12 @@ static void do_i8259() {
 	if(master_irq == NO_INTR) {
 		/* TODO: Uncomment the following line after the `INTR' member
 		 * is added to the CPU_state structure.
-		 */
-		// cpu.INTR = false;
-		panic("uncomment the line above");
+ 		 */
+		cpu.INTR = false;
+		//panic("uncomment the line above");
 		return;
 	}
-	else if(master_irq == 2) {
+ 	else if(master_irq == 2) {
 		assert(slave.highest_irq != NO_INTR);
 		master_irq = 8 + slave.highest_irq;
 	}
@@ -64,14 +64,14 @@ void i8259_raise_intr(int n) {
 	assert(n >= 0 && n < 16);
 	if(n < 8) {
 		master.IRR |= MASK(n);
-	}
+ 	}
 	else {
 		n -= 8;
 		slave.IRR |= MASK(n);
 		master.IRR |= MASK(2);
 
 		slave.highest_irq = ffo_table[slave.IRR & ~slave.IMR];
-	}
+ 	}
 
 	master.highest_irq = ffo_table[master.IRR & ~master.IMR];
 
@@ -86,13 +86,13 @@ uint8_t i8259_query_intr() {
 void i8259_ack_intr() {
 	if(intr_NO == NO_INTR) {
 		return;
-	}
+ 	}
 
 	int n = intr_NO - IRQ_BASE;
-	if(n < 8) {
+ 	if(n < 8) {
 		master.IRR &= ~MASK(n);
 	}
-	else {
+ 	else {
 		n -= 8;
 		slave.IRR &= ~MASK(n);
 		master.IRR &= ~MASK(2);
