@@ -18,14 +18,15 @@ void create_video_mapping() {
 	 * some page tables to create this mapping.
 	 */
 	PDE *kpdir = get_updir();	
-	PDE *pdir = (kpdir);
-	PTE *ptable = (vptable);
+	PDE *pdir = va_to_pa(kpdir);
+	PTE *ptable = va_to_pa(vptable);
 
 	uint32_t nr_ptable = SCR_SIZE/PAGE_SIZE + 1;
 	uint32_t pdir_idx = (VMEM_ADDR >> 22) & 0x3ff;
 	uint32_t pte_idx = (VMEM_ADDR >> 12) & 0x3ff;
 	uint32_t pframe_addr = VMEM_ADDR+PAGE_SIZE * nr_ptable;
 
+	assert(pdir[pdir_idx].present == 1);
     uint32_t pte_addr = (pdir[pdir_idx].page_frame << 12) + 4 * (pte_idx+nr_ptable);
 
 //	pdir[pdir_idx + KOFFSET / PT_SIZE].val = make_pde(ptable);
