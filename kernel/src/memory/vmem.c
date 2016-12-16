@@ -46,7 +46,7 @@ void create_video_mapping() {
 
 void video_mapping_write_test() {
 	int i;
-	Log("begin test\n");
+	Log("begin write\n");
 	uint32_t *buf = (void *)VMEM_ADDR;
  	for(i = 0; i < SCR_SIZE / 4; i ++) {
 		buf[i] = i;
@@ -54,6 +54,7 @@ void video_mapping_write_test() {
 }
 
 void video_mapping_read_test() {
+	Log("test begin\n");
 	int i;
 	uint32_t *buf = (void *)VMEM_ADDR;
 	for(i = 0; i < SCR_SIZE / 4; i ++) {
