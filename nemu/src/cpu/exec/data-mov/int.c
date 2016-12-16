@@ -9,7 +9,7 @@ make_helper(int_i_b)
 	//real-address-mode
 	//push eflages, push cs, push eip
 //	assert(cpu.CR0.PE == 0);
-	cpu.esp -= 4;	
+/*	cpu.esp -= 4;	
 	swaddr_write(cpu.esp, 4, cpu.EFLAGES.eflages, 1);
 
 	cpu.EFLAGES.IF = 0;
@@ -20,7 +20,7 @@ make_helper(int_i_b)
 
 	cpu.esp -= 4;
 	swaddr_write(cpu.esp, 4, cpu.eip+len+1, 1);
-
+*/
 	print_asm("int 0x%x", op_src->val);
 
 	//then jmp eroor process

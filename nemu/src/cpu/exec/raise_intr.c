@@ -29,7 +29,7 @@ void raise_intr(uint8_t NO)
 {
 /* TODO: Trigger an interrupt/exception with 'NO'
  *That is, use 'NO' to index the IDT.
-*/
+ */
 //	printf("raise_intr\n");
 	uint32_t idt_addr = cpu.IDTR.base + 8 * NO;
 //	printf("idt_base: %x  ,idt_addr: %x\n", cpu.IDTR.base, idt_addr);
@@ -37,6 +37,14 @@ void raise_intr(uint8_t NO)
 	idt.val_l = swaddr_read(idt_addr, 4, 1);
 	idt.val_h = swaddr_read(idt_addr+4, 4, 1);
 	assert(idt.present == 1);
+
+	swaddr_write(cpu.esp, 4, cpu.EFLAGES.eflages, 1);
+	cpu.EFLAGES.IF = 0;
+	cpu.EFLAGES.TF = 0;
+	cpu.esp -= 4;
+	swaddr_write(cpu.esp, 2, cpu.CS.selector, 1);
+	cpu.esp -= 4;
+	swaddr_write(cpu.esp, 4, cpu.eip+2, 1);
 
 	cpu.CS.selector = idt.segment;
 	//updata cs cache	
