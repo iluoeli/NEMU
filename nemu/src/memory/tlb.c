@@ -90,7 +90,11 @@ uint32_t tlb_read(hwaddr_t addr)
 			uint32_t tmp_addr = (cpu.CR3.page_directory_base << 12) + 4*temp.pde_index;
 			PDE pde;
 			pde.val = hwaddr_read(tmp_addr, 4);
-			assert(pde.present == 1);
+	//		assert(pde.present == 1);
+			if(pde.present != 1)
+			{	printf("invalid addr: %x\n", addr);
+				assert(0);
+			}
 
 			tmp_addr = (pde.page_frame << 12) + 4*temp.pte_index;
 			PTE pte;
