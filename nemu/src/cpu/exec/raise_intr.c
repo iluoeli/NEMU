@@ -44,7 +44,7 @@ void raise_intr(uint8_t NO)
 	cpu.esp -= 4;
 	swaddr_write(cpu.esp, 2, cpu.CS.selector, 1);
 	cpu.esp -= 4;
-	swaddr_write(cpu.esp, 4, cpu.eip+2, 1);
+	swaddr_write(cpu.esp, 4, cpu.eip, 1);
 
 	cpu.CS.selector = idt.segment;
 	//updata cs cache	
