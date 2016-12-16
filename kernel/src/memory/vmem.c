@@ -25,7 +25,7 @@ void create_video_mapping() {
 	uint32_t pdir_idx = (VMEM_ADDR >> 22) & 0x3ff;
 //	uint32_t pte_idx = (VMEM_ADDR >> 12) & 0x3ff;
 
-	assert(pdir[pdir_idx].present == 1);
+//	assert(pdir[pdir_idx].present == 1);
 	pdir[pdir_idx].val = make_pde(ptable);
 //	pdir[pdir_idx + KOFFSET / PT_SIZE].val = make_pde(ptable);
 
