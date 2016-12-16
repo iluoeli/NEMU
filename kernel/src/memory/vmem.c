@@ -30,10 +30,11 @@ void create_video_mapping() {
 	pdir[pdir_idx + KOFFSET / PT_SIZE].val = make_pde(ptable);
 
 	assert(pdir[pdir_idx].present == 1);
-    uint32_t pte_addr = (pdir[pdir_idx].page_frame << 12) + 4 * (pte_idx+nr_ptable);
 
-	ptable = (PTE *)(pte_addr);
-	
+ //   uint32_t pte_addr = (pdir[pdir_idx].page_frame << 12) + 4 * (pte_idx+nr_ptable);
+
+//	ptable = (PTE *)(pte_addr);
+	ptable += nr_ptable;	
 
     for (; pframe_addr >= VMEM_ADDR; pframe_addr -= PAGE_SIZE) {
 		ptable->val = make_pte(pframe_addr);
