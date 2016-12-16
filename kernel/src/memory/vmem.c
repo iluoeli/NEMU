@@ -18,7 +18,7 @@ void create_video_mapping() {
 	 * some page tables to create this mapping.
 	 */
 	PDE *kpdir = get_updir();	
-	PDE *pdir = va_to_pa(kpdir);
+	PDE *pdir = (kpdir);
 	PTE *ptable = (vptable);
 
 //	uint32_t nr_ptable = SCR_SIZE/PAGE_SIZE + 1;
@@ -27,6 +27,7 @@ void create_video_mapping() {
 
 	pdir[pdir_idx].val = make_pde(ptable);
 //	pdir[pdir_idx + KOFFSET / PT_SIZE].val = make_pde(ptable);
+	assert(pdir[pdir_idx].present == 1);
 
 	assert(pdir[pdir_idx].present == 1);
 
