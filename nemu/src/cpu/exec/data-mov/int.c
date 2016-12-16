@@ -22,7 +22,10 @@ make_helper(int_i_b)
 	swaddr_write(cpu.esp, 4, cpu.eip+len+1, 1);
 */
 //	printf("int 0x%x", op_src->val);
-//	cpu.eip += len+1;
+
+//warning: should I add this ?
+	cpu.eip += len+1;
+
 	print_asm("int 0x%x", op_src->val);
 
 	//then jmp eroor process
