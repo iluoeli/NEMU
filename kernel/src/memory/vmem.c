@@ -34,7 +34,7 @@ void create_video_mapping() {
 
 //	ptable = (PTE *)(pte_addr);
 	ptable += nr_ptable-1;	
-	uint32_t pframe_addr = VMEM_ADDR+PAGE_SIZE * nr_ptable;
+	uint32_t pframe_addr = VMEM_ADDR+PAGE_SIZE * (nr_ptable-1);
 
     for (; pframe_addr >= VMEM_ADDR; pframe_addr -= PAGE_SIZE) {
 		ptable->val = make_pte(pframe_addr);
