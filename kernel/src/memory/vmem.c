@@ -27,7 +27,7 @@ void create_video_mapping() {
 
 //	assert(pdir[pdir_idx].present == 1);
 	pdir[pdir_idx].val = make_pde(ptable);
-//	pdir[pdir_idx + KOFFSET / PT_SIZE].val = make_pde(ptable);
+	pdir[pdir_idx + KOFFSET / PT_SIZE].val = make_pde(ptable);
 
 	assert(pdir[pdir_idx].present == 1);
 
