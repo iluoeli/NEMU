@@ -24,7 +24,6 @@ void create_video_mapping() {
 	uint32_t nr_ptable = SCR_SIZE/PAGE_SIZE + 1;
 	uint32_t pdir_idx = (VMEM_ADDR >> 22) & 0x3ff;
 	uint32_t pte_idx = (VMEM_ADDR >> 12) & 0x3ff;
-	uint32_t pframe_addr = VMEM_ADDR+PAGE_SIZE * nr_ptable;
 
 	pdir[pdir_idx].val = make_pde(ptable);
 	pdir[pdir_idx + KOFFSET / PT_SIZE].val = make_pde(ptable);
@@ -34,7 +33,8 @@ void create_video_mapping() {
  //   uint32_t pte_addr = (pdir[pdir_idx].page_frame << 12) + 4 * (pte_idx+nr_ptable);
 
 //	ptable = (PTE *)(pte_addr);
-	ptable += nr_ptable;	
+	ptable += nr_ptable-1;	
+	uint32_t pframe_addr = VMEM_ADDR+PAGE_SIZE * nr_ptable;
 
     for (; pframe_addr >= VMEM_ADDR; pframe_addr -= PAGE_SIZE) {
 		ptable->val = make_pte(pframe_addr);
