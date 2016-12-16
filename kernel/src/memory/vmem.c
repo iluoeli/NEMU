@@ -22,7 +22,7 @@ void create_video_mapping() {
 	PTE *ptable = (vptable);
 
 //	uint32_t nr_ptable = SCR_SIZE/PAGE_SIZE + 1;
-	uint32_t pdir_idx = (VMEM_ADDR >> 21) & 0x3ff;
+	uint32_t pdir_idx = (VMEM_ADDR >> 22) & 0x3ff;
 //	uint32_t pte_idx = (VMEM_ADDR >> 12) & 0x3ff;
 
 //	assert(pdir[pdir_idx].present == 1);
@@ -31,14 +31,23 @@ void create_video_mapping() {
 
 	assert(pdir[pdir_idx].present == 1);
 
-	ptable += NR_PTE-1;	
+	ptable += NR_PTE;	
 	uint32_t pframe_addr = NR_PTE * PAGE_SIZE-PAGE_SIZE;
 
+	asm volatile ("std;\
+	      1: stosl;\
+	         subl %0, %%eax;\
+             jge 1b;\
+             cld" : :
+	          "i"(PAGE_SIZE), "a"((pframe_addr) | 0x7), "D"(ptable - 1));
+ 
+
+/*
     for (; pframe_addr >= 0; pframe_addr -= PAGE_SIZE) {
 		ptable->val = make_pte(pframe_addr);
 		ptable --;
 	} 
-
+*/
 
 
 //	panic("please implement me");
