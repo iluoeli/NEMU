@@ -164,7 +164,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 
 			assert(base_addr == 0);
 			return (base_addr + addr);*/
-			assert(cpu.sr[sreg].DPL >= cpu.CS.DPL && cpu.sr[sreg].DPL >= cpu.sr[sreg].RPL);
+	//		assert(cpu.sr[sreg].DPL >= cpu.CS.DPL && cpu.sr[sreg].DPL >= cpu.sr[sreg].RPL);
 			return (cpu.sr[sreg].base+addr);
 		}			
 	}
