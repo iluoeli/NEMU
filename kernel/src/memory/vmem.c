@@ -19,10 +19,10 @@ void create_video_mapping() {
 	 */
 	PDE *kpdir = get_updir();	
 	PDE *pdir = va_to_pa(kpdir);
-	PTE *ptable = va_to_pa(vptable);
+	PTE *ptable = (vptable);
 
 //	uint32_t nr_ptable = SCR_SIZE/PAGE_SIZE + 1;
-	uint32_t pdir_idx = 0;//(VMEM_ADDR >> 22) & 0x3ff;
+	uint32_t pdir_idx = (VMEM_ADDR >> 22) & 0x3ff;
 //	uint32_t pte_idx = (VMEM_ADDR >> 12) & 0x3ff;
 
 //	assert(pdir[pdir_idx].present == 1);
