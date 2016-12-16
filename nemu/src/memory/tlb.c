@@ -78,7 +78,7 @@ uint32_t tlb_read(hwaddr_t addr)
 	int i;
 	bool hit = false;
 	for (i=0; i < TLB_SIZE; ++i){
-		if(tlb[i].valid && tlb[i].tag == tag){
+		 if(tlb[i].valid && tlb[i].tag == tag){
 			hit = true;	break;	
 		}
 	}
@@ -95,8 +95,12 @@ uint32_t tlb_read(hwaddr_t addr)
 			tmp_addr = (pde.page_frame << 12) + 4*temp.pte_index;
 			PTE pte;
 			pte.val = hwaddr_read(tmp_addr, 4);
-			assert(pte.present == 1);
-			
+		//	assert(pte.present == 1);
+			if(pte.present != 1){
+				printf("invalid addr: %x\n", addr);
+				assert(0);	
+			}
+					
 			tlb[i].tag = temp.tag;
 			tlb[i].page_frame = pte.page_frame;
 			tlb[i].valid = true;
