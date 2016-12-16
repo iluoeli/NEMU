@@ -61,6 +61,7 @@ void video_mapping_read_test() {
 	for(i = 0; i < SCR_SIZE / 4; i ++) {
 		assert(buf[i] == i);
  	}
+	Log("test right\n");
 }
 
 void video_mapping_clear() {

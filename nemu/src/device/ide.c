@@ -21,7 +21,7 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 	assert(byte_cnt <= 512);
 	int ret;
 	if(is_write) {
-		if(addr - IDE_PORT == 0 && len == 4) {
+		if( addr - IDE_PORT == 0 && len == 4) {
 			/* write 4 bytes data to disk */
 			assert(ide_write);
 			ret = fwrite(ide_port_base, 4, 1, disk_fp);
@@ -31,9 +31,9 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 			if(byte_cnt == 512) {
 				/* finish */
 				ide_port_base[7] = 0x40;
-			}
+	 		}
 		}
-		else if(addr - IDE_PORT == 7) {
+	 	else if(addr - IDE_PORT == 7) {
 			if(ide_port_base[7] == 0x20 || ide_port_base[7] == 0x30) {
 				/* command: read/write */
 				sector = (ide_port_base[6] & 0x1f) << 24 | ide_port_base[5] << 16
@@ -43,24 +43,24 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 
 				byte_cnt = 0;
 
-				if(ide_port_base[7] == 0x20) {
+ 				if(ide_port_base[7] == 0x20) {
 					/* command: read from disk */
 					ide_write = false;
 					ide_port_base[7] = 0x40;
 					i8259_raise_intr(IDE_IRQ);
 				}
-				else {
+ 				else {
 					/* command: write to disk */
 					ide_write = true;
 				}
-			}
-			else if (ide_port_base[7] == 0xc8) {
+ 			}
+ 			else if (ide_port_base[7] == 0xc8) {
 				/* command: DMA read */
 
-				/* Nothing to do here. The actual read operation is
+ 				/* Nothing to do here. The actual read operation is
 				 * issued by write commands to the bus master register. */
 			}
-			else {
+ 			else {
 				/* not implemented command */
 				assert(0);
 			}
@@ -77,9 +77,9 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 			if(byte_cnt == 512) {
 				/* finish */
 				ide_port_base[7] = 0x40;
-			}
-		}
-	}
+ 			}
+ 		}
+ 	}
 }
 
 void bmr_io_handler(ioaddr_t addr, size_t len, bool is_write) {
@@ -112,14 +112,14 @@ void bmr_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 					/* finish */
 					ide_port_base[7] = 0x40;
 					i8259_raise_intr(IDE_IRQ);
-				}
+ 				}
 				else {
 					/* DMA write is not implemented */
 					assert(0);
 				}
-			}
-		}
-	}
+ 			}
+ 		}
+ 	}
 }
 
 void init_ide() {
