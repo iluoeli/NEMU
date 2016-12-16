@@ -50,6 +50,7 @@ void video_mapping_write_test() {
  	for(i = 0; i < SCR_SIZE / 4; i ++) {
 		buf[i] = i;
  	}
+	Log("end write\n");
 }
 
 void video_mapping_read_test() {
