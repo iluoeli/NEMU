@@ -79,9 +79,9 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 		i = randomGenerator() % NR_WAY;
 		int j=0;
 		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
- 	 	for (; j < BLOCK_SIZE; ++j) {
-			//cache[set][i].data[j] = dram_read(addr_block + j, 1);
-			cache[set][i].data[j] = cacheL2_read(addr_block + j, 1);
+ 	  	for (; j < BLOCK_SIZE; ++j) {
+			cache[set][i].data[j] = dram_read(addr_block + j, 1);
+			//cache[set][i].data[j] = cacheL2_read(addr_block + j, 1);
  		}	
 		cache[set][i].tag = tag;
 		cache[set][i].valid = true;
@@ -119,17 +119,17 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 				else
 					cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
   			}
-			//dram_write(addr, len, data);
-			cacheL2_write(addr, len, data);
+			dram_write(addr, len, data);
+			//cacheL2_write(addr, len, data);
 			break;
- 		}	
- 	}
+  		}	
+  	}
 	
  	if(!hit){//count +=2;
 		//not write allocate
-	//	dram_write(addr, len, data);
-		cacheL2_write(addr, len, data);
- 	}
+		dram_write(addr, len, data);
+		//cacheL2_write(addr, len, data);
+  	}
 	//else count +=200;
 }
 

@@ -65,15 +65,14 @@ uint32_t cacheL2_read(hwaddr_t addr, size_t len)
 	uint32_t buf[2];
 	int i=0;
 	for (; i < NR_WAY; ++i){
-		if(cacheL2[set][i].valid && cacheL2[set][i].tag == tag) {
+ 		if(cacheL2[set][i].valid && cacheL2[set][i].tag == tag) {
 			hit = true;
 			break;
 		}	
 	}
 
 	if(!hit) {
-		uint32_t random = randomGenerator() % NR_WAY;
-		i = random;
+		i = randomGenerator() % NR_WAY;
 		int j=0;
 		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
 
@@ -95,7 +94,7 @@ uint32_t cacheL2_read(hwaddr_t addr, size_t len)
 		cacheL2[set][i].tag = tag;
 		cacheL2[set][i].valid = true;
 		cacheL2[set][i].dirty = false;
-	}
+ 	}
 
 	memset(buf, 0, 8);
 	buf[0] = *(uint32_t *)(cacheL2[set][i].data + block);
