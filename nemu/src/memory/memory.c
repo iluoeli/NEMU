@@ -87,7 +87,7 @@ void mmio_write(hwaddr_t addr, size_t len, uint32_t data, int map_NO);
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	int map_NO = is_mmio(addr);
 	if(map_NO == -1)
-		return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
+		return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
 	else 
 		return mmio_read(addr, len, map_NO);
 
@@ -97,7 +97,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	int map_NO = is_mmio(addr);
 	if(map_NO == -1)
-		cache_write(addr, len, data);
+		dram_write(addr, len, data);
 	else 
 		mmio_write(addr, len , data, map_NO);
 //	dram_write(addr, len, data);
@@ -165,6 +165,7 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 			assert(base_addr == 0);
 	 		return (base_addr + addr);*/
 			assert(cpu.sr[sreg].DPL >= cpu.CS.DPL && cpu.sr[sreg].DPL >= cpu.sr[sreg].RPL);
+			assert(cpu.sr[sreg].base == 0);
 			return (cpu.sr[sreg].base+addr);
 		}			
 	}
