@@ -59,7 +59,7 @@ make_helper(mov_r2cr)
 		cpu.CR0._32 = REG(R_EAX);
 		print_asm("movl" " %%%s, CR0", REG_NAME(reg));
 	}
-	else if(cr_reg == 3){
+ 	else if(cr_reg == 3){
 		cpu.CR3.val = REG(R_EAX);
 		//when updata CR3, brush TLB in case of error
 		init_TLB();
@@ -127,13 +127,13 @@ make_helper(mov_r2sr_w)
 		uint32_t gdt_base = cpu.GDTR.base;
 		SegDesc gdt;
 		uint32_t tmp_addr =  (gdt_base + 8*cpu.sr[nr_sr].index);
-		gdt.val_1 = hwaddr_read(tmp_addr, 4);
-		gdt.val_2 = hwaddr_read(tmp_addr+4, 4);
+		gdt.val_1 = lnaddr_read(tmp_addr, 4);
+		gdt.val_2 = lnaddr_read(tmp_addr+4, 4);
 		assert(gdt.present == 1);
 		cpu.sr[nr_sr].base = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
 		cpu.sr[nr_sr].limit = (gdt.limit_19_16 << 16) + gdt.limit_15_0;	 
 		cpu.sr[nr_sr].DPL = gdt.privilege_level;
-	}	
+ 	}	
 
 	//print_asm("movw" " %%%s, sr[%d]", REG_NAME(nr_gpr), nr_sr);
 	print_asm("movw" " %%%s,%s",  REG_NAME(nr_gpr), sr_name);
