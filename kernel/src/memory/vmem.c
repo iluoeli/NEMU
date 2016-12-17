@@ -55,22 +55,22 @@ void create_video_mapping() {
 
 void video_mapping_write_test() {
 	int i;
-	Log("begin write\n");
+//	Log("begin write\n");
 	uint32_t *buf = (void *)VMEM_ADDR;
  	for(i = 0; i < SCR_SIZE / 4; i ++) {
 		buf[i] = i;
  	}
-	Log("end write\n");
+//	Log("end write\n");
 }
 
 void video_mapping_read_test() {
-	Log("test begin\n");
+//	Log("test begin\n");
 	int i;
 	uint32_t *buf = (void *)VMEM_ADDR;
 	for(i = 0; i < SCR_SIZE / 4; i ++) {
 		assert(buf[i] == i);
  	}
-	Log("test right\n");
+//	Log("test right\n");
 }
 
 void video_mapping_clear() {
