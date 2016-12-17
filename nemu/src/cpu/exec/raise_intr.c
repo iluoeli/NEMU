@@ -34,8 +34,8 @@ void raise_intr(uint8_t NO)
 	uint32_t idt_addr = cpu.IDTR.base + 8 * NO;
 //	printf("idt_base: %x  ,idt_addr: %x\n", cpu.IDTR.base, idt_addr);
 	GateDesc idt;
-	idt.val_l = swaddr_read(idt_addr, 4, 1);
-	idt.val_h = swaddr_read(idt_addr+4, 4, 1);
+	idt.val_l = lnaddr_read(idt_addr, 4);
+	idt.val_h = lnaddr_read(idt_addr+4, 4);
 	assert(idt.present == 1);
 
 	cpu.esp -= 4;
