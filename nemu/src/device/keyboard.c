@@ -17,7 +17,7 @@ void keyboard_intr(uint8_t scancode) {
 }
 
 void i8042_io_handler(ioaddr_t addr, size_t len, bool is_write) {
-	if(!is_write) {
+ 	if(!is_write) {
 		newkey = false;
 	}
 }
