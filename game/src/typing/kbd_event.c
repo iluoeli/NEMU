@@ -7,6 +7,6 @@ void add_irq_handle(int , void  (*) (void));
 void keyboard_event();
 
 void init_kbd() {
-	add_irq_handle(KBD_PORT, keyboard_event);
+	add_irq_handle(1, keyboard_event);
 }
 
