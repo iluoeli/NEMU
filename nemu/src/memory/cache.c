@@ -69,7 +69,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	uint32_t buf[2];
 	int i=0;
 	for (; i < NR_WAY; ++i){
- 		if(cache[set][i].valid && cache[set][i].tag == tag) {
+  		if(cache[set][i].valid && cache[set][i].tag == tag) {
 			hit = true;
 			break;
  	 	}	
@@ -90,7 +90,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	memset(buf, 0, 8);
 	buf[0] = *(uint32_t *)(cache[set][i].data + block);
 	//if cross block
-	if((temp.block+ offset + len) > BLOCK_SIZE) 
+	if((temp.block+ offset + len) >= BLOCK_SIZE) 
 		buf[1] = cache_read((temp.addr + 4), 4);
 	else 
 		buf[1] = *(uint32_t *)(cache[set][i].data + block+4);
@@ -114,7 +114,7 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 			int j=0;
 			//if cross block
  			for (; j < len; ++j) {
-				if((block + j) > BLOCK_SIZE)
+				if((block + j) >= BLOCK_SIZE)
 					cache_write(addr+j, 1, (data >> (8*j)) & 0xff);
 				else
 					cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
