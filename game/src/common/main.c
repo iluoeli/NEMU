@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 void init_timer();
+void init_kbd();
 void main_loop();
 
 void add_irq_handle(int irq, void *handler) {
@@ -14,6 +15,8 @@ void add_irq_handle(int irq, void *handler) {
 int
 main(void) {
 	init_timer();
+	
+	init_kbd();
 
 	add_irq_handle(0, timer_event);
 
