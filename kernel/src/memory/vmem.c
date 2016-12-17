@@ -18,7 +18,7 @@ void create_video_mapping() {
 	 * some page tables to create this mapping.
 	 */
 	PDE *kpdir = get_updir();	
-	PDE *pdir = (kpdir);
+	PDE *pdir = va_to_pa(kpdir);
 	PTE *ptable = (vptable);
 
 //	uint32_t nr_ptable = SCR_SIZE/PAGE_SIZE + 1;

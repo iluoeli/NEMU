@@ -89,7 +89,7 @@ uint32_t tlb_read(hwaddr_t addr)
 			i = randomGenerator() % TLB_SIZE;
 			uint32_t tmp_addr = (cpu.CR3.page_directory_base << 12) + 4*temp.pde_index;
 			PDE pde;
-			pde.val = lnaddr_read(tmp_addr, 4);
+			pde.val = hwaddr_read(tmp_addr, 4);
 	//		assert(pde.present == 1);
 			if(pde.present != 1)
 			{	printf("invalid addr: %x\n", addr);
@@ -98,7 +98,7 @@ uint32_t tlb_read(hwaddr_t addr)
 
 			 tmp_addr = (pde.page_frame << 12) + 4*temp.pte_index;
 			PTE pte;
-			pte.val = lnaddr_read(tmp_addr, 4);
+			pte.val = hwaddr_read(tmp_addr, 4);
 		//	assert(pte.present == 1);
 			if(pte.present != 1){
 				printf("invalid addr: %x\n", addr);
