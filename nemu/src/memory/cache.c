@@ -80,7 +80,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 		int j=0;
 		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
  	  	for (; j < BLOCK_SIZE; ++j) {
-			cache[set][i].data[j] = dram_read(addr_block + j, 1);
+			cache[set][i].data[j] = dram_read(addr_block + j, 1) & 0xff;
 			//cache[set][i].data[j] = cacheL2_read(addr_block + j, 1);
   		}	
 		cache[set][i].tag = tag;
