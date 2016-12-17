@@ -56,7 +56,7 @@ void raise_intr(uint8_t NO)
 		gdt.val_l = lnaddr_read(tmp_addr, 4);
 		gdt.val_h = lnaddr_read(tmp_addr+4, 4);
 		assert(gdt.present == 1);
-		cpu.CS.base = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16)     + gdt.base_15_0;
+		cpu.CS.base = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16) + gdt.base_15_0;
 		cpu.CS.limit = (gdt.limit_19_16 << 16) + gdt.limit_15_0;
 		cpu.CS.DPL = gdt.privilege_level;
  	}
