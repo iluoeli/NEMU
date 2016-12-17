@@ -40,7 +40,7 @@ make_helper(mov_cr2r)
 		OPERAND_W(op_src, cpu.CR0._32);
 		print_asm("movl" " CR0,%%%s", REG_NAME(reg));
 	}
- 	else if(cr_reg == 3) {
+ 	 else if(cr_reg == 3) {
 		OPERAND_W(op_src, cpu.CR3.val);	
 		print_asm("movl" " CR3,%%%s", REG_NAME(reg));
 	}
