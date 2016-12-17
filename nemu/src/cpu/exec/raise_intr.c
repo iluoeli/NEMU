@@ -53,8 +53,8 @@ void raise_intr(uint8_t NO)
 		uint32_t gdt_base = cpu.GDTR.base;
 		SegDesc gdt;
 		uint32_t tmp_addr =  (gdt_base + 8*cpu.CS.index);
-		gdt.val_l = hwaddr_read(tmp_addr, 4);
-		gdt.val_h = hwaddr_read(tmp_addr+4, 4);
+		gdt.val_l = lnaddr_read(tmp_addr, 4);
+		gdt.val_h = lnaddr_read(tmp_addr+4, 4);
 		assert(gdt.present == 1);
 		cpu.CS.base = (gdt.base_31_24 << 24) + (gdt.base_23_16 << 16)     + gdt.base_15_0;
 		cpu.CS.limit = (gdt.limit_19_16 << 16) + gdt.limit_15_0;
