@@ -116,8 +116,9 @@ make_helper(mov_r2sr_w)
 		case 3:	sr_name[0] = 'D';	break;
 		case 4:	sr_name[0] = 'F';	break;
 		case 5:	sr_name[0] = 'G';	break;
-		default :sr_name[0] = 'E';
-				sr_name[1] = 'R';
+		default :assert(0);
+				//sr_name[0] = 'E';
+				//sr_name[1] = 'R';
  	}
 
 //every time sr changed, cache will  update
