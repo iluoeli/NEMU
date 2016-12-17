@@ -4,6 +4,7 @@
 void init_page();
 void init_serial();
 void init_ide();
+void init_kbd();
 void init_i8259();
 void init_segment();
 void init_idt();
@@ -57,6 +58,8 @@ void init_cond() {
 
 	/* Initialize the IDE driver. */
 	init_ide();
+
+	init_kbd();
 
 	/* Enable interrupts. */
 	sti();
