@@ -87,7 +87,7 @@ void mmio_write(hwaddr_t addr, size_t len, uint32_t data, int map_NO);
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	int map_NO = is_mmio(addr);
 	if(map_NO == -1)
-		return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
+		return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
 	else 
 		return mmio_read(addr, len, map_NO);
 
@@ -97,7 +97,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	int map_NO = is_mmio(addr);
 	if(map_NO == -1)
-		dram_write(addr, len, data);
+		cache_write(addr, len, data);
 	else 
 		mmio_write(addr, len , data, map_NO);
 //	dram_write(addr, len, data);
@@ -107,13 +107,13 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 /*	if(data corss the page boundary){
 		assert(0);
-	}*/
+ 	}*/
 //	else 
 	{ 
 		hwaddr_t hwaddr = page_translate(addr);
 		return hwaddr_read(hwaddr, len);
 	
-	}
+ 	}
 
 
 	//return hwaddr_read(addr, len);
@@ -153,9 +153,9 @@ uint32_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 {
 	assert(sreg <= 5 && sreg >= 0);
 	
-	if(cpu.CR0.PE == 1){
- 	  	if(cpu.sr[sreg].TI == 0){
-	/*		uint32_t gdt_base = cpu.GDTR.base;
+ 	if(cpu.CR0.PE == 1){
+  	  	if(cpu.sr[sreg].TI == 0){
+ 	/*		uint32_t gdt_base = cpu.GDTR.base;
 			SegDesc gdt;
 			uint32_t tmp_addr =  (gdt_base + 8*cpu.sr[sreg].index);	
 			gdt.val_1 = hwaddr_read(tmp_addr, 4);
@@ -177,7 +177,7 @@ uint32_t page_translate(hwaddr_t addr)
 	if(cpu.CR0.PE == 1 && cpu.CR0.PG == 1){
 		PAGE_ADDR paddr;
 		paddr.addr = addr;
-/*		uint32_t tmp_addr  = ((cpu.CR3.page_directory_base << 12) + 4*paddr.pde_index);			
+ /*		uint32_t tmp_addr  = ((cpu.CR3.page_directory_base << 12) + 4*paddr.pde_index);			
 		uint32_t val = hwaddr_read(tmp_addr, 4);
 		PDE pde;
 		pde.val = val;
