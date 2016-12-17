@@ -6,5 +6,5 @@ make_helper(bt_r2rm_v)
 		
 	cpu.EFLAGES.CF = (op_src->val >> op_dest->val) & 1;	
 
-	return 1+len;
+	return 2+len;
 }
