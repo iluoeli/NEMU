@@ -60,8 +60,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 //   Assert(addr < HW_MEM_SIZE, "physical address %x is outside of the physical memory!", addr);
 
 	cache_addr temp;
-	uint32_t offset = addr & 3;
-	temp.addr = addr & (~3);
+	uint32_t offset = addr & 3u;
+	temp.addr = addr & (~3u);
 	uint32_t block = temp.block;
 	uint32_t set = temp.set;
 	uint32_t tag = temp.tag;
@@ -119,9 +119,9 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 					cache_write(addr+j, 1, (data >> (8*j)) & 0xff);
 				else {
 					cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
-					dram_write(addr+j, 1, (data >> (8*j)) & 0xff);
+					dram_write(addr+j, 1, (data >> (8*j)) &0xff);
 				}
-    			}
+    		}
 			//dram_write(addr, len, data);
 			//cacheL2_write(addr, len, data);
 			break;
