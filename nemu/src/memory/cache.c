@@ -120,16 +120,16 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 				else
 					cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
     			}
-			//dram_write(addr, len, data);
-			cacheL2_write(addr, len, data);
+			dram_write(addr, len, data);
+			//cacheL2_write(addr, len, data);
 			break;
      		}	
      	}
 	
  	if(!hit){//count +=2;
 	//not write allocate
-		//dram_write(addr, len, data);
-		cacheL2_write(addr, len, data);
+		dram_write(addr, len, data);
+		//cacheL2_write(addr, len, data);
      	}
 	//else count +=200;
 }
