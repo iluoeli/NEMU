@@ -26,7 +26,7 @@ void cacheL2_write(hwaddr_t addr, size_t len, uint32_t data);
 uint64_t count=0;
 */
 typedef union{
-	struct {
+ 	struct {
 		uint32_t block	: BLOCK_WIDTH;
 		uint32_t set	: SET_WIDTH; 
 		uint32_t tag	: (27 - BLOCK_WIDTH - SET_WIDTH);
@@ -109,15 +109,15 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 	bool hit = false;
 	int i = 0;
 	for (; i < NR_WAY; ++i){
-  	 	if(cache[set][i].valid && cache[set][i].tag == tag){
+  	  	if(cache[set][i].valid && cache[set][i].tag == tag){
 			hit = true;
 			//write through
 			int j=0;
 			//if cross block
-  			for (; j < len; ++j) {
+   			for (; j < len; ++j) {
 				if((block + j) >= BLOCK_SIZE) 
 					cache_write(addr+j, 1, (data >> (8*j)) & 0xff);
-				else {
+ 				else {
 					cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
 					dram_write(addr+j, 1, (data >> (8*j)) &0xff);
 				}
@@ -127,12 +127,12 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 			break;
      		}	
      	}
-	
+	assert(hit == false);
  	if(!hit){//count +=2;
 	//not write allocate
 		dram_write(addr, len, data);
 		//cacheL2_write(addr, len, data);
-     	}
+    }
 	//else count +=200;
 }
 
