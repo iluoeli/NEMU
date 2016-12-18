@@ -115,12 +115,14 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 			int j=0;
 			//if cross block
   			for (; j < len; ++j) {
-				if((block + j) >= BLOCK_SIZE)
+				if((block + j) >= BLOCK_SIZE) 
 					cache_write(addr+j, 1, (data >> (8*j)) & 0xff);
-				else
+				else {
 					cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
+					dram_write(addr+j, 1, (data >> (8*j)) & 0xff);
+				}
     			}
-			dram_write(addr, len, data);
+			//dram_write(addr, len, data);
 			//cacheL2_write(addr, len, data);
 			break;
      		}	
