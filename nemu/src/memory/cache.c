@@ -69,19 +69,19 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	uint32_t buf[2];
 	int i=0;
 	for (; i < NR_WAY; ++i){
-   		if(cache[set][i].valid && cache[set][i].tag == tag) {
+    		if(cache[set][i].valid && cache[set][i].tag == tag) {
 			hit = true;
 			break;
   	 	}	
   	} 
 
-   	if(!hit) {//count+=2;
+    	if(!hit) {//count+=2;
 		i = randomGenerator() % NR_WAY;
 		int j=0;
 		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
-  	  	for (; j < BLOCK_SIZE; ++j) {
-			//cache[set][i].data[j] = dram_read(addr_block + j, 1) & 0xff;
-			cache[set][i].data[j] = cacheL2_read(addr_block + j, 1);
+   	  	for (; j < BLOCK_SIZE; ++j) {
+			cache[set][i].data[j] = dram_read(addr_block + j, 1) & 0xff;
+			//cache[set][i].data[j] = cacheL2_read(addr_block + j, 1);
    		}	
 		cache[set][i].tag = tag;
 		cache[set][i].valid = true;
@@ -91,7 +91,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	buf[0] = *(uint32_t *)(cache[set][i].data + block);
 	//if cross block
 	if((temp.block+ offset + len) > BLOCK_SIZE) 
-		buf[1] = cache_read((temp.addr + 4), 4);
+	//	buf[1] = cache_read((temp.addr + 4), 4);
+		buf[1] = dram_read((temp.addr + 4), 4);
 	else 
 		buf[1] = *(uint32_t *)(cache[set][i].data + block+4);
 
@@ -122,14 +123,14 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 			//dram_write(addr, len, data);
 			cacheL2_write(addr, len, data);
 			break;
-    		}	
-    	}
+     		}	
+     	}
 	
  	if(!hit){//count +=2;
 	//not write allocate
 		//dram_write(addr, len, data);
 		cacheL2_write(addr, len, data);
-    	}
+     	}
 	//else count +=200;
 }
 
