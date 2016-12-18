@@ -87,7 +87,7 @@ void mmio_write(hwaddr_t addr, size_t len, uint32_t data, int map_NO);
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	int map_NO = is_mmio(addr);
 	if(map_NO == -1)
-		return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
+		return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
 	else 
 		return mmio_read(addr, len, map_NO);
 
@@ -97,7 +97,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	int map_NO = is_mmio(addr);
 	if(map_NO == -1)
-		dram_write(addr, len, data);
+		cache_write(addr, len, data);
 	else 
 		mmio_write(addr, len , data, map_NO);
 //	dram_write(addr, len, data);
