@@ -44,7 +44,7 @@ void init_cacheL2()
 	int i = 0;
 	int j = 0;
 	for (; i < NR_SET; ++i){
-		for (j=0; j < NR_WAY; ++j){
+ 		for (j=0; j < NR_WAY; ++j){
 			cacheL2[i][j].valid = false;
 			cacheL2[i][j].dirty = false;
 		}
@@ -69,9 +69,9 @@ uint32_t cacheL2_read(hwaddr_t addr, size_t len)
 			hit = true;
 			break;
 		}	
-	}
+ 	}
 
-	if(!hit) {
+ 	if(!hit) {
 		i = randomGenerator() % NR_WAY;
 		int j=0;
 		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
