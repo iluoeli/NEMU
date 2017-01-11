@@ -96,7 +96,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	else 
 		buf[1] = *(uint32_t *)(cache[set][i].data + block+4);
 
-	return unalign_rw((uint8_t *)buf + offset, 4);
+//	return unalign_rw((uint8_t *)buf + offset, 4);
+	return *(uint32_t *)((uint8_t *)buf + offset);
 }
 
 void cache_write(hwaddr_t addr, size_t len, uint32_t data)
