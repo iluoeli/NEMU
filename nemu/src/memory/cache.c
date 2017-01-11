@@ -80,8 +80,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 		int j=0;
 		uint32_t addr_block = addr & (~0u & ~(BLOCK_SIZE -1));
    	   	for (; j < BLOCK_SIZE; ++j) {
-			cache[set][i].data[j] = dram_read(addr_block + j, 1) & 0xff;
-			//cache[set][i].data[j] = cacheL2_read(addr_block + j, 1);
+			//cache[set][i].data[j] = dram_read(addr_block + j, 1) & 0xff;
+			cache[set][i].data[j] = cacheL2_read(addr_block + j, 1) & 0xff;
    		}	
 		cache[set][i].tag = tag;
 		cache[set][i].valid = true;
@@ -91,8 +91,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len)
 	buf[0] = *(uint32_t *)(cache[set][i].data + block);
 	//if cross block
 	if((temp.block+ offset + len) > BLOCK_SIZE) 
-	//	buf[1] = cache_read((temp.addr + 4), 4);
-		buf[1] = dram_read((temp.addr + 4), 4);
+		buf[1] = cacheL2_read((temp.addr + 4), 4);
+	//	buf[1] = dram_read((temp.addr + 4), 4);
 	else 
 		buf[1] = *(uint32_t *)(cache[set][i].data + block+4);
 
@@ -120,7 +120,9 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 						cache_write(addr+j, 1, (data >> (8*j)) & 0xff);
  	 			else {
 					cache[set][i].data[block+j] = (data >> (8 * j)) & 0xff;
-					dram_write(addr+j, 1, (data >> (8*j)) &0xff);
+				//	dram_write(addr+j, 1, (data >> (8*j)) &0xff);
+					cacheL2_write(addr+j, 1, (data >> (8*j)) &0xff);
+					//cacheL2_write(addr, len, data);
 				}
     		}
 			//dram_write(addr, len, data);
@@ -131,8 +133,8 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data)
 //	assert(hit == false);
  	if(!hit){//count +=2;
 	//not write allocate
-		dram_write(addr, len, data);
-		//cacheL2_write(addr, len, data);
+//		dram_write(addr, len, data);
+		cacheL2_write(addr, len, data);
      }
 	//else count +=200;
 }
